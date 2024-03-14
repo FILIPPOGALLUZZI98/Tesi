@@ -1,0 +1,6 @@
+library(sf)
+library(ggplot2)
+library(tmap)
+setwd("D:Personale/Studio/^Magistrale_Tesi/zDatasets/world_geolev1_2021")
+dati_spatial <- st_read("world_geolev1_2021.shp")
+tail(dati_spatial)
