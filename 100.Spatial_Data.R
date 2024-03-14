@@ -51,6 +51,60 @@ ggplot(shp, aes(fill = log(population2022))) +
 
 
 
+# Drought in Italy
+r <- raster::brick("spatialRlab/spei12_italy.nc")    
+# set a coordinate system for the raster data (the same as in the shapefile, because we want to merge them later)
+proj4string(r) = raster::crs(shp)         
+# basic and quick visualization of the first raster layer
+image(r[[1]]) 
+
+# First, we give names to each of the raster layers, based on the corresponding year and months. Second, we build 
+# a data.frame from the raster data
+names(r)       = paste0(rep(paste0(1982:2022), each=12), "-", stringr::str_pad(rep(1:12, length(1982:2022)), 2, "left", "0"))
+# this creates a data frame from the raster layer 488 (= august 2022)
+plot.df        = as.data.frame(r[[488]], xy = TRUE) 
+# delete missing observations (mostly the mediterranean sea)
+plot.df        = plot.df[complete.cases(plot.df), ] 
+
+# Plot
+ggplot() +     
+  # plot the shape file as background layer (with grey borders and white provinces)
+  geom_sf(data=shp, col="grey", fill="white") +  
+  # geom_tile() is used to plot raster data here, with the filling color for each tile based on variable "X2022.08"
+  geom_tile(data=plot.df, aes(x,y,fill=X2022.08)) + 
+   # use a nicer theme than standard
+  theme_bw() +                           
+  # title for the legend
+  labs(fill="SPEI-12\nin Aug. 2022") +          
+  # again, we use the viridis color scheme
+  scale_fill_viridis_c(option="inferno", end=0.8) +
+  # no title on x axis
+  xlab("") +               
+  # no title on y axis
+  ylab("")          
+
+
+
+
+# AGGREGATING RASTER DATA USING POLYGON DATA
+spei_data        = exactextractr::exact_extract(r, shp, fun="mean")
+
+# create a column that holds the names of the provinces
+spei_data$region = shp$NUTS_NAME
+
+# now let's add the extracted data from august 2022 back to the shape file so we can visualize it using the polygon data
+shp$spei_2022_08 = spei_data$mean.X2022.08
+
+ggplot(shp, aes(fill=spei_2022_08)) + 
+  geom_sf(col="black") +
+  theme_bw() +
+  labs(fill="Avg. SPEI-12\nin Aug. 2022") +
+  scale_fill_viridis_c(option="inferno", end=0.8)
+
+
+
+
+
 
 
 
