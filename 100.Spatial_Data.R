@@ -104,6 +104,47 @@ ggplot(shp, aes(fill=spei_2022_08)) +
 
 
 
+# We can also visualize the SPEI-12 over time for each region
+plot.df      = reshape2::melt(spei_data, id.vars="region")
+
+# This line of code uses the "zoo" package and creates a variable of class "date".
+# This will be useful for plotting the SPEI-12 index across time, because ggplot2 naturally handles "date" variables on the x-axis.
+plot.df$date = zoo::as.Date(zoo::as.yearmon(substr(as.character(plot.df$variable), 7, 13), "%Y.%m"))
+
+# subset data to some provinces
+ggplot(subset(plot.df, region %in% c("Pordenone", "Milano", "Palermo", "Bologna")), 
+       # date on x axis, spei (stored in variable "value") on y axis, color (of outlines) based on spei, filling based on spei
+       aes(date, value, fill=value, col=value)) +   
+  # add a horizontal line at zero
+  geom_hline(yintercept=0) +                  
+  # add a horizontal, dotted (lty=3) line at -1.5 to visualize the threshold for severe drought
+  geom_hline(yintercept=-1.5, lty=3) +     
+  # split the plot into separate plots for each region, organized in two columns
+  facet_wrap(region~., ncol=2) +        
+  # nicer theme than standard theme
+  theme_bw() +         
+  # white background for province names
+  theme(strip.background=element_rect(fill="white")) +          
+  # y axis title
+  ylab("SPEI-12") +                                                                
+  # x axis title
+  xlab("") +                                                                       
+  # columns for SPEI in each month
+  geom_col() +                                                                      
+  # set color palette (for the outlines of the columns)
+  scale_fill_viridis_c(option="inferno", end  = 0.8) +                              
+  # set fill palette (for filling the columns)
+  scale_color_viridis_c(option="inferno", end = 0.8) +                              
+  # set legend title
+  labs(fill="SPEI-12",col="SPEI-12")   
+
+
+
+
+# RIOTS
+
+
+
 
 
 
