@@ -1,5 +1,5 @@
 library(terra)
-setwd("D:Personale/Studio/Magistrale/Tesi/zDatasets/ISIMIP3a")
+setwd("D:Personale/Studio/^Magistrale_Tesi/zDatasets/ISIMIP3a")
 
 data1<-rast("cwatm_gswp3-w5e5_obsclim_histsoc_default_groundwstor_global_monthly_1901_2019.nc")
 # Contiene GW storage di 1428 mesi a partire dal 01-01-1901
