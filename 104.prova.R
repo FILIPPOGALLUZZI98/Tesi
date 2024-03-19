@@ -1,1 +1,0 @@
-# per vedere se funziona
