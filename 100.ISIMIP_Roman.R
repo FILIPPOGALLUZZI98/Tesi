@@ -61,9 +61,7 @@ ggplot(subset(plot.df, region %in% c("Red Sea", "Kassala", "Northern", "Al Gezir
   # set color palette (for the outlines of the columns)
   scale_fill_viridis_c(option="inferno", end  = 0.8) +                              
   # set fill palette (for filling the columns)
-  scale_color_viridis_c(option="inferno", end = 0.8) +                              
-  # set legend title
-  labs(fill="SPEI-12",col="GW Storage") 
+  scale_color_viridis_c(option="inferno", end = 0.8)
 
 
 
