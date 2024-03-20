@@ -12,15 +12,35 @@ suppressPackageStartupMessages({
   library(zoo)   
 })
 
+#################################################################################################
+####  GW DATA MEDIE ANNUALI  ####################################################################
+###    r <- raster::brick("GW_Data/ISIMIP3a/cwatm_gswp3-w5e5_obsclim_histsoc_default_groundwstor_global_monthly_1901_2019.nc")
+###    Creazione di un nuovo raster brick per le medie annuali
+###    gwy <- raster::brick(ncol = ncol(r), nrow = nrow(r), nl = nlayers(r)/12,
+###                         xmn = extent(r)[1], xmx = extent(r)[2], 
+###                         ymn = extent(r)[3], ymx = extent(r)[4], 
+###                         crs = crs(r))
+###    Ciclo for per calcolare le medie annuali
+###    for (i in 1:(nlayers(r)/12)) {
+###      start <- (i - 1) * 12 + 1
+###      end <- start + 11
+###      yearly_mean <- calc(r[[start:end]], mean)
+###      gwy[[i]] <- yearly_mean}
+###    years <- unique(format(as.Date(names(r), format = "X%Y.%m.%d"), "%Y"))
+###    names(gwy) <- paste0("gw", years)
+###    output_nc <- "GW_Data/ISIMIP3a/gwy.nc"
+###    Scrivi il RasterBrick in un file NetCDF
+###    writeRaster(gwy, filename = output_nc, format = "CDF", overwrite = TRUE)
+
 
 #################################################################################################
-####  CARICARE I DATI  ##########################################################################
+####  CARICARE I DATI  #########################################################################
 shp <- sf::read_sf("GW_Data/world_geolev1_2021/world_geolev1_2021.shp")
 shp <- subset(shp, CNTRY_NAME == "Sudan")
 plot(shp[,"geometry"])  
 shp <- sf::st_transform(shp, sp::CRS("+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs")) 
 
-r <- raster::brick("GW_Data/ISIMIP3a/cwatm_gswp3-w5e5_obsclim_histsoc_default_groundwstor_global_monthly_1901_2019.nc")
+r <- raster::brick("GW_Data/ISIMIP3a/gwy.nc")
 proj4string(r) <- raster::crs(shp)    
 image(r[[1]]) 
 
