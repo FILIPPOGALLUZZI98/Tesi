@@ -47,6 +47,7 @@ ggplot(shp, aes(fill=gw_1902_12)) +
   labs(fill="gw storage") +
   scale_fill_viridis_c(option="inferno", end=0.8)
 
+# Plottiamo le serie temporali per 4 regioni del Sudan
 ggplot(subset(plot.df, region %in% c("Red Sea", "Kassala", "Northern", "Al Gezira")), 
        # date on x axis, spei (stored in variable "value") on y axis, color (of outlines) based on spei, filling based on spei
        aes(date, value, fill=value, col=value)) +   
