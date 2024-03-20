@@ -42,18 +42,18 @@ shp <- sf::st_transform(shp, sp::CRS("+proj=longlat +ellps=WGS84 +datum=WGS84 +n
 
 r <- raster::brick("GW_Data/ISIMIP3a/gwy.nc")
 proj4string(r) <- raster::crs(shp)    
-image(r[[1]]) 
+# image(r[[119]]) 
 
 
 #################################################################################################
 ####  PREPARARE I DATI  #########################################################################
-names(r) <- paste0(rep(paste0(1901:2018), each=12), "-", stringr::str_pad(rep(1:12, length(1901:2019)), 2, "left", "0"))
-plot.df <- as.data.frame(r[[12]], xy = TRUE)  ## 12 equivale a dicembre 1901
+# DA FARE PER OGNI ANNO E NON SOLO PER UNO
+plot.df <- as.data.frame(r[[119]], xy = TRUE)  ## 119 equivale a dicembre 2019
 plot.df <- plot.df[complete.cases(plot.df), ]
 
 gw_data <- exactextractr::exact_extract(r, shp, fun="mean")
 gw_data$region <- shp$ADMIN_NAME
-shp$gw_1902_12 <- gw_data$mean.X1901.12.2
+shp$gw_2019 <- gw_data$mean.X1
 
 plot.df <- reshape2::melt(gw_data, id.vars="region")
 plot.df$date <- zoo::as.Date(zoo::as.yearmon(substr(as.character(plot.df$variable), 7, 13), "%Y.%m"))
@@ -61,7 +61,7 @@ plot.df$date <- zoo::as.Date(zoo::as.yearmon(substr(as.character(plot.df$variabl
 
 #################################################################################################
 ####  PLOT DATA  ################################################################################
-ggplot(shp, aes(fill=gw_1902_12)) + 
+ggplot(shp, aes(fill=gw_2019)) + 
   geom_sf(col="black") +
   theme_bw() +
   labs(fill="gw storage") +
