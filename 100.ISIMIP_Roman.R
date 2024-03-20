@@ -59,7 +59,7 @@ ggplot(shp, aes(fill=gw_2000)) +
   geom_sf(col="black") +
   theme_bw() +
   labs(fill="gw storage") +
-  scale_fill_viridis_c(option="inferno", end=0.8)
+  scale_fill_viridis_c(option="viridis", end=0.8)
 
 
 #################################################################################################
