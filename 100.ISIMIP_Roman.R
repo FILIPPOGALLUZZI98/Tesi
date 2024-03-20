@@ -14,6 +14,7 @@ suppressPackageStartupMessages({
 
 #################################################################################################
 ####  GW DATA MEDIE ANNUALI  ####################################################################
+###    Medie annuali dei dati raster ISIMIP3a del groundwstr a partire dai dati mensili
 ###    r <- raster::brick("GW_Data/ISIMIP3a/cwatm_gswp3-w5e5_obsclim_histsoc_default_groundwstor_global_monthly_1901_2019.nc")
 ###    Creazione di un nuovo raster brick per le medie annuali
 ###    gwy <- raster::brick(ncol = ncol(r), nrow = nrow(r), nl = nlayers(r)/12,
@@ -35,6 +36,7 @@ suppressPackageStartupMessages({
 
 #################################################################################################
 ####  CARICARE I DATI  #########################################################################
+# Upload dei dati shapefile e gw medie annuali + coordinate uguali
 shp <- sf::read_sf("GW_Data/world_geolev1_2021/world_geolev1_2021.shp")
 shp <- sf::st_transform(shp, sp::CRS("+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs")) 
 r <- raster::brick("GW_Data/ISIMIP3a/gwy.nc")
@@ -43,9 +45,13 @@ proj4string(r) <- raster::crs(shp)
 
 #################################################################################################
 ####  PLOT FOR STATES  ##########################################################################
+# Per ogni stato faccio i grafici di groundwstr nelle regioni per ogni anno
+# Seleziono il paese
 state <- subset(shp, CNTRY_NAME == "Italy")
+# Media dei valori del raster sulle regioni 
 gw_data <- exactextractr::exact_extract(r, state, fun="mean")
 gw_data$region <- state$ADMIN_NAME
+# Aggiungo una variabile per ogni anno perso in considerazione
 for (year in 1901:2019) {
   col_name <- paste0("gw_", year)
   state[[col_name]] <- gw_data[[paste0("mean.X", year - 1900)]]
