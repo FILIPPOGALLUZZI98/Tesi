@@ -51,7 +51,7 @@ state <- subset(shp, CNTRY_NAME == "Italy")
 # Media dei valori del raster sulle regioni 
 gw_data <- exactextractr::exact_extract(r, state, fun="mean")
 gw_data$region <- state$ADMIN_NAME
-# Aggiungo una variabile per ogni anno perso in considerazione
+# Rinomino gli anni
 for (year in 1901:2019) {
   col_name <- paste0("gw_", year)
   state[[col_name]] <- gw_data[[paste0("mean.X", year - 1900)]]
