@@ -44,7 +44,7 @@ proj4string(r) <- raster::crs(shp)
 
 
 #################################################################################################
-####  PLOT FOR STATES  ##########################################################################
+####  PLOT FOR SINGLE STATE  ####################################################################
 # Per ogni stato faccio i grafici di groundwstr nelle regioni per ogni anno
 # Seleziono il paese
 state <- subset(shp, CNTRY_NAME == "Italy")
@@ -59,6 +59,37 @@ for (year in 1901:2019) {
 
 # Plot anno 2000
 ggplot(state, aes(fill=gw_2000)) + 
+  geom_sf(col="black") +
+  theme_bw() +
+  labs(fill="gw storage") +
+  scale_fill_viridis_c(option="viridis", end=0.8)
+
+
+#################################################################################################
+####  PLOT FOR ALL STATES  ######################################################################
+gw_data <- list()
+state <- list()
+
+for (i in seq_along(shp$CNTRY_NAME)) {
+  a <- subset(shp, CNTRY_NAME == shp$CNTRY_NAME[i])
+  state <- append(state, list(a))
+}
+
+for (i in seq_along(state)) {
+  tryCatch({
+    b <- exactextractr::exact_extract(r, state[[i]], fun="mean")
+    gw_data <- append(gw_data, list(b))
+    gw_data[[i]]$region <- state[[i]]$ADMIN_NAME
+  }, error = function(e) {
+    # Gestisci l'errore qui, puoi anche stampare un messaggio di avviso
+    cat("Errore durante l'elaborazione dell'elemento", i, ":", conditionMessage(e), "\n")
+  })
+}
+
+
+####  Controllare  ####
+# Plot anno 2000 paese numero 100
+ggplot(state[[100]], aes(fill=gw_data[[100]]$mean.X100)) + 
   geom_sf(col="black") +
   theme_bw() +
   labs(fill="gw storage") +
