@@ -32,7 +32,7 @@ plot.df <- as.data.frame(r[[12]], xy = TRUE)  ## 12 equivale a dicembre 1901
 plot.df <- plot.df[complete.cases(plot.df), ]
 
 gw_data <- exactextractr::exact_extract(r, shp, fun="mean")
-gw_data$region = shp$ADMIN_NAME
+gw_data$region <- shp$ADMIN_NAME
 shp$gw_1902_12 <- gw_data$mean.X1901.12.2
 
 plot.df <- reshape2::melt(gw_data, id.vars="region")
