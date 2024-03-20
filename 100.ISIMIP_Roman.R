@@ -43,16 +43,16 @@ proj4string(r) <- raster::crs(shp)
 
 #################################################################################################
 ####  PLOT FOR STATES  ##########################################################################
-stat <- subset(shp, CNTRY_NAME == "Italy")
-gw_data <- exactextractr::exact_extract(r, stat, fun="mean")
-gw_data$region <- stat$ADMIN_NAME
+state <- subset(shp, CNTRY_NAME == "Italy")
+gw_data <- exactextractr::exact_extract(r, state, fun="mean")
+gw_data$region <- state$ADMIN_NAME
 for (year in 1901:2019) {
   col_name <- paste0("gw_", year)
-  stat[[col_name]] <- gw_data[[paste0("mean.X", year - 1900)]]
+  state[[col_name]] <- gw_data[[paste0("mean.X", year - 1900)]]
 }
 
 # Plot anno 2000
-ggplot(shp, aes(fill=gw_2000)) + 
+ggplot(state, aes(fill=gw_2000)) + 
   geom_sf(col="black") +
   theme_bw() +
   labs(fill="gw storage") +
