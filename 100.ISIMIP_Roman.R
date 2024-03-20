@@ -46,26 +46,29 @@ proj4string(r) <- raster::crs(shp)
 
 
 #################################################################################################
-####  PREPARARE I DATI  #########################################################################
-# DA FARE PER OGNI ANNO E NON SOLO PER UNO
-plot.df <- as.data.frame(r[[119]], xy = TRUE)  ## 119 equivale a dicembre 2019
-plot.df <- plot.df[complete.cases(plot.df), ]
-
-gw_data <- exactextractr::exact_extract(r, shp, fun="mean")
+####  PLOT REGIONS  #############################################################################
+Gw_data <- exactextractr::exact_extract(r, shp, fun="mean")
 gw_data$region <- shp$ADMIN_NAME
-shp$gw_2019 <- gw_data$mean.X1
+for (year in 1901:2019) {
+  col_name <- paste0("gw_", year)
+  shp[[col_name]] <- gw_data[[paste0("mean.X", year - 1900)]]
+}
 
-plot.df <- reshape2::melt(gw_data, id.vars="region")
-plot.df$date <- zoo::as.Date(zoo::as.yearmon(substr(as.character(plot.df$variable), 7, 13), "%Y.%m"))
-
-
-#################################################################################################
-####  PLOT DATA  ################################################################################
-ggplot(shp, aes(fill=gw_2019)) + 
+# Plot anno 2000
+ggplot(shp, aes(fill=gw_2000)) + 
   geom_sf(col="black") +
   theme_bw() +
   labs(fill="gw storage") +
   scale_fill_viridis_c(option="inferno", end=0.8)
+
+
+#################################################################################################
+####  PLOT TIME SERIES  ##########################################################################
+plot.df <- as.data.frame(r[[119]], xy = TRUE)  ## 119 equivale a dicembre 2019
+plot.df <- plot.df[complete.cases(plot.df), ]
+plot.df <- reshape2::melt(gw_data, id.vars="region")
+plot.df$date <- zoo::as.Date(zoo::as.yearmon(substr(as.character(plot.df$variable), 7, 13), "%Y.%m"))
+
 
 # Plottiamo le serie temporali per 4 regioni del Sudan
 ggplot(subset(plot.df, region %in% c("Red Sea", "Kassala", "Northern", "Al Gezira")), 
