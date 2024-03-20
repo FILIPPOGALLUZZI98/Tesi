@@ -70,8 +70,11 @@ ggplot(state, aes(fill=gw_2000)) +
 gw_data <- list()
 state <- list()
 
-for (i in seq_along(shp$CNTRY_NAME)) {
-  a <- subset(shp, CNTRY_NAME == shp$CNTRY_NAME[i])
+# Per risolvere i conflitti provare a fare una lista di nomi singoli da inserire al posto di shp$CNTRY_NAME
+# Usare codice di chatgpt per ottenere elenco nomi singoli
+nomi <- list()
+for (i in seq_along(shp$nomi)) {
+  a <- subset(shp, nomi == shp$CNTRY_NAME[i])
   state <- append(state, list(a))
 }
 
