@@ -36,22 +36,19 @@ suppressPackageStartupMessages({
 #################################################################################################
 ####  CARICARE I DATI  #########################################################################
 shp <- sf::read_sf("GW_Data/world_geolev1_2021/world_geolev1_2021.shp")
-shp <- subset(shp, CNTRY_NAME == "Sudan")
-plot(shp[,"geometry"])  
 shp <- sf::st_transform(shp, sp::CRS("+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs")) 
-
 r <- raster::brick("GW_Data/ISIMIP3a/gwy.nc")
-proj4string(r) <- raster::crs(shp)    
-# image(r[[119]]) 
+proj4string(r) <- raster::crs(shp) 
 
 
 #################################################################################################
-####  PLOT REGIONS  #############################################################################
-Gw_data <- exactextractr::exact_extract(r, shp, fun="mean")
-gw_data$region <- shp$ADMIN_NAME
+####  PLOT FOR STATES  ##########################################################################
+stat <- subset(shp, CNTRY_NAME == "Italy")
+gw_data <- exactextractr::exact_extract(r, stat, fun="mean")
+gw_data$region <- stat$ADMIN_NAME
 for (year in 1901:2019) {
   col_name <- paste0("gw_", year)
-  shp[[col_name]] <- gw_data[[paste0("mean.X", year - 1900)]]
+  stat[[col_name]] <- gw_data[[paste0("mean.X", year - 1900)]]
 }
 
 # Plot anno 2000
