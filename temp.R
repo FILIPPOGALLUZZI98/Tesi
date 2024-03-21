@@ -49,7 +49,33 @@ ggplot(state[[1]], aes(fill=gw_data[[1]]$mean.X117)) +
 ################################################################################################
 gw_data <- list()
 state <- list()
+
 nomi <- unique(shp$CNTRY_NAME)
+posizioni_da_rimuovere <- c(10, 63, 66, 72, 74, 99, 108, 122, 134, 145, 161, 163, 
+                            175, 207, 209, 211, 233, 242, 245)
+nomi_rimossi <- nomi[posizioni_da_rimuovere]
+nomi <- nomi[-posizioni_da_rimuovere]
+print(nomi_rimossi)
+
+
+for (i in seq_along(nomi)) {
+  a <- subset(shp, CNTRY_NAME == nomi[i])
+  state <- append(state, list(a))
+}
+
+for (i in 1:264) {
+    b <- exactextractr::exact_extract(r, state[[i]], fun="mean")
+    b$region <- state[[i]]$ADMIN_NAME
+    gw_data <- append(gw_data, list(b))
+}
+
+
+# Plot anno 2000
+ggplot(state[[99]], aes(fill=gw_data[[99]]$mean.X117)) + 
+  geom_sf(col="black") +
+  theme_bw() +
+  labs(fill="gw storage") +
+  scale_fill_viridis_c(option="viridis", end=0.8)
 
 
 
