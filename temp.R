@@ -49,8 +49,6 @@ ggplot(state[[1]], aes(fill=gw_data[[1]]$mean.X117)) +
 ################################################################################################
 gw_data <- list()
 state <- list()
-
-shp <- readOGR(dsn = "path_to_your_shapefile", layer = "name_of_your_layer")
 nomi <- unique(shp$CNTRY_NAME)
 
 
