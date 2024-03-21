@@ -40,7 +40,7 @@ suppressPackageStartupMessages({
 shp <- sf::read_sf("GW_Data/world_geolev1_2021/world_geolev1_2021.shp")
 shp <- sf::st_transform(shp, sp::CRS("+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs")) 
 r <- raster::brick("GW_Data/ISIMIP3a/gwy.nc")
-proj4string(r) <- raster::crs(shp) 
+proj4string(r) <- raster::crs(shp)
 
 
 #################################################################################################
@@ -65,38 +65,63 @@ ggplot(state, aes(fill=gw_2000)) +
   scale_fill_viridis_c(option="viridis", end=0.8)
 
 
-#################################################################################################
-####  PLOT FOR ALL STATES  ######################################################################
+################################################################################################
+################################################################################################
+## ESEMPIO PER POCHI STATI PER VEDERE SE FUNZIONA
 gw_data <- list()
 state <- list()
+nomi <- c("Italy","Austria","Germany")
 
-# Per risolvere i conflitti provare a fare una lista di nomi singoli da inserire al posto di shp$CNTRY_NAME
-# Usare codice di chatgpt per ottenere elenco nomi singoli
-nomi <- list()
-for (i in seq_along(shp$nomi)) {
-  a <- subset(shp, nomi == shp$CNTRY_NAME[i])
+for (i in seq_along(nomi)) {
+  a <- subset(shp, CNTRY_NAME == nomi[i])
   state <- append(state, list(a))
 }
 
-for (i in seq_along(state)) {
-  tryCatch({
+for (i in 1:3) {
     b <- exactextractr::exact_extract(r, state[[i]], fun="mean")
+    b$region <- state[[i]]$ADMIN_NAME
     gw_data <- append(gw_data, list(b))
-    gw_data[[i]]$region <- state[[i]]$ADMIN_NAME
-  }, error = function(e) {
-    # Gestisci l'errore qui, puoi anche stampare un messaggio di avviso
-    cat("Errore durante l'elaborazione dell'elemento", i, ":", conditionMessage(e), "\n")
-  })
 }
 
-
-####  Controllare  ####
-# Plot anno 2000 paese numero 100
-ggplot(state[[100]], aes(fill=gw_data[[100]]$mean.X100)) + 
+# Plot anno 2000 per Italia
+ggplot(state[[1]], aes(fill=gw_data[[1]]$mean.X117)) + 
   geom_sf(col="black") +
   theme_bw() +
   labs(fill="gw storage") +
   scale_fill_viridis_c(option="viridis", end=0.8)
+
+################################################################################################
+################################################################################################
+gw_data <- list()
+state <- list()
+
+nomi <- unique(shp$CNTRY_NAME)
+posizioni_da_rimuovere <- c(10, 63, 66, 72, 74, 99, 108, 122, 134, 145, 161, 163, 
+                            175, 207, 209, 211, 233, 242, 245)
+nomi_rimossi <- nomi[posizioni_da_rimuovere]
+nomi <- nomi[-posizioni_da_rimuovere]
+print(nomi_rimossi)
+
+
+for (i in seq_along(nomi)) {
+  a <- subset(shp, CNTRY_NAME == nomi[i])
+  state <- append(state, list(a))
+}
+
+for (i in 1:264) {
+    b <- exactextractr::exact_extract(r, state[[i]], fun="mean")
+    b$region <- state[[i]]$ADMIN_NAME
+    gw_data <- append(gw_data, list(b))
+}
+
+
+# Plot anno 2000
+ggplot(state[[99]], aes(fill=gw_data[[99]]$mean.X117)) + 
+  geom_sf(col="black") +
+  theme_bw() +
+  labs(fill="gw storage") +
+  scale_fill_viridis_c(option="viridis", end=0.8)
+
 
 
 #################################################################################################
