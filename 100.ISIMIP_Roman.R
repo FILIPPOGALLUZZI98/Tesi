@@ -66,8 +66,7 @@ ggplot(state, aes(fill=gw_2000)) +
 
 
 ################################################################################################
-################################################################################################
-## ESEMPIO PER POCHI STATI PER VEDERE SE FUNZIONA
+####  ESEMPIO PER POCHI STATI PER VEDERE SE FUNZIONA  ##########################################
 gw_data <- list()
 state <- list()
 nomi <- c("Italy","Austria","Germany")
@@ -94,14 +93,12 @@ ggplot(state[[1]], aes(fill=gw_data[[1]]$mean.X117)) +
 ################################################################################################
 gw_data <- list()
 state <- list()
-
 nomi <- unique(shp$CNTRY_NAME)
 posizioni_da_rimuovere <- c(10, 63, 66, 72, 74, 99, 108, 122, 134, 145, 161, 163, 
                             175, 207, 209, 211, 233, 242, 245)
 nomi_rimossi <- nomi[posizioni_da_rimuovere]
 nomi <- nomi[-posizioni_da_rimuovere]
 print(nomi_rimossi)
-
 
 for (i in seq_along(nomi)) {
   a <- subset(shp, CNTRY_NAME == nomi[i])
@@ -114,8 +111,9 @@ for (i in 1:264) {
     gw_data <- append(gw_data, list(b))
 }
 
+# Plot anno 2000 per Iran
 
-# Plot anno 2000
+
 ggplot(state[[99]], aes(fill=gw_data[[99]]$mean.X117)) + 
   geom_sf(col="black") +
   theme_bw() +
