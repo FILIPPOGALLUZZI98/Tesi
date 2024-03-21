@@ -25,6 +25,7 @@ proj4string(r) <- raster::crs(shp)
 ## ESEMPIO PER POCHI STATI PER VEDERE SE FUNZIONA
 gw_data <- list()
 state <- list()
+nomi <- c("Italy","Austria","Germany")
 
 for (i in seq_along(nomi)) {
   a <- subset(shp, CNTRY_NAME == nomi[i])
