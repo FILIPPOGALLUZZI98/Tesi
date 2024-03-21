@@ -111,10 +111,9 @@ for (i in 1:264) {
     gw_data <- append(gw_data, list(b))
 }
 
-# Plot anno 2000 per Iran
-
-
-ggplot(state[[99]], aes(fill=gw_data[[99]]$mean.X117)) + 
+country <- "Italy"
+x <- nomi.index(country)
+ggplot(state[[x]], aes(fill=gw_data[[x]]$mean.X117)) + 
   geom_sf(col="black") +
   theme_bw() +
   labs(fill="gw storage") +
