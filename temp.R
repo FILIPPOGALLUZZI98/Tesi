@@ -31,7 +31,6 @@ for (i in seq_along(nomi)) {
   a <- subset(shp, CNTRY_NAME == nomi[i])
   state <- append(state, list(a))
 }
-## plot(state[[1]][,"geometry"])  
 
 for (i in 1:3) {
     b <- exactextractr::exact_extract(r, state[[i]], fun="mean")
@@ -39,7 +38,7 @@ for (i in 1:3) {
     gw_data <- append(gw_data, list(b))
 }
 
-# Plot anno 2000
+# Plot anno 2000 per Italia
 ggplot(state[[1]], aes(fill=gw_data[[1]]$mean.X117)) + 
   geom_sf(col="black") +
   theme_bw() +
