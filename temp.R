@@ -34,14 +34,9 @@ for (i in seq_along(nomi)) {
 ## plot(state[[1]][,"geometry"])  
 
 for (i in 1:3) {
-  tryCatch({
     b <- exactextractr::exact_extract(r, state[[i]], fun="mean")
     b$region <- state[[i]]$ADMIN_NAME
     gw_data <- append(gw_data, list(b))
-  }, error = function(e) {
-    # Gestisci l'errore qui, puoi anche stampare un messaggio di avviso
-    cat("Errore durante l'elaborazione dell'elemento", i, ":", conditionMessage(e), "\n")
-  })
 }
 
 # Plot anno 2000
