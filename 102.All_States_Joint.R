@@ -1,5 +1,3 @@
-# Per vedere meglio il procedimento vedi 'Preparazione/002.Prove_Varie.R'
-
 shp <- sf::read_sf("GW_Data/world_geolev1_2021/world_geolev1_2021.shp")
 shp <- sf::st_transform(shp, sp::CRS("+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs")) 
 # Rimuovo le regioni che danno geometry error
