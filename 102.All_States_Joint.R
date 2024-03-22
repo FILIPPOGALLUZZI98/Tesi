@@ -11,9 +11,9 @@ proj4string(r) <- raster::crs(shp)
 
 gw_data <- exactextractr::exact_extract(r, shp, fun="mean")
 
-
-# Selezionare anno 
-ggplot(shp, aes(fill=gw_data$mean.X119)) + 
+# Selezionare l'anno
+y <- 1901
+ggplot(shp, aes(fill=gw_data[[paste0("mean.X", y - 1900)]])) + 
   geom_sf(col="black") +
   theme_bw() +
   labs(fill="Avg. SPEI-12\nin Aug. 2022") +
