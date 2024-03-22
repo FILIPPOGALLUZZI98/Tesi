@@ -75,4 +75,4 @@ years <- unique(format(as.Date(names(r), format = "X%Y.%m.%d"), "%Y"))
 names(qr) <- paste0("qr", years)
 output_nc <- "GW_Data/ISIMIP3a/qry.nc"
 # Scrivi il RasterBrick in un file NetCDF
-writeRaster(qry, filename = output_nc, format = "CDF", overwrite = TRUE)
+writeRaster(qr, filename = output_nc, format = "CDF", overwrite = TRUE)
