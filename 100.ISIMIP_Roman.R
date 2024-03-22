@@ -112,7 +112,7 @@ for (i in 1:264) {
 }
 
 country <- "Italy"
-x <- nomi.index(country)
+x <- which(nomi == country)
 ggplot(state[[x]], aes(fill=gw_data[[x]]$mean.X117)) + 
   geom_sf(col="black") +
   theme_bw() +
