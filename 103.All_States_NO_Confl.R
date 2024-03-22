@@ -10,10 +10,10 @@ proj4string(r) <- raster::crs(shp)
 
 
 ################################################################################################
-####  ESEMPIO PER POCHI STATI PER VEDERE SE FUNZIONA  ##########################################
+####  ESEMPIO ALGORITMO PER POCHI STATI PER VEDERE SE FUNZIONA  ################################
 gw_data <- list()
 state <- list()
-nomi <- c("Italy","Austria","Germany")
+nomi <- c("Italy","Austria","Germany")  ## Alcuni di quelli che NON danno geometry error
 
 for (i in seq_along(nomi)) {
   a <- subset(shp, CNTRY_NAME == nomi[i])
@@ -40,6 +40,7 @@ gw_data <- list()
 state <- list()
 nomi <- unique(shp$CNTRY_NAME)
 
+# Attraverso 'trycatch' posso vedere quali paesi mi danno errore e posso quindi rimuoverli 
 # Devo rimuovere gli stati che danno errore nel momento del merging dei dati
 posizioni_da_rimuovere <- c(10, 63, 66, 72, 74, 99, 108, 122, 134, 145, 161, 163, 
                             175, 207, 209, 211, 233, 242, 245)
@@ -58,8 +59,10 @@ for (i in 1:264) {
     gw_data <- append(gw_data, list(b))
 }
 
+# Seleziono il nome del paese che voglio plottare
 country <- "Italy"
 x <- which(nomi == country)
+# Seleziono l'anno ricordando che mean.X1<-->1901 e così via
 ggplot(state[[x]], aes(fill=gw_data[[x]]$mean.X117)) + 
   geom_sf(col="black") +
   theme_bw() +
