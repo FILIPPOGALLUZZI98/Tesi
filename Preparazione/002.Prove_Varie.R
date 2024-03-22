@@ -3,7 +3,9 @@ shp <- sf::read_sf("GW_Data/world_geolev1_2021/world_geolev1_2021.shp")
 shp <- sf::st_transform(shp, sp::CRS("+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs")) 
 
 # Upload dati delle medie annuali (non diretti ISIMIP3a) + settaggio coordinate
-r <- raster::brick("GW_Data/ISIMIP3a/gwy.nc")
+r <- raster::brick("GW_Data/ISIMIP3a/gwy.nc")  ## groundwstrg
+## r <- raster::brick("GW_Data/ISIMIP3a/twsy.nc")  ## total water storage
+## r <- raster::brick("GW_Data/ISIMIP3a/qry.nc")  ## runoff (??)
 proj4string(r) <- raster::crs(shp)
 
 
