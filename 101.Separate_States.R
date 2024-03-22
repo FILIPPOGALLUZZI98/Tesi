@@ -6,6 +6,8 @@ elementi <- c(34, 381, 2070, 419, 420, 2071, 643, 770, 868, 930, 2072, 1065,
 shp<- shp[-elementi,]
 # Raster è quello modificato da me medie annuali e non mensili
 r <- raster::brick("GW_Data/ISIMIP3a/gwy.nc")
+## r <- raster::brick("GW_Data/ISIMIP3a/twsy.nc")
+## r <- raster::brick("GW_Data/ISIMIP3a/qry.nc")
 proj4string(r) <- raster::crs(shp)
 
 
