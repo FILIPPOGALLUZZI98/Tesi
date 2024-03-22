@@ -17,7 +17,7 @@ ggplot(shp, aes(fill=gw_data[[paste0("mean.X", y - 1900)]])) +
   geom_sf(col="black") +
   theme_bw() +
   labs(fill=paste("groundwstrg", y)) +
-  scale_fill_viridis_c(option="inferno", end=0.8)
+  scale_fill_viridis_c(option="viridis", end=0.8)
 
 
 
