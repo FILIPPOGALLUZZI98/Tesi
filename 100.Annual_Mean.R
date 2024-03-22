@@ -1,3 +1,21 @@
+suppressPackageStartupMessages({
+  library(sf)              ## useful for spatial manipulations
+  library(sp)              ## useful for spatial manipulations
+  library(raster)          ## useful for working with raster data
+  library(ncdf4)           ## useful for working with raster data
+  library(exactextractr)   ## useful for extracting data from raster files
+  library(dplyr)           ## useful for merging data sets
+  library(reshape2)        ## useful for manipulating data sets
+  library(ggplot2)         ## useful for data visualization
+  library(ggrepel)         ## useful for labeling point plots in ggplot2
+  library(lubridate)
+  library(zoo)   
+})
+
+
+#################################################################################################
+####  GW DATA MEDIE ANNUALI  ####################################################################
+
 # Medie annuali dei dati raster ISIMIP3a del groundwstr a partire dai dati mensili
 r <- raster::brick("GW_Data/ISIMIP3a/cwatm_gswp3-w5e5_obsclim_histsoc_default_groundwstor_global_monthly_1901_2019.nc")
 
