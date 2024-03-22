@@ -1,5 +1,3 @@
-# Per vedere meglio il procedimento vedi 'Preparazione/002.Prove_Varie.R'
-
 shp <- sf::read_sf("GW_Data/world_geolev1_2021/world_geolev1_2021.shp")
 shp <- sf::st_transform(shp, sp::CRS("+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs")) 
 # Rimuovo le regioni che danno geometry error
@@ -9,6 +7,7 @@ shp<- shp[-elementi,]
 # Raster è quello modificato da me medie annuali e non mensili
 r <- raster::brick("GW_Data/ISIMIP3a/gwy.nc")
 proj4string(r) <- raster::crs(shp)
+
 
 
 gw_data <- list()
