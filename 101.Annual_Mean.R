@@ -1,6 +1,3 @@
-#################################################################################################
-####  GW DATA MEDIE ANNUALI  ####################################################################
-
 # Medie annuali dei dati raster ISIMIP3a del groundwstr a partire dai dati mensili
 r <- raster::brick("GW_Data/ISIMIP3a/cwatm_gswp3-w5e5_obsclim_histsoc_default_groundwstor_global_monthly_1901_2019.nc")
 
