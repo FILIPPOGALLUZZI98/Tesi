@@ -11,7 +11,7 @@ proj4string(r) <- raster::crs(shp)
 
 #################################################################################################
 ####  PLOT FOR SINGLE STATE  ####################################################################
-# Seleziono il paese
+# Seleziono il paese (ci sono alcuni paesi che danno geometry error, perché alcune geometry sono vuote)
 state <- subset(shp, CNTRY_NAME == "Italy")
 # Media dei valori del raster sulle regioni 
 gw_data <- exactextractr::exact_extract(r, state, fun="mean")
