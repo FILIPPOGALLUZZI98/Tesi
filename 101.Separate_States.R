@@ -19,7 +19,7 @@ for (i in seq_along(nomi)) {
   state <- append(state, list(a))
 }
 
-for (i in 1:264) {
+for (i in 1:283) {
   b <- exactextractr::exact_extract(r, state[[i]], fun="mean")
   b$region <- state[[i]]$ADMIN_NAME
   gw_data <- append(gw_data, list(b))
