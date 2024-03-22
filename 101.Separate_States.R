@@ -26,13 +26,19 @@ for (i in 1:283) {
 }
 
 
-# Selezionare il nome del paese che voglio plottare
+# Selezionare il nome del paese che voglio plottare e l'anno
+y <- 1901
 country <- "Nigeria"
 x <- which(nomi == country)
 
-# Selezionare l'anno ricordando che mean.X1<-->1901 e così via
-ggplot(state[[x]], aes(fill=gw_data[[x]]$mean.X1)) + 
+ggplot(state[[x]], aes(fill=gw_data[[x]][[paste0("mean.X", y - 1900)]])) + 
   geom_sf(col="black") +
   theme_bw() +
-  labs(fill="gw storage") +
-  scale_fill_viridis_c(option="viridis", end=0.8)
+  labs(fill="Avg. SPEI-12\nin Aug. 2022") +
+  scale_fill_viridis_c(option="inferno", end=0.8)
+
+
+
+
+
+
