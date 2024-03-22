@@ -35,7 +35,7 @@ ggplot(state[[x]], aes(fill=gw_data[[x]][[paste0("mean.X", y - 1900)]])) +
   geom_sf(col="black") +
   theme_bw() +
   labs(fill = paste("groundwstrg", country, y)) +
-  scale_fill_viridis_c(option="inferno", end=0.8)
+  scale_fill_viridis_c(option="viridis", end=0.8)
 
 
 
