@@ -19,8 +19,16 @@ shp<- shp[-elementi,]
 
 
 #################################################################################################
-####  AAAA  ##############################################################
+####  MERGE OF ALL STATES JOINTLY  ##############################################################
 
+gw_data <- exactextractr::exact_extract(r, shp, fun="mean")
+
+# Seleziono l'anno 2019
+ggplot(shp, aes(fill=gw_data$mean.X119)) + 
+  geom_sf(col="black") +
+  theme_bw() +
+  labs(fill="Avg. SPEI-12\nin Aug. 2022") +
+  scale_fill_viridis_c(option="inferno", end=0.8)
 
 
 
