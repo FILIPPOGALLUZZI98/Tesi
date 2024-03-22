@@ -19,9 +19,32 @@ shp<- shp[-elementi,]
 
 
 #################################################################################################
-####  PLOT PER GLI ELEMENTI CHE DAVANO ERRORE  ###################################################
+####  PLOT PER TUTTI GLI STATI SEPARATI  ########################################################
 
+gw_data <- list()
+state <- list()
+nomi <- unique(shp$CNTRY_NAME)
 
+for (i in seq_along(nomi)) {
+  a <- subset(shp, CNTRY_NAME == nomi[i])
+  state <- append(state, list(a))
+}
+
+for (i in 1:264) {
+  b <- exactextractr::exact_extract(r, state[[i]], fun="mean")
+  b$region <- state[[i]]$ADMIN_NAME
+  gw_data <- append(gw_data, list(b))
+}
+
+# Seleziono il nome del paese che voglio plottare
+country <- "Nigeria"
+x <- which(nomi == country)
+# Seleziono l'anno ricordando che mean.X1<-->1901 e così via
+ggplot(state[[x]], aes(fill=gw_data[[x]]$mean.X1)) + 
+  geom_sf(col="black") +
+  theme_bw() +
+  labs(fill="gw storage") +
+  scale_fill_viridis_c(option="viridis", end=0.8)
 
 
 
