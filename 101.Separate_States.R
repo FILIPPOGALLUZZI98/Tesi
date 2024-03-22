@@ -10,7 +10,28 @@ r <- raster::brick("GW_Data/ISIMIP3a/gwy.nc")  ## groundwstrg
 ## r <- raster::brick("GW_Data/ISIMIP3a/qry.nc")  ## runoff (??)
 proj4string(r) <- raster::crs(shp)
 
+#################################################################################################
+####  SINGLE STATES  ############################################################################
 
+state <- subset(shp, CNTRY_NAME == "Nigeria")
+# Media dei valori del raster sulle regioni 
+gw_data <- exactextractr::exact_extract(r, state, fun="mean")
+gw_data$region <- state$ADMIN_NAME
+# Rinomino gli anni
+for (year in 1901:2019) {
+  col_name <- paste0("gw_", year)
+  state[[col_name]] <- gw_data[[paste0("mean.X", year - 1900)]]
+}
+
+# Plot anno 2000
+ggplot(state, aes(fill=gw_2000)) + 
+  geom_sf(col="black") +
+  theme_bw() +
+  labs(fill="gw storage") +
+  scale_fill_viridis_c(option="viridis", end=0.8)
+
+#################################################################################################
+####  ALGORITHM  ################################################################################
 
 gw_data <- list()
 state <- list()
@@ -31,9 +52,8 @@ for (i in 1:283) {
 # Selezionare il nome del paese che voglio plottare e l'anno
 y <- 1901
 country <- "Nigeria"
-
-# Plot
 x <- which(nomi == country)
+
 ggplot(state[[x]], aes(fill=gw_data[[x]][[paste0("mean.X", y - 1900)]])) + 
   geom_sf(col="black") +
   theme_bw() +
