@@ -1,4 +1,4 @@
-# Per vedere meglio il procedimento vedere '002.Prove_Varie.R
+# Per vedere meglio il procedimento vedere 'Preparazione/002.Prove_Varie.R'
 
 shp <- sf::read_sf("GW_Data/world_geolev1_2021/world_geolev1_2021.shp")
 shp <- sf::st_transform(shp, sp::CRS("+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs")) 
