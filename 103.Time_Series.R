@@ -1,4 +1,5 @@
 stato <- "Italy"
+
 state <- subset(shp, CNTRY_NAME == stato)
 gw_data <- exactextractr::exact_extract(r, state, fun="mean")
 
