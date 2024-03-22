@@ -16,9 +16,8 @@ y <- 1901
 ggplot(shp, aes(fill=gw_data[[paste0("mean.X", y - 1900)]])) + 
   geom_sf(col="black") +
   theme_bw() +
-  labs(fill="Avg. SPEI-12\nin Aug. 2022") +
+  labs(fill=paste("groundwstrg", y)) +
   scale_fill_viridis_c(option="inferno", end=0.8)
-
 
 
 
