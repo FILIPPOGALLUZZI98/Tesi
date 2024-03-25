@@ -1,27 +1,25 @@
 libia <- read.csv("GW_Data/Conflict_Data/Libia.csv")
 state <- subset(shp, CNTRY_NAME == "Libya")
-lib <- libia[, c("relid", "code_status","type_of_violence","latitude" ,"longitude")]
-gw_data <- exactextractr::exact_extract(r, state, fun="mean")
-gw_data$region <- state$ADMIN_NAME
+libia <- libia[, c("relid", "code_status","type_of_violence","latitude" ,"longitude")]
 
 
 # Per estrarre i valori della longitudine 
-lib <- lib %>%
+lib <- libia %>%
   mutate(
     longitude = as.numeric(str_extract(stringr::str_extract(longitude, " \\d+\\.\\d+"), "\\d+\\.\\d+"))
   )
+# Elimino le righe con valori NA di latitudine e longitudine
+lib1 <- na.omit(lib[, c("latitude", "longitude")])  ## Mi elimina tutte le colonne tranne lon e lat perché???
 
-# Per impostare lo stesso CRS devo prima eliminare i valori NA
-lib <- na.omit(lib[, c("latitude", "longitude")])
+
+# Imposto lo stesso CRS dello shapefile sui punti
 lib <- st_as_sf(lib, coords = c("longitude", "latitude"), crs = st_crs(state))
-sf_df <- st_as_sf(lib, coords = c("longitude", "latitude"), crs = st_crs(state))
 st_set_crs(sf_df, st_crs(state))
 lib <- sf_df %>%
   mutate(
     latitude = as.numeric(str_extract(geometry, "\\d+\\.\\d+")),
     longitude = as.numeric(str_extract(stringr::str_extract(geometry, " \\d+\\.\\d+"), "\\d+\\.\\d+"))
   )
-
 
 
 ggplot(state) +           
