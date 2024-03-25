@@ -15,11 +15,7 @@ proj4string(r) <- raster::crs(shp)
 
 ext <- extent(-130, -60, 20, 50)  ## xmin, xmax, ymin, ymax
 rc <- crop(r, ext)
-plot(rc$X1)
-
 state <- subset(shp, CNTRY_NAME == "United States")
-xmin <- -130; ymin <- 20; xmax <- -60; ymax <- 50
-
 plot(rc$X1)
 plot(state, add = TRUE)
 
