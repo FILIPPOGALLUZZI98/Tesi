@@ -1,4 +1,4 @@
-xsuppressPackageStartupMessages({
+suppressPackageStartupMessages({
   library(sf)              ## useful for spatial manipulations
   library(sp)              ## useful for spatial manipulations
   library(plyr )
