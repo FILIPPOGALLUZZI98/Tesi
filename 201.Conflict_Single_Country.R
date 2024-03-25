@@ -28,32 +28,32 @@ cntry <- cntry[, c("relid", "code_status","type_of_violence","latitude" ,"longit
 
 
 # Per impostare lo stesso crs devo prima separare i valori della longitudine dalla latitudine
-cty <- cntry %>%
+cntry <- cntry %>%
   mutate(
     longitude = as.numeric(str_extract(stringr::str_extract(longitude, " \\d+\\.\\d+"), "\\d+\\.\\d+"))
   )
 # Elimino le righe con valori NA di latitudine e longitudine
-cty <- na.omit(cty[, c("relid", "code_status","type_of_violence","latitude" ,"longitude")])
+cntry <- na.omit(cntry[, c("relid", "code_status","type_of_violence","latitude" ,"longitude")])
 # Imposto lo stesso CRS dello shapefile sui punti
-cty <- st_as_sf(cty, coords = c("longitude", "latitude"), crs = st_crs(state))
-st_set_crs(cty, st_crs(state))
-cty <- cty %>%
+cntry <- st_as_sf(cntry, coords = c("longitude", "latitude"), crs = st_crs(state))
+st_set_crs(cntry, st_crs(state))
+cntry <- cntry %>%
   mutate(
     latitude = as.numeric(str_extract(geometry, "\\d+\\.\\d+")),
     longitude = as.numeric(str_extract(stringr::str_extract(geometry, " \\d+\\.\\d+"), "\\d+\\.\\d+"))
   )
-cty <- subset(cty, select = -geometry)
+cntry <- subset(cntry, select = -geometry)
 
 
 
 
 
-# cty è il dataset dei punti del paese che ho selezionato nel giusto crs
+# cntry è il dataset dei punti del paese che ho selezionato nel giusto crs
 ggplot(state) +           
   # plot the outlines of the shapefile of italy (using black borders and transparent filling)
   geom_sf(fill = NA, col = "black") +  
   # plot points for each event, using longitude, latitude as x and y, set shape and color of points using variable "event type" (which is either protests or riots)
-  geom_point(data = cty, aes(longitude, latitude, color = factor(code_status)), size = .5) +
+  geom_point(data = cntry, aes(longitude, latitude, color = factor(code_status)), size = .5) +
   # Assegna manualmente i colori ai valori di code_status
   scale_color_manual(values = c("1" = "red", "2" = "blue", "3" = "green"))
   theme_bw() +                     
