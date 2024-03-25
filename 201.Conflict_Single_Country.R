@@ -118,7 +118,6 @@ full <- left_join(full, gw_data_m[,c("year", "region","value")], by=c("year", "r
 
 #################################################################################################
 #################################################################################################
-#################################################################################################
 
 
 full1 <- full
@@ -127,17 +126,24 @@ state <- left_join(state, full1, by=c("ADMIN_NAME"="region"))
 
 
 data <- subset(state, year == 2019)
-
 ggplot(data, aes(fill = number)) +  
   # plots the sf object / shapefile
   geom_sf() + 
   # nice theme
   theme_bw() +         
   # viridis color palette
-  scale_fill_viridis_c(option="inferno", end=0.8) 
+  scale_fill_viridis_c(option="viridis", end=0.8) 
 
-head(state)
 
+years <- c(1990, 1991, 1992, 1993)  
+data_selected <- subset(state, year %in% years)
+ggplot(data, aes(fill = number)) +  
+  # plots the sf object / shapefile
+  geom_sf() + 
+  # nice theme
+  theme_bw() +         
+  # viridis color palette
+  scale_fill_viridis_c(option="viridis", end=0.8) 
 
 
 
