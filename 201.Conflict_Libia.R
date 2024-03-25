@@ -29,8 +29,9 @@ ggplot(state) +
   # plot the outlines of the shapefile of italy (using black borders and transparent filling)
   geom_sf(fill = NA, col = "black") +  
   # plot points for each event, using longitude, latitude as x and y, set shape and color of points using variable "event type" (which is either protests or riots)
-  geom_point(data = lib, aes(longitude, latitude), size=.1, col="red") + 
-  # set nice theme
+  geom_point(data = lib, aes(longitude, latitude, color = factor(code_status)), size = 1) +
+  # Assegna manualmente i colori ai valori di code_status
+  scale_color_manual(values = c("1" = "red", "2" = "blue", "3" = "green"))
   theme_bw() +                     
   # hide legend
   theme(legend.position = "none") +          
