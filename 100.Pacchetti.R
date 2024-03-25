@@ -1,6 +1,7 @@
-suppressPackageStartupMessages({
+xsuppressPackageStartupMessages({
   library(sf)              ## useful for spatial manipulations
   library(sp)              ## useful for spatial manipulations
+  library(plyr )
   library(raster)          ## useful for working with raster data
   library(ncdf4)           ## useful for working with raster data
   library(exactextractr)   ## useful for extracting data from raster files
