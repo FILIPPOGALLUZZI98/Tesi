@@ -2,6 +2,7 @@
 stato <- "Israel"
 
 state <- subset(shp, CNTRY_NAME == stato)
+state$BPL_CODE=NULL; state$CNTRY_CODE=NULL; state$GEOLEVEL1=NULL
 gw_data <- exactextractr::exact_extract(r, state, fun="mean")
 
 gw_data$region <- state$ADMIN_NAME
