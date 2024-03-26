@@ -33,6 +33,7 @@ ggplot(state, aes(fill=gw_2000)) +
 
 #################################################################################################
 ####  ALGORITHM  ################################################################################
+# Creo una lista dove ci sono tutti gli stati già uniti con valori di GW
 
 gw_data <- list()
 state <- list()
