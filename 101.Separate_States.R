@@ -1,7 +1,9 @@
 #################################################################################################
 ####  SINGLE STATES  ############################################################################
+# Valori del raster mediati nelle singole regioni di uno stato scelto
 
 state <- subset(shp, CNTRY_NAME == "Nigeria")
+
 state$BPL_CODE=NULL; state$CNTRY_CODE=NULL; state$GEOLEVEL1=NULL
 # Media dei valori del raster sulle regioni 
 gw_data <- exactextractr::exact_extract(r, state, fun="mean")
@@ -21,6 +23,7 @@ ggplot(state, aes(fill=gw_2000)) +
 
 #################################################################################################
 ####  ALGORITHM  ################################################################################
+# Lista contenente i valori del raster mediati nelle singole regioni di tutti gli stati uno per uno
 # Creo una lista dove ci sono tutti gli stati già uniti con valori di GW
 
 gw_data <- list()
@@ -37,6 +40,7 @@ for (i in 1:283) {
   b$region <- state[[i]]$ADMIN_NAME
   gw_data <- append(gw_data, list(b))
 }
+
 
 
 # Selezionare il nome del paese che voglio plottare e l'anno
