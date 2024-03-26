@@ -8,7 +8,7 @@ shp<- shp[-elementi,]
 rg <- raster::brick("GW_Data/ISIMIP3a/gwy.nc")  ## groundwstrg
 rt <- raster::brick("GW_Data/ISIMIP3a/twsy.nc")  ## total water storage
 rq <- raster::brick("GW_Data/ISIMIP3a/qry.nc")  ## runoff (??)
-proj4string(r) <- raster::crs(shp)
 
 r <- rg  ## Nei codici seguenti il file raster sarà chiamato 'r', quindi 
          ## devo scegliere quale usare
+proj4string(r) <- raster::crs(shp)
