@@ -37,7 +37,7 @@ colnames(gw_data_sc)[colnames(gw_data_sc) == "ADMIN_NAME"] <- "region"
 ##############################################################################################################################
 
 # Plot mappa anno scelto
-data <- subset(gw_data_sc, year == "1901")
+data <- subset(gw_data_sc, year == y)
 ggplot(data, aes(fill=value)) + 
   geom_sf(col="black") +
   theme_bw() +
