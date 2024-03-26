@@ -13,6 +13,13 @@ gw_data$region <- state$ADMIN_NAME
 
 # Seleziono soltanto le variabili che mi interessano
 events <- events[, c("relid", "code_status","type_of_violence","latitude" ,"longitude")]
+# Cambio i nomi del tipo di evento
+events <- mutate(events,
+                 code_status = case_when(
+                   code_status == 1 ~ "state",
+                   code_status == 2 ~ "Nstate",
+                   code_status == 3 ~ "onesided"
+                 ))
 
 
 
