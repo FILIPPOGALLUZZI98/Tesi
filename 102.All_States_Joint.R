@@ -1,5 +1,7 @@
 # Unisco direttamente i valori di GW direttamente sulle regioni
 gw_data <- exactextractr::exact_extract(r, shp, fun="mean")
+gw_data$region <- shp$ADMIN_NAME
+
 
 # Selezionare l'anno
 y <- 1901
