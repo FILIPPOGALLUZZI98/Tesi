@@ -10,7 +10,7 @@ gw_data_g$region <- shp$ADMIN_NAME
 gw_data_g <- reshape2::melt(gw_data_g, id.vars="region")
 
 
-ggplot(shp, aes(fill=gw_data[[paste0("mean.X", y - 1900)]])) + 
+ggplot(shp, aes(fill=gw_data_g[[paste0("mean.X", y - 1900)]])) + 
   geom_sf(col="black") +
   theme_bw() +
   labs(fill=paste("groundwstrg", y)) +
