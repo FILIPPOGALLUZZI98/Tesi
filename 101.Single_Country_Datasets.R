@@ -69,7 +69,7 @@ events <- events[order(events$year),]
 ##############################################################################################################################
 ##############################################################################################################################
 
-# Operazioni sui dati GW
+# Operazioni sui dati GW + events
 gw_events_data <- expand.grid(year = 1990:2022, region = unique(events$region),type=c("state","Nstate","onesided"))
 gw_events_data <- left_join(gw_events_data, events, by=c("region", "year", "type"="type"))
 gw_events_data$number[is.na(gw_events_data$number)] = 0 # assign a zero to each month/province where no data is observed
