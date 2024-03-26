@@ -2,6 +2,10 @@
 r <- rs
 # Selezionare lo stato
 stato <- "Israel"
+# Selezionare le regioni
+R <- c("", "", "", "", "")
+# R <- c(gw_data_t$region)  ## Se voglio vederle tutte insieme
+
 
 
 
@@ -13,8 +17,6 @@ gw_data_t$region <- state$ADMIN_NAME
 time_ser <- reshape2::melt(gw_data_t, id.vars="region")
 time_ser$date <- 1901 + seq(0, 118)
 
-R <- c(gw_data_t$region)
-# R <- c("", "", "", "", "")
 ggplot(subset(time_ser, region %in% R), 
        aes(date, value, fill=value, col=value)) +   
   geom_hline(yintercept=0) +                  
