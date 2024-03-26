@@ -13,9 +13,6 @@ r <- rs
 # Selezionare il paese e anno
 country <- "Nigeria"
 y <- "1990"
-# Selezionare le regioni per le serie temporali
-R <- c("Borno", "Gombe", "Nasarawa", "Sokoto")
-# R <- c(gw_data_t$region)  ## Se voglio vederle tutte insieme
 
 ##############################################################################################################################
 ##############################################################################################################################
