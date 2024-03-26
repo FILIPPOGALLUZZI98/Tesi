@@ -2,16 +2,15 @@
 # Quindi per lo stato selezionato, per ogni anno, per ogni regione e per ogni tipo di conflitto abbiamo
 # il valore del raster mediato sulla regione ed il numero di eventi
 
-#########################################################################################
-#########################################################################################
+
 
 # Seleziono lo stato
 country <- "Nigeria"
 # Scegliere quale raster usare (rs, rt, rq)
 r <- rs
 
-
-
+#########################################################################################
+#########################################################################################
 
 # Operazioni sui dati 
 file_path <- paste("Data/Conflict/", country, ".csv", sep = "")
