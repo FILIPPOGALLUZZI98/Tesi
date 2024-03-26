@@ -10,6 +10,9 @@ r <- rs
 # Selezionare il paese e anno
 country <- "Nigeria"
 y <- 1990
+# Selezionare le regioni per le serie temporali
+R <- c("", "", "", "", "")
+# R <- c(gw_data_t$region)  ## Se voglio vederle tutte insieme
 
 
 
@@ -20,18 +23,21 @@ state <- subset(shp, CNTRY_NAME == country)
 gw_data_sc <- exactextractr::exact_extract(r, state, fun="mean")
 # Aggiungo una colonna region al file gw_data_state
 gw_data_sc$region <- state$ADMIN_NAME
-
 gw_data_sc <- reshape2::melt(gw_data_sc, id.vars="region")
 anni <- 1901:2019
 gw_data_sc <- gw_data_sc %>%
   group_by(region) %>%
   mutate(year = anni)
 gw_data_sc$variable=NULL
-
-
 gw_data_sc <- left_join(state, gw_data_sc, by=c("ADMIN_NAME"="region")) 
+# Creo una variabile 'date' per le serie temporali
+gw_data_sc$date <- 1901 + seq(0, 118)
 
-# Plot anno scelto
+
+##############################################################################################################################
+##############################################################################################################################
+
+# Plot mappa anno scelto
 data <- subset(gw_data_sc, year == y)
 ggplot(data, aes(fill=value)) + 
   geom_sf(col="black") +
@@ -39,6 +45,19 @@ ggplot(data, aes(fill=value)) +
   labs(fill="gw storage") +
   scale_fill_viridis_c(option="viridis", end=0.8)
 
+# Plot serie temporali per regioni scelte
+ggplot(subset(gw_data_sc, region %in% R), 
+       aes(date, value, fill=value, col=value)) +   
+  geom_hline(yintercept=0) +                  
+  geom_hline(yintercept=-1.5, lty=3) +     
+  facet_wrap(region~., ncol=2) +        
+  theme_bw() +         
+  theme(strip.background=element_rect(fill="white")) +          
+  ylab("SPEI-12") +                                                                
+  xlab("") +                                                                       
+  geom_col() +                                                                      
+  scale_fill_viridis_c(option="inferno", end  = 0.8) +                              
+  scale_color_viridis_c(option="inferno", end = 0.8)
 
 
 
