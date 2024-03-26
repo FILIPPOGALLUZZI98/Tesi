@@ -9,9 +9,9 @@
 r <- rs
 # Selezionare il paese e anno
 country <- "Nigeria"
-y <- 1990
+y <- "1990"
 # Selezionare le regioni per le serie temporali
-R <- c("", "", "", "", "")
+R <- c("Borno", "Gombe", "Nasarawa", "Sokoto")
 # R <- c(gw_data_t$region)  ## Se voglio vederle tutte insieme
 
 
@@ -30,24 +30,25 @@ gw_data_sc <- gw_data_sc %>%
   mutate(year = anni)
 gw_data_sc$variable=NULL
 gw_data_sc <- left_join(state, gw_data_sc, by=c("ADMIN_NAME"="region")) 
-# Creo una variabile 'date' per le serie temporali
-gw_data_sc$date <- 1901 + seq(0, 118)
+colnames(gw_data_sc)[colnames(gw_data_sc) == "ADMIN_NAME"] <- "region"
 
 
 ##############################################################################################################################
 ##############################################################################################################################
 
 # Plot mappa anno scelto
-data <- subset(gw_data_sc, year == y)
+data <- subset(gw_data_sc, year == "1901")
 ggplot(data, aes(fill=value)) + 
   geom_sf(col="black") +
   theme_bw() +
   labs(fill="gw storage") +
   scale_fill_viridis_c(option="viridis", end=0.8)
 
+
+
 # Plot serie temporali per regioni scelte
 ggplot(subset(gw_data_sc, region %in% R), 
-       aes(date, value, fill=value, col=value)) +   
+       aes(year, value, fill=value, col=value)) +   
   geom_hline(yintercept=0) +                  
   geom_hline(yintercept=-1.5, lty=3) +     
   facet_wrap(region~., ncol=2) +        
