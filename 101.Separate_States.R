@@ -3,8 +3,8 @@
 # Valori del raster mediati nelle singole regioni di uno stato scelto
 
 state <- subset(shp, CNTRY_NAME == "Nigeria")
-
 state$BPL_CODE=NULL; state$CNTRY_CODE=NULL; state$GEOLEVEL1=NULL
+
 # Media dei valori del raster sulle regioni 
 gw_data <- exactextractr::exact_extract(r, state, fun="mean")
 gw_data$region <- state$ADMIN_NAME
