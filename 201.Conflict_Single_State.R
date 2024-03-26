@@ -1,5 +1,5 @@
-# Il dataset gw_events_data contine le variabili: year, region, type, number e value
-# QUindi per ogni anno, per ogni regione e per ogni tipo diconflitto abbiamo il valore
+# Il dataset gw_events_data contine le variabili: year, region, geometry, type, number e value
+# QUindi per ogni anno, per ogni regione e per ogni tipo di conflitto abbiamo il valore
 # del raster mediato sulla regione ed il numero di eventi
 
 #########################################################################################
@@ -93,13 +93,8 @@ gw_events_data <- left_join(gw_events_data, gw_data_m[,c("year", "region","value
 gw_events_data <- left_join(state, gw_events_data, by=c("ADMIN_NAME"="region")) 
 
 
-
-
-full1 <- full
-full1$type=NULL
-
-
-data <- subset(state, year == 2019)
+data <- subset(gw_events_data, year == 2019)
+data <- subset(gw_events_data, type == "state")
 ggplot(data, aes(fill = number)) +  
   # plots the sf object / shapefile
   geom_sf() + 
