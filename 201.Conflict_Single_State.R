@@ -1,6 +1,6 @@
-# Il dataset gw_events_data contine le variabili: year, region, geometry, type, number e value
-# QUindi per ogni anno, per ogni regione e per ogni tipo di conflitto abbiamo il valore
-# del raster mediato sulla regione ed il numero di eventi
+# Il dataset 'gw_events_data' contine le variabili: year, region, geometry, type, number e value
+# Quindi per lo stato selezionato, per ogni anno, per ogni regione e per ogni tipo di conflitto abbiamo
+# il valore del raster mediato sulla regione ed il numero di eventi
 
 #########################################################################################
 #########################################################################################
