@@ -13,6 +13,19 @@ gw_data$region <- state$ADMIN_NAME
 
 # Seleziono soltanto le variabili che mi interessano
 events <- events[, c("relid", "code_status","type_of_violence","latitude" ,"longitude")]
+# Rinomino i valori del tipo di evento
+events <- mutate(events,
+                 code_status = case_when(
+                   code_status == 1 ~ "state",
+                   code_status == 2 ~ "Nstate",
+                   code_status == 3 ~ "onesided"
+                 ))
+# Ordino e rinomino le colonne
+events <- events %>% group_by(relid, region, code_status,latitude, longitude) %>% summarise(number_events = n())
+colnames(events) <- c("year","region", "type", "latitude", "longitude","number")
+# Ordino il dataset rispetto all'anno
+events <- events[order(events$year),]
+
 
 
 
@@ -69,12 +82,6 @@ events$region   = state$ADMIN_NAME[unlist(intersection)]
 # now we will delete the explicit spatial information in acled (based on the variable `geometry`)
 # technically, we don't have to do this, but it speeds up some of the code that comes below
 events$geometry = NULL
-
-
-events <- events %>% group_by(relid, region, code_status,latitude, longitude) %>% summarise(number_events = n())
-colnames(events) <- c("year","region", "type", "latitude", "longitude","number")
-# Ordino il dataset rispetto all'anno
-events <- events[order(events$year),]
 
 
 
