@@ -1,4 +1,4 @@
-# Il dataset 'state'contiene le variabili: CNTRY_NAME, ADMIN_NAME, geometry, value, year
+# Il dataset 'gw_data_sc'contiene le variabili: CNTRY_NAME, ADMIN_NAME, geometry, value, year
 # Quindi abbiamo, per lo stato selezionato, per ogni regione e per ogni anno il valore della media del raster selezionato
 # all'interno delle regioni dello stato
 
@@ -29,7 +29,7 @@ gw_data_sc <- gw_data_sc %>%
 gw_data_sc$variable=NULL
 
 
-state <- left_join(state, gw_data_sc, by=c("ADMIN_NAME"="region")) 
+gw_data_sc <- left_join(state, gw_data_sc, by=c("ADMIN_NAME"="region")) 
 
 # Plot anno scelto
 data <- subset(state, year == y)
