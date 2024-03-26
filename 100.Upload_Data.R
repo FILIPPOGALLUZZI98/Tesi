@@ -1,5 +1,5 @@
 # Shapefile
-shp <- sf::read_sf("GW_Data/world_geolev1_2021/world_geolev1_2021.shp")
+shp <- sf::read_sf("Data/Shapefile/shapefile.shp")
 shp <- sf::st_transform(shp, sp::CRS("+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs"))
 
 # Groundwater Storage
