@@ -24,6 +24,28 @@ ggplot(subset(gw_data_sc, region %in% R),
 
 ######################################################################################################
 
+ggplot(state) +           
+  geom_sf(fill = NA, col = "black") +  
+  # plot points for each event, using longitude, latitude as x and y, set shape and color of points using variable "event type" (which is either protests or riots)
+  geom_point(data = events, aes(longitude, latitude, color = factor(type)), size = .5) +
+  # Assegna manualmente i colori ai valori di code_status
+  scale_color_manual(values = c("state" = "red", "Nstate" = "blue", "onesided" = "green"))+
+  theme_bw() +                     
+  # white background for variable names
+  theme(strip.background = element_rect(fill="white"))
+
+data <- subset(gw_events_data, year == 2019)
+data <- subset(gw_events_data, type == "state")
+ggplot(data, aes(fill = number)) +  
+  # plots the sf object / shapefile
+  geom_sf() + 
+  # nice theme
+  theme_bw() +         
+  # viridis color palette
+  scale_fill_viridis_c(option="inferno", end=0.8) 
+
+
+
 
 
 
