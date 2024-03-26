@@ -54,11 +54,11 @@ ggplot(subset(gw_data_sc, region %in% R),
   facet_wrap(region~., ncol=2) +        
   theme_bw() +         
   theme(strip.background=element_rect(fill="white")) +          
-  ylab("SPEI-12") +                                                                
+  ylab("") +                                                                
   xlab("") +                                                                       
   geom_col() +                                                                      
-  scale_fill_viridis_c(option="inferno", end  = 0.8) +                              
-  scale_color_viridis_c(option="inferno", end = 0.8)
+  scale_fill_viridis_c(option="viridis", end  = 0.8) +                              
+  scale_color_viridis_c(option="viridis", end = 0.8)
 
 
 
