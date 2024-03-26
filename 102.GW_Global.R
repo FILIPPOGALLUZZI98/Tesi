@@ -18,9 +18,9 @@ y <- 1901
 gw_data_g <- exactextractr::exact_extract(r, shp, fun="mean")
 gw_data_g$region <- shp$ADMIN_NAME
 gw_data_g <- reshape2::melt(gw_data_g, id.vars="region")
+gw_data_g <- left_join(shp, gw_data_g, by=c("ADMIN_NAME"="region")) 
 
-
-ggplot(shp, aes(fill=gw_data_g[[paste0("mean.X", y - 1900)]])) + 
+ggplot(gw_data_g, aes(fill=gw_data_g[[paste0("mean.X", y - 1900)]])) + 
   geom_sf(col="black") +
   theme_bw() +
   labs(fill=paste("groundwstrg", y)) +
