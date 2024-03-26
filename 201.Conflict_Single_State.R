@@ -1,29 +1,18 @@
-# Dataset dei conflitti dei singoli stati da Uppsala
-
 # Seleziono lo stato
 country <- "Nigeria"
+# Scegliere quale raster usare (rs, rt, rq)
+r <- rs
 
 
-file_path <- paste("GW_Data/Conflict_Data/", country, ".csv", sep = "")
+
+
+# Operazioni sui dati 
+file_path <- paste("Data/Conflict/", country, ".csv", sep = "")
 events <- read.csv(file_path)
 state <- subset(shp, CNTRY_NAME == country)    ## plot(state[,"geometry"])
-state$BPL_CODE=NULL; state$CNTRY_CODE=NULL; state$GEOLEVEL1=NULL
 gw_data <- exactextractr::exact_extract(r, state, fun="mean")
 gw_data$region <- state$ADMIN_NAME
 gw_data_m <- reshape2::melt(gw_data, id.vars="region")
-
-# Seleziono soltanto le variabili che mi interessano
-events <- events[, c("relid", "code_status","latitude" ,"longitude", "best_est")]
-events <- events %>%
-  rename(year = relid,
-         type = code_status)
-events <- mutate(events,
-                 type = case_when(
-                   type == 1 ~ "state",
-                   type == 2 ~ "Nstate",
-                   type == 3 ~ "onesided"
-                 ))
-
 events <- events %>%
   mutate(
     longitude = as.numeric(str_extract(stringr::str_extract(longitude, " \\d+\\.\\d+"), "\\d+\\.\\d+"))
@@ -39,6 +28,8 @@ events <- events %>%
     longitude = as.numeric(str_extract(stringr::str_extract(geometry, " \\d+\\.\\d+"), "\\d+\\.\\d+"))
   )
 events$geometry = NULL
+
+
 
 
 ggplot(state) +           
