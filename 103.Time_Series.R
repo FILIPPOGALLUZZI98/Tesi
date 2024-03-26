@@ -1,3 +1,4 @@
+# Variazioni temporali delle regioni selezionate di uno stato
 # Selezionare lo stato
 stato <- "Israel"
 
