@@ -1,4 +1,4 @@
-# Il dataset 'gw_data_sc'contiene le variabili: CNTRY_NAME, ADMIN_NAME, geometry, value, year
+# Il dataset 'gw_data_sc'contiene le variabili: CNTRY_NAME, region, geometry, value, year
 # Quindi abbiamo, per lo stato selezionato, per ogni regione e per ogni anno il valore della media del raster selezionato
 # all'interno delle regioni dello stato
 
