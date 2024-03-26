@@ -77,11 +77,11 @@ gw_events_data <- expand.grid(year = 1990:2022, region = unique(events$region),t
 gw_events_data <- left_join(gw_events_data, events, by=c("region", "year", "type"="type"))
 gw_events_data$number[is.na(gw_events_data$number)] = 0 # assign a zero to each month/province where no data is observed
 gw_events_data$latitude = NULL ; gw_events_data$longitude=NULL
-gw_data_m <- gw_data_sc %>%
+filter <- gw_data_sc %>%
   filter(year > 1989)
 gw_events_data <- gw_events_data %>%
   filter(year != 2020 & year != 2021 & year != 2022)
-gw_events_data <- left_join(gw_events_data, gw_data_m[,c("year", "region","value")], by=c("year", "region"))
+gw_events_data <- left_join(gw_events_data, filter[,c("year", "region","value")], by=c("year", "region"))
 gw_events_data <- left_join(state, gw_events_data, by=c("ADMIN_NAME"="region")) 
 
 
