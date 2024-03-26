@@ -21,7 +21,7 @@ R <- c("Borno", "Gombe", "Nasarawa", "Sokoto")
 ##############################################################################################################################
 
 # Subset dello shapefile per il paese selezionato
-state <- subset(shp, CNTRY_NAME == country)
+state <- subset(shp, CNTRY_NAME == country)    ## plot(state[,"geometry"])
 # Media dei valori del raster sulle regioni 
 gw_data_sc <- exactextractr::exact_extract(r, state, fun="mean")
 # Aggiungo una colonna region al file gw_data_state
@@ -41,11 +41,9 @@ colnames(gw_data_sc)[colnames(gw_data_sc) == "ADMIN_NAME"] <- "region"
 # Operazioni sui dati events
 file_path <- paste("Data/Conflict/", country, ".csv", sep = "")
 events <- read.csv(file_path)
-state <- subset(shp, CNTRY_NAME == country)    ## plot(state[,"geometry"])
 events <- events %>%
   mutate(
-    longitude = as.numeric(str_extract(stringr::str_extract(longitude, " \\d+\\.\\d+"), "\\d+\\.\\d+"))
-  )
+    longitude = as.numeric(str_extract(stringr::str_extract(longitude, " \\d+\\.\\d+"), "\\d+\\.\\d+")))
 # Elimino le righe con valori NA di latitudine e longitudine
 events <- na.omit(events[, c("year", "type","latitude" ,"longitude","best_est")])
 # Imposto lo stesso CRS dello shapefile sui punti
@@ -71,6 +69,8 @@ colnames(events) <- c("year","region", "type", "latitude", "longitude","number")
 # Ordino il dataset rispetto all'anno
 events <- events[order(events$year),]
 
+##############################################################################################################################
+##############################################################################################################################
 
 # Operazioni sui dati GW
 gw_events_data <- expand.grid(year = 1990:2022, region = unique(events$region),type=c("state","Nstate","onesided"))
@@ -84,9 +84,6 @@ gw_events_data <- gw_events_data %>%
 gw_events_data <- left_join(gw_events_data, filter[,c("year", "region","value")], by=c("year", "region"))
 gw_events_data <- left_join(state, gw_events_data, by=c("ADMIN_NAME"="region")) 
 
-
-#################################################################################################
-#################################################################################################
 
 
 
