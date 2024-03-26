@@ -4,6 +4,7 @@ country <- "Nigeria"
 file_path <- paste("GW_Data/Conflict_Data/", country, ".csv", sep = "")
 events <- read.csv(file_path)
 state <- subset(shp, CNTRY_NAME == country)
+state$BPL_CODE=NULL; state$CNTRY_CODE=NULL; state$GEOLEVEL1=NULL
 gw_data <- exactextractr::exact_extract(r, state, fun="mean")
 gw_data$region <- state$ADMIN_NAME
 
