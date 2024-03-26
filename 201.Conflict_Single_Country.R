@@ -1,5 +1,8 @@
+# Dataset dei conflitti dei singoli stati da Uppsala
+
 # Seleziono lo stato
 country <- "Nigeria"
+
 
 file_path <- paste("GW_Data/Conflict_Data/", country, ".csv", sep = "")
 events <- read.csv(file_path)
