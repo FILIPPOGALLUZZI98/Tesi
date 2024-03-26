@@ -2,8 +2,8 @@
 # Quindi abbiamo, per lo stato selezionato, per ogni regione e per ogni anno il valore della media del raster selezionato
 # all'interno delle regioni dello stato
 
-##############################################################################################################################
-##############################################################################################################################
+
+
 
 # Scegliere quale raster usare (rs, rt, rq)
 r <- rs
@@ -14,8 +14,8 @@ y <- "1990"
 R <- c("Borno", "Gombe", "Nasarawa", "Sokoto")
 # R <- c(gw_data_t$region)  ## Se voglio vederle tutte insieme
 
-
-
+##############################################################################################################################
+##############################################################################################################################
 
 # Subset dello shapefile per il paese selezionato
 state <- subset(shp, CNTRY_NAME == country)
