@@ -13,7 +13,7 @@ gw_data$region <- state$ADMIN_NAME
 gw_data_m <- reshape2::melt(gw_data, id.vars="region")
 
 # Seleziono soltanto le variabili che mi interessano
-events <- events[, c("relid", "code_status","latitude" ,"longitude")]
+events <- events[, c("relid", "code_status","latitude" ,"longitude", "best_est")]
 events <- events %>%
   rename(year = relid,
          type = code_status)
@@ -29,7 +29,7 @@ events <- events %>%
     longitude = as.numeric(str_extract(stringr::str_extract(longitude, " \\d+\\.\\d+"), "\\d+\\.\\d+"))
   )
 # Elimino le righe con valori NA di latitudine e longitudine
-events <- na.omit(events[, c("year", "type","latitude" ,"longitude")])
+events <- na.omit(events[, c("year", "type","latitude" ,"longitude","best_est")])
 # Imposto lo stesso CRS dello shapefile sui punti
 events <- st_as_sf(events, coords = c("longitude", "latitude"), crs = st_crs(state))
 st_set_crs(events, st_crs(state))
@@ -48,10 +48,6 @@ ggplot(state) +
   # Assegna manualmente i colori ai valori di code_status
   scale_color_manual(values = c("state" = "red", "Nstate" = "blue", "onesided" = "green"))+
   theme_bw() +                     
-  # hide legend
-  theme(legend.position = "none") +          
-  # set color scheme
-  scale_color_viridis_d(end = 0.7,begin=0.2,option="inferno") +    
   # white background for variable names
   theme(strip.background = element_rect(fill="white"))
 
@@ -124,14 +120,6 @@ ggplot(data, aes(fill = number)) +
   theme_bw() +         
   # viridis color palette
   scale_fill_viridis_c(option="viridis", end=0.8) 
-
-
-
-
-
-
-
-
 
 
 
