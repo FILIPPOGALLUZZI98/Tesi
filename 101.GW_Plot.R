@@ -32,7 +32,7 @@ gw_data_sc$variable=NULL
 gw_data_sc <- left_join(state, gw_data_sc, by=c("ADMIN_NAME"="region")) 
 
 # Plot anno scelto
-data <- subset(state, year == y)
+data <- subset(gw_data_sc, year == y)
 ggplot(data, aes(fill=value)) + 
   geom_sf(col="black") +
   theme_bw() +
