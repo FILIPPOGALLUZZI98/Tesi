@@ -1,3 +1,10 @@
+# Il dataset gw_events_data contine le variabili: year, region, type, number e value
+# QUindi per ogni anno, per ogni regione e per ogni tipo diconflitto abbiamo il valore
+# del raster mediato sulla regione ed il numero di eventi
+
+#########################################################################################
+#########################################################################################
+
 # Seleziono lo stato
 country <- "Nigeria"
 # Scegliere quale raster usare (rs, rt, rq)
@@ -13,6 +20,11 @@ state <- subset(shp, CNTRY_NAME == country)    ## plot(state[,"geometry"])
 gw_data <- exactextractr::exact_extract(r, state, fun="mean")
 gw_data$region <- state$ADMIN_NAME
 gw_data_m <- reshape2::melt(gw_data, id.vars="region")
+anni <- 1901:2019
+gw_data_m <- gw_data_m %>%
+  group_by(region) %>%
+  mutate(year = anni)
+gw_data_m$variable=NULL
 events <- events %>%
   mutate(
     longitude = as.numeric(str_extract(stringr::str_extract(longitude, " \\d+\\.\\d+"), "\\d+\\.\\d+"))
@@ -62,34 +74,29 @@ events <- events[order(events$year),]
 #################################################################################################
 #################################################################################################
 
-full <- expand.grid(year = 1990:2022, region = unique(events$region),type=c("state","Nstate","onesided"))
-full <- left_join(full, events, by=c("region", "year", "type"="type"))
-full$number[is.na(full$number)] = 0 # assign a zero to each month/province where no data is observed
-full$latitude = NULL ; full$longitude=NULL
-
-gw_data_m$year <- lubridate::year(zoo::as.Date(zoo::as.yearmon(substr(as.character(gw_data_m$variable), 7, 13), "%Y.%m")))  # extract the year from the data
-anni <- 1901:2019
-nomi_anni <- paste("X", anni - 1900, sep = "")
-gw_data_m <- rename(gw_data_m, !!paste0("mean.", nomi_anni) := variable)
-gw_data_m <- gw_data_m %>%
-  group_by(region) %>%
-  mutate(year = anni)
-gw_data_m$variable=NULL
+gw_events_data <- expand.grid(year = 1990:2022, region = unique(events$region),type=c("state","Nstate","onesided"))
+gw_events_data <- left_join(gw_events_data, events, by=c("region", "year", "type"="type"))
+gw_events_data$number[is.na(gw_events_data$number)] = 0 # assign a zero to each month/province where no data is observed
+gw_events_data$latitude = NULL ; gw_events_data$longitude=NULL
 gw_data_m <- gw_data_m %>%
   filter(year > 1989)
 
-full <- full %>%
+gw_events_data <- gw_events_data %>%
   filter(year != 2020 & year != 2021 & year != 2022)
 
-full <- left_join(full, gw_data_m[,c("year", "region","value")], by=c("year", "region"))
+gw_events_data <- left_join(gw_events_data, gw_data_m[,c("year", "region","value")], by=c("year", "region"))
 
 
 #################################################################################################
 #################################################################################################
+
+gw_events_data <- left_join(state, gw_events_data, by=c("ADMIN_NAME"="region")) 
+
+
+
 
 full1 <- full
 full1$type=NULL
-state <- left_join(state, full1, by=c("ADMIN_NAME"="region")) 
 
 
 data <- subset(state, year == 2019)
