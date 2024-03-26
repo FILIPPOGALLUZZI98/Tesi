@@ -3,6 +3,7 @@ gw_data <- exactextractr::exact_extract(r, shp, fun="mean")
 
 # Selezionare l'anno
 y <- 1901
+
 ggplot(shp, aes(fill=gw_data[[paste0("mean.X", y - 1900)]])) + 
   geom_sf(col="black") +
   theme_bw() +
