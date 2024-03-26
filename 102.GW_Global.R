@@ -2,6 +2,9 @@
 #  Quindi per ogni regione (di tutti i paesi) abbiamo l'anno (variable) e il valore
 # del raster mediato nelle regioni
 
+###  MANCA DA RINOMINARE VARIABLE --> ANNO (CIOE DA MEAN.X1 A 1901 PER TUTTI I VALORI)  ###
+
+
 ##############################################################################################
 ##############################################################################################
 
