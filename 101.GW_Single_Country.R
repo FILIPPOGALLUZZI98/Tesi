@@ -1,5 +1,5 @@
 # Il dataset 'state'contiene le variabili: CNTRY_NAME, ADMIN_NAME, geometry, value, year
-# Quindi abbiamo, per lo stato selezionato, per ogni regione e per ogni anno il valore del raster selezionato
+# Quindi abbiamo, per lo stato selezionato, per ogni regione e per ogni anno il valore della media del raster selezionato
 # all'interno delle regioni dello stato
 
 ##############################################################################################################################
