@@ -1,4 +1,4 @@
-# Il dataset 'gw_data_g' contiene le seguenti variabili: region, variable, value
+# Il dataset 'gw_data_g' contiene le seguenti variabili: region, geometry, variable, value
 #  Quindi per ogni regione (di tutti i paesi) abbiamo l'anno (variable) e il valore
 # del raster mediato nelle regioni
 
