@@ -46,8 +46,8 @@ for (i in 1:283) {
 # Selezionare il nome del paese che voglio plottare e l'anno
 y <- 1901
 country <- "Nigeria"
-x <- which(nomi == country)
 
+x <- which(nomi == country)
 ggplot(state[[x]], aes(fill=gw_data[[x]][[paste0("mean.X", y - 1900)]])) + 
   geom_sf(col="black") +
   theme_bw() +
