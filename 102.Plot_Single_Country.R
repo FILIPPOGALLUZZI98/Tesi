@@ -9,6 +9,10 @@ ggplot(data, aes(fill=value)) +
 ######################################################################################################
 
 # Plot serie temporali per regioni scelte
+# Selezionare le regioni per le serie temporali
+R <- c("Borno", "Gombe", "Nasarawa", "Sokoto")
+# R <- c(gw_data_t$region)  ## Se voglio vederle tutte insieme
+
 ggplot(subset(gw_data_sc, region %in% R), 
        aes(year, value, fill=value, col=value)) +   
   geom_hline(yintercept=0) +                  
