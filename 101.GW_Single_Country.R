@@ -4,7 +4,6 @@
 
 
 
-
 # Scegliere quale raster usare (rs, rt, rq)
 r <- rs
 # Selezionare il paese e anno
