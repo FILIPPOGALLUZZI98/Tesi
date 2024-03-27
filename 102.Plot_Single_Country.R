@@ -1,5 +1,5 @@
 # Select the country
-country <- "Nigeria"
+country <- "Ethiopia"
 # Select the year
 y <- "2000"
 # Select the raster
@@ -26,7 +26,7 @@ ggplot(data_year, aes(fill=value)) +
 
 # Selezionare le regioni per le serie temporali
 # R <- c("", "", "", "")
-R <- c(data_gw_events$ADMIN_NAME)  ## Se voglio vederle tutte insieme
+R <- unique(data_gw_events$ADMIN_NAME)  ## Se voglio vederle tutte insieme
 
 ggplot(subset(data_gw_events, ADMIN_NAME %in% R), 
        aes(year, value, fill=value, col=value)) +   
@@ -74,7 +74,7 @@ ggplot(data = agg_data, aes(x = year, y = count)) +
 ######################################################################################################
 # Plot delle timeseries dei conflitti Nstate in varie regioni scelte 
 
-# reg <- c(data_gw_events$ADMIN_NAME)  ## Se voglio vederle tutte insieme
+# reg <- unique(data_gw_events$ADMIN_NAME)  ## Se voglio vederle tutte insieme
 reg <- c("Abia", "Adamawa", "Anambra", "Borno", "Edo", "Jigawa", "Nasarawa", "Ogun")
 data <- data_gw_events; data$geometry=NULL
 agg_data <- data %>%
@@ -103,7 +103,7 @@ ggplot(data = agg_data, aes(x = year, y = count)) +
 ######################################################################################################
 # plot timeseries dei conflitti in regioni scelte state+Nstate+onesided
 
-# reg <- c(data_gw_events$ADMIN_NAME)  ## Se voglio vederle tutte insieme
+# reg <- unique(data_gw_events$ADMIN_NAME)  ## Se voglio vederle tutte insieme
 reg <- c("Abia", "Adamawa", "Anambra", "Borno", "Edo", "Jigawa", "Nasarawa", "Ogun")
 data <- data_gw_events; data$geometry=NULL
 agg_data <- data %>%
@@ -144,6 +144,7 @@ ggplot(agg_data, aes(year)) +
 # PLOT GW+CONFLICTS SLECTED REGIONS state+Nstate+onesided
 
 reg <- c("Abia", "Adamawa", "Anambra", "Borno", "Edo", "Jigawa", "Nasarawa", "Ogun")
+reg <- unique(data_gw_events$ADMIN_NAME)
 data <- data_gw_events; data$geometry=NULL
 agg_data <- data %>%
   filter(ADMIN_NAME %in% reg) %>%
