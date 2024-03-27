@@ -82,14 +82,13 @@ gw_events_sc <- left_join(state, gw_events_sc, by=c("ADMIN_NAME"="region"))
 gw_events_sc$geometry.y=NULL
 st_geometry(gw_events_sc) <- "Geometry"
 
-file_name <- paste0(country, "_gw_events", ".csv")
-write.csv(gw_events_sc, file = file.path("Data/GW_Conflict", file_name), row.names = FALSE)
 
 
-
-
-
-
+percorso_cartella <- paste0("Data/GW_Conflict/",country,"/")
+if (!file.exists(percorso_cartella)) {
+  dir.create(percorso_cartella, recursive = TRUE)
+}
+write_sf(gw_events_sc, paste0(percorso_cartella, country, "_gw_events.shp"))
 
 
 
