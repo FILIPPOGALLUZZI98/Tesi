@@ -148,16 +148,22 @@ agg_data <- data %>%
   group_by(year, ADMIN_NAME, value) %>%
   summarise(count = sum(number))
 
-
-
-
-
-
-
+b<-data.frame()
+for (i in reg){
+  a <- subset(agg_data, ADMIN_NAME==i)
+  mvalue <- mean(a$value)
+  svalue <- sd(a$value)
+  mcount <- mean(a$count)
+  scount <- sd(a$count)
+  a$Svalue <- (a$value-mvalue)/svalue
+  a$Scount <- (a$count-mcount)/scount
+  b <- rbind(b, a)
+}
+agg_data <- b
 
 ggplot(data = agg_data, aes(year)) +
-  geom_line(aes(y = value), colour = "blue") +
-  geom_line(aes(y = lcount), colour = "red") +
+  geom_line(aes(y = Svalue), colour = "blue") +
+  geom_line(aes(y = Scount), colour = "red")+
   facet_wrap(~ ADMIN_NAME, ncol = 3)
 
 
