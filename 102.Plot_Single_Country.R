@@ -1,5 +1,5 @@
 # Select the country
-country <- "Myanmar"
+country <- "Nigeria"
 # Select the year
 y <- "2000"
 # Select the raster
@@ -8,6 +8,9 @@ r <- "rs"
 path <- paste0("Data/GW_Conflict/", country, "/")
 data_gw_events <- sf::read_sf(paste0(path, country,"_gw_events_", r,".shp"))
 events <-read.csv(paste0(path, country, "_events.csv"))
+
+
+
 ######################################################################################################
 
 # Plot mappa GW anno scelto
@@ -36,26 +39,60 @@ ggplot(subset(data_gw_events, ADMIN_NAME %in% R),
   scale_fill_viridis_c(option="viridis", end  = 0.8) +                              
   scale_color_viridis_c(option="viridis", end = 0.8)
 
+######################################################################################################
+
+# Plot data points over geometry figure
+shape <- data_gw_events; shape$CNTRY_NAME=NULL; shape$year=NULL; shape$value=NULL;shape$type=NULL
+sf_data <- st_as_sf(dataframe_unici <- shape[!duplicated(shape$ADMIN_NAME), ], wkt = "geometry")
+ggplot(sf_data) +           
+  geom_sf(fill = NA, col = "black") +  
+  geom_point(data = events, aes(longitude, latitude), size = .5) +
+  # Assegna manualmente i colori ai valori di code_status
+  scale_color_manual(values = c("state" = "red", "Nstate" = "blue", "onesided" = "green"))+
+  theme_bw() +                     
+  # white background for variable names
+  theme(strip.background = element_rect(fill="white"))
 
 ######################################################################################################
-# Plot della timeseries in una regione dei conflitti Nstate
 
-reg <- "Kayin"
+# Plot della timeseries in una regione dei conflitti Nstate
+print(unique(data_gw_events$ADMIN_NAME))
+reg <- "Ondo"
+
 data <- subset(data_gw_events,ADMIN_NAME==reg)
 data <- subset(data, type=="Nstate")
+agg_data <- data %>%
+  group_by(year, ADMIN_NAME) %>%
+  summarise(count = sum(number))
+
+ggplot(data = agg_data, aes(x = year, y = count)) +
+  geom_point() +  # Aggiunge i punti
+  geom_line() +   # Aggiunge la linea
+  labs(x = "Year", y = "Count")
 
 
-ggplot(data = data, aes(x = year, y = count)) +
+
+reg <- c("Abia", "Adamawa", "Anambra", "Borno", "Edo", "Jigawa", "Nasarawa", "Ogun")
+dati <- data_gw_events; dati$geometry=NULL
+agg_data <- dati %>%
+  filter(type == "Nstate", ADMIN_NAME %in% reg) %>%
+  group_by(year, ADMIN_NAME) %>%
+  summarise(count = sum(number))
+
+ggplot(data = agg_data, aes(x = year, y = count)) +
   geom_point() +  # Aggiunge i punti
   geom_line() +   # Aggiunge la linea
   labs(x = "Year", y = "Count") +
-  ggtitle("Somma dei valori 'number' per anno")
+  facet_wrap(~ ADMIN_NAME, ncol = 4)
+
+
+
 
 
 ######################################################################################################
-# Plot della timeseries dei conflitti in una regione state+Nstate+onesided
 
-reg <- "Kayin"
+# Plot della timeseries dei conflitti in una regione state+Nstate+onesided
+reg <- "Ondo"
 data <- subset(data_gw_events,ADMIN_NAME==reg)
 agg_data <- data %>%
   group_by(year, ADMIN_NAME) %>%
@@ -64,33 +101,11 @@ agg_data <- data %>%
 ggplot(data = agg_data, aes(x = year, y = count)) +
   geom_point() +  # Aggiunge i punti
   geom_line() +   # Aggiunge la linea
-  labs(x = "Year", y = "Count") +
-  ggtitle("Somma dei valori 'number' per anno")
+  labs(x = "Year", y = "Count")
 
 ######################################################################################################
-# Da togliere state e mettere data_gw_events
 
-ggplot(data_gw_events) +           
-  geom_sf(fill = NA, col = "black") +  
-  geom_point(data = events, aes(longitude, latitude, color = factor(type)), size = .5) +
-  # Assegna manualmente i colori ai valori di code_status
-  scale_color_manual(values = c("state" = "red", "Nstate" = "blue", "onesided" = "green"))+
-  theme_bw() +                     
-  # white background for variable names
-  theme(strip.background = element_rect(fill="white"))
-
-
-
-
-
-
-
-
-
-
-
-
-
+reg <- c("Kachin", "Magway", "Sagaing", "Kayin", "Chin", "Kayah", "Tanintharyi", "Bago")
 
 
 
