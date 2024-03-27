@@ -12,8 +12,8 @@ events <-read.csv(paste0(path, country, "_events.csv"))
 
 
 ######################################################################################################
-
 # Plot mappa GW anno scelto
+
 data_year <- subset(data_gw_events, year == y)
 ggplot(data_year, aes(fill=value)) + 
   geom_sf(col="black") +
@@ -22,8 +22,8 @@ ggplot(data_year, aes(fill=value)) +
   scale_fill_viridis_c(option="viridis", end=0.8)
 
 ######################################################################################################
-
 # Plot serie temporali GW per regioni scelte
+
 # Selezionare le regioni per le serie temporali
 # R <- c("", "", "", "")
 R <- c(data_gw_events$ADMIN_NAME)  ## Se voglio vederle tutte insieme
@@ -40,8 +40,8 @@ ggplot(subset(data_gw_events, ADMIN_NAME %in% R),
   scale_color_viridis_c(option="viridis", end = 0.8)
 
 ######################################################################################################
-
 # Plot data points over geometry figure
+
 shape <- data_gw_events; shape$CNTRY_NAME=NULL; shape$year=NULL; shape$value=NULL;shape$type=NULL
 sf_data <- st_as_sf(dataframe_unici <- shape[!duplicated(shape$ADMIN_NAME), ], wkt = "geometry")
 ggplot(sf_data) +           
@@ -54,8 +54,8 @@ ggplot(sf_data) +
   theme(strip.background = element_rect(fill="white"))
 
 ######################################################################################################
-
 # Plot della timeseries in una regione dei conflitti Nstate
+
 print(unique(data_gw_events$ADMIN_NAME))
 reg <- "Ondo"
 
@@ -88,8 +88,8 @@ ggplot(data = agg_data, aes(x = year, y = count)) +
   facet_wrap(~ ADMIN_NAME, ncol = 6)
 
 ######################################################################################################
-
 # Plot della timeseries dei conflitti in una regione state+Nstate+onesided
+
 reg <- "Ondo"
 data <- subset(data_gw_events,ADMIN_NAME==reg)
 agg_data <- data %>%
