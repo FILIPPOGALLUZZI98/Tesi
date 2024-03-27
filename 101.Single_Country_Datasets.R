@@ -83,7 +83,7 @@ gw_events_sc$geometry.y=NULL
 st_geometry(gw_events_sc) <- "Geometry"
 
 file_name <- paste0("gw_events_", country, ".csv")
-write.csv(gw_events_sc, file = file.path("Data", file_name), row.names = FALSE)
+write.csv(gw_events_sc, file = file.path("Data/GW_Conflict", file_name), row.names = FALSE)
 
 
 
