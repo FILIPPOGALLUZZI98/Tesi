@@ -82,13 +82,14 @@ gw_events_sc$geometry.y=NULL
 st_geometry(gw_events_sc) <- "Geometry"
 
 
-
+get_variable_name <- function(var) {
+  deparse(substitute(var))}
+a <- get_variable_name(r)
 percorso_cartella <- paste0("Data/GW_Conflict/",country,"/")
 if (!file.exists(percorso_cartella)) {
   dir.create(percorso_cartella, recursive = TRUE)
 }
-write_sf(gw_events_sc, paste0(percorso_cartella, country, "_gw_events.shp"))
-
+write_sf(gw_events_sc, paste0(percorso_cartella, country, "_gw_events_",a ".shp"))
 write.csv(events,paste0(percorso_cartella, country, "_events.csv"))
 
 
