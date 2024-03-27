@@ -45,7 +45,7 @@ data <- subset(data_gw_events,ADMIN_NAME==reg)
 data <- subset(data, type=="Nstate")
 
 
-ggplot(data = agg_data, aes(x = year, y = count)) +
+ggplot(data = data, aes(x = year, y = count)) +
   geom_point() +  # Aggiunge i punti
   geom_line() +   # Aggiunge la linea
   labs(x = "Year", y = "Count") +
