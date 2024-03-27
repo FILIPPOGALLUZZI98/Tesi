@@ -35,6 +35,18 @@ ggplot(subset(data_gw_events, ADMIN_NAME %in% R),
   scale_color_viridis_c(option="viridis", end = 0.8)
 
 ######################################################################################################
+
+data <- subset(data_gw_events, year == 2019)
+data <- subset(data_gw_events, type == "state")
+ggplot(data, aes(fill = number)) +  
+  # plots the sf object / shapefile
+  geom_sf() + 
+  # nice theme
+  theme_bw() +         
+  # viridis color palette
+  scale_fill_viridis_c(option="inferno", end=0.8) 
+
+######################################################################################################
 # Da togliere state e mettere data_gw_events
 
 ggplot(data_gw_events) +           
@@ -46,15 +58,7 @@ ggplot(data_gw_events) +
   # white background for variable names
   theme(strip.background = element_rect(fill="white"))
 
-data <- subset(data_gw_events, year == 2019)
-data <- subset(data_gw_events, type == "state")
-ggplot(data, aes(fill = number)) +  
-  # plots the sf object / shapefile
-  geom_sf() + 
-  # nice theme
-  theme_bw() +         
-  # viridis color palette
-  scale_fill_viridis_c(option="inferno", end=0.8) 
+
 
 
 
