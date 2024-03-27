@@ -10,6 +10,7 @@
 
 # Scegliere quale raster usare (rs, rt, rq)
 r <- rs
+a <- "rs"
 # Selezionare il paese e anno
 country <- "Nigeria"
 
@@ -82,9 +83,6 @@ gw_events_sc$geometry.y=NULL
 st_geometry(gw_events_sc) <- "Geometry"
 
 
-get_variable_name <- function(var) {
-  deparse(substitute(var))}
-a <- get_variable_name(r)
 percorso_cartella <- paste0("Data/GW_Conflict/",country,"/")
 if (!file.exists(percorso_cartella)) {
   dir.create(percorso_cartella, recursive = TRUE)
