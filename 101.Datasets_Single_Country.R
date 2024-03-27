@@ -89,6 +89,7 @@ if (!file.exists(percorso_cartella)) {
 }
 write_sf(gw_events_sc, paste0(percorso_cartella, country, "_gw_events.shp"))
 
+write.csv(events,paste0(percorso_cartella, country, "_events.csv"))
 
 
 
