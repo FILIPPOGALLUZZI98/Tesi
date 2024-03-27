@@ -57,16 +57,15 @@ ggplot(sf_data) +
 # Plot della timeseries in una regione dei conflitti Nstate
 
 print(unique(data_gw_events$ADMIN_NAME))
-reg <- "Ondo"
+reg <- "Borno"
 
-data <- subset(data_gw_events,ADMIN_NAME==reg)
+data <- subset(data_gw_events,ADMIN_NAME==reg); data$geometry=NULL
 data <- subset(data, type=="Nstate")
 agg_data <- data %>%
   group_by(year, ADMIN_NAME) %>%
   summarise(count = sum(number))
 
 ggplot(data = agg_data, aes(x = year, y = count)) +
-  geom_point() +  # Aggiunge i punti
   geom_line() +   # Aggiunge la linea
   labs(x = "Year", y = "Count")
 
@@ -75,29 +74,27 @@ ggplot(data = agg_data, aes(x = year, y = count)) +
 
 # reg <- c(data_gw_events$ADMIN_NAME)  ## Se voglio vederle tutte insieme
 reg <- c("Abia", "Adamawa", "Anambra", "Borno", "Edo", "Jigawa", "Nasarawa", "Ogun")
-dati <- data_gw_events; dati$geometry=NULL
-agg_data <- dati %>%
+data <- data_gw_events; data$geometry=NULL
+agg_data <- data %>%
   filter(type == "Nstate", ADMIN_NAME %in% reg) %>%
   group_by(year, ADMIN_NAME) %>%
   summarise(count = sum(number))
 
 ggplot(data = agg_data, aes(x = year, y = count)) +
-  geom_point() +  # Aggiunge i punti
   geom_line() +   # Aggiunge la linea
   labs(x = "Year", y = "Count") +
-  facet_wrap(~ ADMIN_NAME, ncol = 6)
+  facet_wrap(~ ADMIN_NAME, ncol = 3)
 
 ######################################################################################################
 # Plot della timeseries dei conflitti in una regione state+Nstate+onesided
 
-reg <- "Ondo"
-data <- subset(data_gw_events,ADMIN_NAME==reg)
+reg <- "Borno"
+data <- subset(data_gw_events,ADMIN_NAME==reg); data$geometry=NULL
 agg_data <- data %>%
-  group_by(year, ADMIN_NAME) %>%
+  group_by(year) %>%
   summarise(count = sum(number))
 
 ggplot(data = agg_data, aes(x = year, y = count)) +
-  geom_point() +  # Aggiunge i punti
   geom_line() +   # Aggiunge la linea
   labs(x = "Year", y = "Count")
 
@@ -106,19 +103,28 @@ ggplot(data = agg_data, aes(x = year, y = count)) +
 
 # reg <- c(data_gw_events$ADMIN_NAME)  ## Se voglio vederle tutte insieme
 reg <- c("Abia", "Adamawa", "Anambra", "Borno", "Edo", "Jigawa", "Nasarawa", "Ogun")
-agg_data <- dati %>%
+agg_data <- data %>%
   group_by(year, ADMIN_NAME) %>%
   summarise(count = sum(number))
 
 
 ggplot(data = agg_data, aes(x = year, y = count)) +
-  geom_point() +  # Aggiunge i punti
   geom_line() +   # Aggiunge la linea
   labs(x = "Year", y = "Count") +
   facet_wrap(~ ADMIN_NAME, ncol = 6)
 
 ######################################################################################################
-# 
+# DA FINIRE
+
+reg <- "Borno"
+data <- subset(data_gw_events,ADMIN_NAME==reg)
+agg_data <- data %>%
+  group_by(year, ADMIN_NAME) %>%
+  summarise(count = sum(number))
+
+ggplot(data = agg_data, aes(x = year, y = count)) +
+  geom_line() +   
+  labs(x = "Year", y = "Count")
 
 
 
