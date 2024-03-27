@@ -1,17 +1,17 @@
-# Il dataset 'gw_data_sc'contiene le variabili: CNTRY_NAME, region, geometry, value, year
-# Quindi abbiamo, per lo stato selezionato, per ogni regione e per ogni anno il valore della media del raster selezionato
-# all'interno delle regioni dello stato.
-# Il dataset 'gw_events_data' contine le variabili: year, region, geometry, type, number e value
+# Il dataset 'gw_events_data' contine le variabili: CNTRY_NAME, ADMIN_REGION, geometry, yera, type, number, value
 # Quindi per lo stato selezionato, per ogni anno, per ogni regione e per ogni tipo di conflitto abbiamo
 # il valore del raster mediato sulla regione ed il numero di eventi.
 
+# Il dataset 'gw_data_sc'contiene le variabili: CNTRY_NAME, region, geometry, value, year
+# Quindi abbiamo, per lo stato selezionato, per ogni regione e per ogni anno il valore della media del raster selezionato
+# all'interno delle regioni dello stato.
 ##############################################################################################################################
 ##############################################################################################################################
 
 # Scegliere quale raster usare (rs, rt, rq)
 r <- rs
 # Selezionare il paese e anno
-country <- "Ethiopia"
+country <- "Nigeria"
 y <- "1990"
 
 ##############################################################################################################################
