@@ -11,7 +11,7 @@
 # Scegliere quale raster usare (rs, rt, rq)
 r <- rs
 # Selezionare il paese e anno
-country <- "Nigeria"
+country <- "Ethiopia"
 y <- "1990"
 
 ##############################################################################################################################
@@ -68,21 +68,19 @@ events <- events[order(events$year),]
 
 ##############################################################################################################################
 ##############################################################################################################################
-
 # Operazioni sui dati GW + events
-gw_events_data <- expand.grid(year = 1990:2022, region = unique(events$region),type=c("state","Nstate","onesided"))
-gw_events_data <- left_join(gw_events_data, events, by=c("region", "year", "type"="type"))
-gw_events_data$number[is.na(gw_events_data$number)] = 0 # assign a zero to each month/province where no data is observed
-gw_events_data$latitude = NULL ; gw_events_data$longitude=NULL
+gw_events_sc <- expand.grid(year = 1990:2022, region = unique(events$region),type=c("state","Nstate","onesided"))
+gw_events_sc <- left_join(gw_events_sc, events, by=c("region", "year", "type"="type"))
+gw_events_sc$number[is.na(gw_events_sc$number)] = 0 # assign a zero to each month/province where no data is observed
+gw_events_sc$latitude = NULL ; gw_events_sc$longitude=NULL
 filter <- gw_data_sc %>%
   filter(year > 1989)
-gw_events_data <- gw_events_data %>%
+gw_events_sc <- gw_events_sc %>%
   filter(year != 2020 & year != 2021 & year != 2022)
-gw_events_data <- left_join(gw_events_data, filter[,c("year", "region","value")], by=c("year", "region"))
-gw_events_data <- left_join(state, gw_events_data, by=c("ADMIN_NAME"="region")) 
-
-
-
+gw_events_sc <- left_join(gw_events_sc, filter[,c("year", "region","value")], by=c("year", "region"))
+gw_events_sc <- left_join(state, gw_events_sc, by=c("ADMIN_NAME"="region")) 
+gw_events_sc$geometry.y=NULL
+st_geometry(gw_events_sc) <- "Geometry"
 
 
 
