@@ -70,8 +70,10 @@ ggplot(data = agg_data, aes(x = year, y = count)) +
   geom_line() +   # Aggiunge la linea
   labs(x = "Year", y = "Count")
 
+######################################################################################################
+# Plot delle timeseries dei conflitti Nstate in varie regioni scelte 
 
-
+# reg <- c(data_gw_events$ADMIN_NAME)  ## Se voglio vederle tutte insieme
 reg <- c("Abia", "Adamawa", "Anambra", "Borno", "Edo", "Jigawa", "Nasarawa", "Ogun")
 dati <- data_gw_events; dati$geometry=NULL
 agg_data <- dati %>%
@@ -83,11 +85,7 @@ ggplot(data = agg_data, aes(x = year, y = count)) +
   geom_point() +  # Aggiunge i punti
   geom_line() +   # Aggiunge la linea
   labs(x = "Year", y = "Count") +
-  facet_wrap(~ ADMIN_NAME, ncol = 4)
-
-
-
-
+  facet_wrap(~ ADMIN_NAME, ncol = 6)
 
 ######################################################################################################
 
@@ -105,7 +103,6 @@ ggplot(data = agg_data, aes(x = year, y = count)) +
 
 ######################################################################################################
 
-reg <- c("Kachin", "Magway", "Sagaing", "Kayin", "Chin", "Kayah", "Tanintharyi", "Bago")
 
 
 
