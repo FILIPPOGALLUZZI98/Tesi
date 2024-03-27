@@ -43,10 +43,12 @@ ggplot(subset(data_gw_events, ADMIN_NAME %in% R),
 # Plot data points over geometry figure
 
 shape <- data_gw_events; shape$CNTRY_NAME=NULL; shape$year=NULL; shape$value=NULL;shape$type=NULL
-sf_data <- st_as_sf(dataframe_unici <- shape[!duplicated(shape$ADMIN_NAME), ], wkt = "geometry")
-ggplot(sf_data) +           
+shape <- shape %>%
+  group_by(ADMIN_NAME, geometry) %>%
+  summarise(count = sum(number)); shape$count=NULL
+ggplot(shape) +           
   geom_sf(fill = NA, col = "black") +  
-  geom_point(data = events, aes(longitude, latitude), size = .5) +
+  geom_point(data = events, aes(longitude, latitude, color=type), size = .7) +
   # Assegna manualmente i colori ai valori di code_status
   scale_color_manual(values = c("state" = "red", "Nstate" = "blue", "onesided" = "green"))+
   theme_bw() +                     
