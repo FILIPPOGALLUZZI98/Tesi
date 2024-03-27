@@ -103,7 +103,9 @@ ggplot(data = agg_data, aes(x = year, y = count)) +
 
 # reg <- c(data_gw_events$ADMIN_NAME)  ## Se voglio vederle tutte insieme
 reg <- c("Abia", "Adamawa", "Anambra", "Borno", "Edo", "Jigawa", "Nasarawa", "Ogun")
+data <- data_gw_events; data$geometry=NULL
 agg_data <- data %>%
+  filter(ADMIN_NAME %in% reg) %>%
   group_by(year, ADMIN_NAME) %>%
   summarise(count = sum(number))
 
@@ -111,7 +113,7 @@ agg_data <- data %>%
 ggplot(data = agg_data, aes(x = year, y = count)) +
   geom_line() +   # Aggiunge la linea
   labs(x = "Year", y = "Count") +
-  facet_wrap(~ ADMIN_NAME, ncol = 6)
+  facet_wrap(~ ADMIN_NAME, ncol = 3)
 
 ######################################################################################################
 # PLOT GW+CONFLICTS IN ONE REGION state+Nstate+onesided
@@ -121,30 +123,46 @@ data <- subset(data_gw_events,ADMIN_NAME==reg); data$geometry=NULL; data$CNTRY_N
 agg_data <- data %>%
   group_by(year, ADMIN_NAME, value) %>%
   summarise(count = sum(number))
-head(agg_data)
+mvalue <- mean(agg_data$value)
+svalue <- sd(agg_data$value)
+mcount <- mean(agg_data$count)
+scount <- sd(agg_data$count)
+agg_data$Svalue <- (agg_data$value-mvalue)/svalue
+agg_data$Scount <- (agg_data$count-mcount)/scount
 
-agg_data$lvalue <- log(agg_data$value)
-agg_data$lcount <- log(agg_data$count)
+ggplot(agg_data, aes(year)) +
+  geom_smooth(aes(y = Svalue), colour = "blue") +
+  geom_smooth(aes(y = Scount), colour = "red")
+
+ggplot(agg_data, aes(year)) +
+  geom_line(aes(y = Svalue), colour = "blue") +
+  geom_line(aes(y = Scount), colour = "red")
+
+######################################################################################################
+# PLOT GW+CONFLICTS SLECTED REGIONS state+Nstate+onesided
+
+reg <- c("Abia", "Adamawa", "Anambra", "Borno", "Edo", "Jigawa", "Nasarawa", "Ogun")
+data <- data_gw_events; data$geometry=NULL
+agg_data <- data %>%
+  filter(ADMIN_NAME %in% reg) %>%
+  group_by(year, ADMIN_NAME, value) %>%
+  summarise(count = sum(number))
 
 
-ggplot(agg_data, aes(x = year)) +
-  geom_line(aes(y = lvalue, color = "Value")) +
-  geom_line(aes(y = lcount, color = "Count")) +
-  scale_color_manual(values = c("blue", "red"), name = "Variable") +
-  labs(x = "Anno", y = "Valore") +
-  theme_minimal()
 
-ggplot(agg_data, aes(x = year)) +
-  geom_line(aes(y = value, color = "Value")) +
-  geom_line(aes(y = lcount * 10, color = "Count")) + # Moltiplica count per 10 per separare le scale
-  scale_color_manual(values = c("blue", "red"), name = "Variable") +
-  labs(x = "Anno", y = NULL) + # Rimuovi l'etichetta y
-  theme_minimal() +
-  theme(legend.position = "top") +
-  scale_y_continuous(
-    name = "Value", 
-    sec.axis = sec_axis(~./10, name = "Count")
-  )
+
+
+
+
+
+ggplot(data = agg_data, aes(year)) +
+  geom_line(aes(y = value), colour = "blue") +
+  geom_line(aes(y = lcount), colour = "red") +
+  facet_wrap(~ ADMIN_NAME, ncol = 3)
+
+
+
+
 
 
 
