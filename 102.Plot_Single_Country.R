@@ -3,9 +3,9 @@ country <- "Myanmar"
 # Select the year
 y <- "2000"
 
-path <- paste0("Data/GW_Conflict/", country, "/", country,"_gw_events.shp")
-data_gw_events <- sf::read_sf(path)
-
+path <- paste0("Data/GW_Conflict/", country, "/")
+data_gw_events <- sf::read_sf(paste0(path, country,"_gw_events.shp"))
+events <-read.csv(path, country, "_events.csv")
 ######################################################################################################
 
 # Plot mappa anno scelto
