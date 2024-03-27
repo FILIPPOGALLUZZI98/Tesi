@@ -6,7 +6,7 @@ y <- "2000"
 r <- "rs"
 
 path <- paste0("Data/GW_Conflict/", country, "/")
-data_gw_events <- sf::read_sf(paste0(path, country,"_gw_events", r,".shp"))
+data_gw_events <- sf::read_sf(paste0(path, country,"_gw_events_", r,".shp"))
 events <-read.csv(path, country, "_events.csv")
 ######################################################################################################
 
