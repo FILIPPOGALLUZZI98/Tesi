@@ -114,19 +114,37 @@ ggplot(data = agg_data, aes(x = year, y = count)) +
   facet_wrap(~ ADMIN_NAME, ncol = 6)
 
 ######################################################################################################
-# DA FINIRE
+# PLOT GW+CONFLICTS IN ONE REGION state+Nstate+onesided
 
 reg <- "Borno"
-data <- subset(data_gw_events,ADMIN_NAME==reg)
+data <- subset(data_gw_events,ADMIN_NAME==reg); data$geometry=NULL; data$CNTRY_NAME=NULL
 agg_data <- data %>%
-  group_by(year, ADMIN_NAME) %>%
+  group_by(year, ADMIN_NAME, value) %>%
   summarise(count = sum(number))
+head(agg_data)
 
-ggplot(data = agg_data, aes(x = year, y = count)) +
-  geom_line() +   
-  labs(x = "Year", y = "Count")
+agg_data$lvalue <- log(agg_data$value)
+agg_data$lcount <- log(agg_data$count)
 
 
+ggplot(agg_data, aes(x = year)) +
+  geom_line(aes(y = lvalue, color = "Value")) +
+  geom_line(aes(y = lcount, color = "Count")) +
+  scale_color_manual(values = c("blue", "red"), name = "Variable") +
+  labs(x = "Anno", y = "Valore") +
+  theme_minimal()
+
+ggplot(agg_data, aes(x = year)) +
+  geom_line(aes(y = value, color = "Value")) +
+  geom_line(aes(y = lcount * 10, color = "Count")) + # Moltiplica count per 10 per separare le scale
+  scale_color_manual(values = c("blue", "red"), name = "Variable") +
+  labs(x = "Anno", y = NULL) + # Rimuovi l'etichetta y
+  theme_minimal() +
+  theme(legend.position = "top") +
+  scale_y_continuous(
+    name = "Value", 
+    sec.axis = sec_axis(~./10, name = "Count")
+  )
 
 
 
