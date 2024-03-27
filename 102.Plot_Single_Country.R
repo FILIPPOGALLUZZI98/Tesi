@@ -1,7 +1,7 @@
 # Select the country
-country <- "Nigeria"
+country <- "Myanmar"
 # Select the year
-y <- "1901"
+y <- "2000"
 
 
 
@@ -30,7 +30,7 @@ R <- c("Borno", "Gombe", "Nasarawa", "Sokoto")
 
 ggplot(subset(data_gw_events, ADMIN_NAME %in% R), 
        aes(year, value, fill=value, col=value)) +   
-  facet_wrap(ADMIN_NAME~., ncol=2) +        
+  facet_wrap(ADMIN_NAME~., ncol=6) +        
   theme_bw() +         
   theme(strip.background=element_rect(fill="white")) +          
   ylab("") +                                                                
@@ -44,8 +44,7 @@ ggplot(subset(data_gw_events, ADMIN_NAME %in% R),
 
 ggplot(data_gw_events) +           
   geom_sf(fill = NA, col = "black") +  
-  # plot points for each event, using longitude, latitude as x and y, set shape and color of points using variable "event type" (which is either protests or riots)
-  geom_point(data = events, aes(longitude, latitude, color = factor(type)), size = .5) +
+  geom_point(data = data_gw_events$number, aes(longitude, latitude, color = factor(type)), size = .5) +
   # Assegna manualmente i colori ai valori di code_status
   scale_color_manual(values = c("state" = "red", "Nstate" = "blue", "onesided" = "green"))+
   theme_bw() +                     
