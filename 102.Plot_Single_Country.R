@@ -7,7 +7,7 @@ r <- "rs"
 
 path <- paste0("Data/GW_Conflict/", country, "/")
 data_gw_events <- sf::read_sf(paste0(path, country,"_gw_events_", r,".shp"))
-events <-read.csv(path, country, "_events.csv")
+events <-read.csv(paste0(path, country, "_events.csv"))
 ######################################################################################################
 
 # Plot mappa anno scelto
