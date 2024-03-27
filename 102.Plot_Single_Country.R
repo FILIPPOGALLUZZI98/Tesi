@@ -1,5 +1,20 @@
+# Select the country
+country <- "Nigeria"
+# Select the year
+y <- "1901"
+
+
+
+######################################################################################################
+######################################################################################################
+
+path <- paste0("Data/GW_Conflict/", country, "/", country,"_gw_events.shp")
+data_gw_events <- sf::read_sf(path)
+
+######################################################################################################
+
 # Plot mappa anno scelto
-data <- subset(gw_data_sc, year == y)
+data <- subset(data_gw_events, year == y)
 ggplot(data, aes(fill=value)) + 
   geom_sf(col="black") +
   theme_bw() +
@@ -13,11 +28,9 @@ ggplot(data, aes(fill=value)) +
 R <- c("Borno", "Gombe", "Nasarawa", "Sokoto")
 # R <- c(gw_data_t$region)  ## Se voglio vederle tutte insieme
 
-ggplot(subset(gw_data_sc, region %in% R), 
+ggplot(subset(data_gw_events, ADMIN_NAME %in% R), 
        aes(year, value, fill=value, col=value)) +   
-  geom_hline(yintercept=0) +                  
-  geom_hline(yintercept=-1.5, lty=3) +     
-  facet_wrap(region~., ncol=2) +        
+  facet_wrap(ADMIN_NAME~., ncol=2) +        
   theme_bw() +         
   theme(strip.background=element_rect(fill="white")) +          
   ylab("") +                                                                
@@ -27,8 +40,9 @@ ggplot(subset(gw_data_sc, region %in% R),
   scale_color_viridis_c(option="viridis", end = 0.8)
 
 ######################################################################################################
+# Da togliere state e mettere data_gw_events
 
-ggplot(state) +           
+ggplot(data_gw_events) +           
   geom_sf(fill = NA, col = "black") +  
   # plot points for each event, using longitude, latitude as x and y, set shape and color of points using variable "event type" (which is either protests or riots)
   geom_point(data = events, aes(longitude, latitude, color = factor(type)), size = .5) +
@@ -38,8 +52,8 @@ ggplot(state) +
   # white background for variable names
   theme(strip.background = element_rect(fill="white"))
 
-data <- subset(gw_events_data, year == 2019)
-data <- subset(gw_events_data, type == "state")
+data <- subset(data_gw_events, year == 2019)
+data <- subset(data_gw_events, type == "state")
 ggplot(data, aes(fill = number)) +  
   # plots the sf object / shapefile
   geom_sf() + 
