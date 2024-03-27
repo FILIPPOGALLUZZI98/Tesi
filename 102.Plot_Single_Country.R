@@ -26,7 +26,7 @@ ggplot(data, aes(fill=value)) +
 # Plot serie temporali per regioni scelte
 # Selezionare le regioni per le serie temporali
 R <- c("Borno", "Gombe", "Nasarawa", "Sokoto")
-# R <- c(gw_data_t$region)  ## Se voglio vederle tutte insieme
+# R <- c(data_gw_events$ADMIN_NAME)  ## Se voglio vederle tutte insieme
 
 ggplot(subset(data_gw_events, ADMIN_NAME %in% R), 
        aes(year, value, fill=value, col=value)) +   
