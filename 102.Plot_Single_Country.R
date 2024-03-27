@@ -102,6 +102,25 @@ ggplot(data = agg_data, aes(x = year, y = count)) +
   labs(x = "Year", y = "Count")
 
 ######################################################################################################
+# plot timeseries dei conflitti in regioni scelte state+Nstate+onesided
+
+# reg <- c(data_gw_events$ADMIN_NAME)  ## Se voglio vederle tutte insieme
+reg <- c("Abia", "Adamawa", "Anambra", "Borno", "Edo", "Jigawa", "Nasarawa", "Ogun")
+agg_data <- dati %>%
+  group_by(year, ADMIN_NAME) %>%
+  summarise(count = sum(number))
+
+
+ggplot(data = agg_data, aes(x = year, y = count)) +
+  geom_point() +  # Aggiunge i punti
+  geom_line() +   # Aggiunge la linea
+  labs(x = "Year", y = "Count") +
+  facet_wrap(~ ADMIN_NAME, ncol = 6)
+
+######################################################################################################
+# 
+
+
 
 
 
