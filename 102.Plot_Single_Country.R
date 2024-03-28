@@ -13,7 +13,7 @@ events <-read.csv(paste0(path, country, "_events.csv"))
 
 ######################################################################################################
 # Plot mappa GW anno scelto
-
+data_gw_events<-gw_events_sc
 data_year <- subset(data_gw_events, year == y)
 ggplot(data_year, aes(fill=value)) + 
   geom_sf(col="black") +
@@ -26,11 +26,11 @@ ggplot(data_year, aes(fill=value)) +
 
 # Selezionare le regioni per le serie temporali
 # R <- c("", "", "", "")
-R <- unique(data_gw_events$ADMIN_NAME)  ## Se voglio vederle tutte insieme
+R <- unique(data_gw_events$region)  ## Se voglio vederle tutte insieme
 
-ggplot(subset(data_gw_events, ADMIN_NAME %in% R), 
+ggplot(subset(data_gw_events, region %in% R), 
        aes(year, value, fill=value, col=value)) +   
-  facet_wrap(ADMIN_NAME~., ncol=6) +        
+  facet_wrap(region~., ncol=6) +        
   theme_bw() +         
   theme(strip.background=element_rect(fill="white")) +          
   ylab("") +                                                                
