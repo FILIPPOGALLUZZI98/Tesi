@@ -12,6 +12,7 @@ suppressPackageStartupMessages({
   library(ggrepel)         ## useful for labeling point plots in ggplot2
   library(lubridate)
   library(zoo)   
+  library(foreign)
 })
 
 ########################################################################################################
