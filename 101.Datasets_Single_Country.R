@@ -44,16 +44,18 @@ events$longitude <- as.numeric(str_extract(events$longitude, "(?<=\\s)[0-9.-]+(?
 events <- na.omit(events[, c("year", "type","latitude" ,"longitude","best_est")])
 events = sf::st_as_sf(events, coords = c("latitude","longitude"), remove = FALSE)
 sf::st_crs(events) = sf::st_crs(state)
+events$longitude <- st_coordinates(events)[, "X"]
+events$latitude <- st_coordinates(events)[, "Y"]
 intersection = sf::st_intersects(events, state)            
 # set non-matched values to NA, these points are recorded in no province (outliers, miscoding, ...)
 intersection[sapply(intersection, length) == 0] <- NA    
 # merge region name to conflict data points
 events$region <- state$ADMIN_NAME[unlist(intersection)]   
 events$geometry = NULL
-colnames(events) <- c("year", "type","latitude", "longitude","number","region")
+events <- events %>% group_by(year, region, type, latitude, longitude) %>% summarise(number_events = n())
+colnames(events) <- c("year","region", "type", "latitude", "longitude","number")
 # Ordino il dataset rispetto all'anno
 events <- events[order(events$year),]
-
 
 ##############################################################################################################################
 ##############################################################################################################################
