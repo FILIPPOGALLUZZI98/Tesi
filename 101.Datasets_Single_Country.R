@@ -12,7 +12,7 @@
 r <- rs
 a <- "rs"
 # Selezionare il paese e anno
-country <- "Thailand"
+country <- "Nigeria"
 
 ##############################################################################################################################
 ##############################################################################################################################
@@ -29,8 +29,8 @@ gw_data_sc <- gw_data_sc %>%
   group_by(region) %>%
   mutate(year = anni)
 gw_data_sc$variable=NULL
-gw_data_sc <- left_join(state, gw_data_sc, by=c("ADMIN_NAME"="region")) 
-colnames(gw_data_sc)[colnames(gw_data_sc) == "ADMIN_NAME"] <- "region"
+# gw_data_sc <- left_join(state, gw_data_sc, by=c("ADMIN_NAME"="region")) 
+# colnames(gw_data_sc)[colnames(gw_data_sc) == "ADMIN_NAME"] <- "region"
 
 ##############################################################################################################################
 ##############################################################################################################################
@@ -69,8 +69,8 @@ gw_events_sc$number[is.na(gw_events_sc$number)] = 0 # assign a zero to each mont
 gw_events_sc$latitude = NULL ; gw_events_sc$longitude=NULL
 gw_events_sc <- gw_events_sc %>%
   filter(year != 2020 & year != 2021 & year != 2022)
-gw_events_sc <- left_join(gw_events_sc, gw_data_sc[,c("year", "region","value")], by=c("year", "region"))
-st_geometry(gw_events_sc) <- "geometry"
+# gw_events_sc <- left_join(gw_events_sc, gw_data_sc[,c("year", "region","value")], by=c("year", "region"))
+# st_geometry(gw_events_sc) <- "geometry"
 
 
 percorso_cartella <- paste0("Data/GW_Conflict/",country,"/")
