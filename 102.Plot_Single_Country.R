@@ -1,6 +1,6 @@
-library(ggplot2); library(sf)
+library(foreign); library(sf)
 # Select the country
-country <- "Nigeria"
+country <- "Ethiopia"
 # Select the year
 y <- "2000"
 # Select the raster
@@ -47,7 +47,7 @@ ggplot(subset(data_gw_events, region %in% R),
 
 shape <- data_gw_events; shape$CNTRY_NAME=NULL; shape$year=NULL; shape$value=NULL;shape$type=NULL
 shape <- shape %>%
-  group_by(ADMIN_NAME, geometry) %>%
+  group_by(region, geometry) %>%
   summarise(count = sum(number)); shape$count=NULL
 ggplot(shape) +           
   geom_sf(fill = NA, col = "black") +  
