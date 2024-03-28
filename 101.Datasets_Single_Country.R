@@ -69,7 +69,7 @@ gw_events_sc$number[is.na(gw_events_sc$number)] = 0 # assign a zero to each mont
 gw_events_sc$latitude = NULL ; gw_events_sc$longitude=NULL
 gw_events_sc <- gw_events_sc %>%
   filter(year != 2020 & year != 2021 & year != 2022)
-# gw_events_sc <- left_join(gw_events_sc, gw_data_sc[,c("year", "region","value")], by=c("year", "region"))
+gw_events_sc <- left_join(gw_events_sc, gw_data_sc[,c("year", "region","value")], by=c("year", "region"))
 # st_geometry(gw_events_sc) <- "geometry"
 
 
