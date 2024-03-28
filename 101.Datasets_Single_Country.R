@@ -38,22 +38,11 @@ colnames(gw_data_sc)[colnames(gw_data_sc) == "ADMIN_NAME"] <- "region"
 # Operazioni sui dati events
 file_path <- paste("Data/Conflict/", country, ".csv", sep = "")
 events <- read.csv(file_path)
-events <- events %>%
-  mutate(
-    longitude = as.numeric(str_extract(stringr::str_extract(longitude, " \\d+\\.\\d+"), "\\d+\\.\\d+")))
-# Elimino le righe con valori NA di latitudine e longitudine
+events$latitude=NULL
+events$latitude <- as.numeric(str_extract(events$longitude, "(?<=POINT \\()[0-9.-]+"))
+events$longitude <- as.numeric(str_extract(events$longitude, "(?<=\\s)[0-9.-]+(?=\\))"))
 events <- na.omit(events[, c("year", "type","latitude" ,"longitude","best_est")])
-# Imposto lo stesso CRS dello shapefile sui punti
-events <- st_as_sf(events, coords = c("longitude", "latitude"), crs = st_crs(state))
-st_set_crs(events, st_crs(state))
-events <- events %>%
-  mutate(
-    latitude = as.numeric(str_extract(geometry, "\\d+\\.\\d+")),
-    longitude = as.numeric(str_extract(stringr::str_extract(geometry, " \\d+\\.\\d+"), "\\d+\\.\\d+"))
-  )
-events$geometry = NULL
-events <- na.omit(events)
-events = sf::st_as_sf(events, coords = c("longitude","latitude"), remove = FALSE)
+events = sf::st_as_sf(events, coords = c("latitude","longitude"), remove = FALSE)
 sf::st_crs(events) = sf::st_crs(state)
 intersection = sf::st_intersects(events, state)            
 # set non-matched values to NA, these points are recorded in no province (outliers, miscoding, ...)
@@ -61,10 +50,10 @@ intersection[sapply(intersection, length) == 0] <- NA
 # merge region name to conflict data points
 events$region <- state$ADMIN_NAME[unlist(intersection)]   
 events$geometry = NULL
-events <- events %>% group_by(year, region, type, latitude, longitude) %>% summarise(number_events = n())
-colnames(events) <- c("year","region", "type", "latitude", "longitude","number")
+colnames(events) <- c("year", "type","latitude", "longitude","number","region")
 # Ordino il dataset rispetto all'anno
 events <- events[order(events$year),]
+
 
 ##############################################################################################################################
 ##############################################################################################################################
