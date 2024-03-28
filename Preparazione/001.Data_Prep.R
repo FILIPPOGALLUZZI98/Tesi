@@ -17,7 +17,7 @@ st_write(obj = shp, dsn = "Data", layer = "shapefile", driver = "ESRI Shapefile"
 r <- raster::brick("Data_Raw/ISIMIP3a/cwatm_gswp3-w5e5_obsclim_histsoc_default_groundwstor_global_monthly_1901_2019.nc")
 
 # Creazione di un nuovo raster brick per le medie annuali
-gwy <- raster::brick(ncol = ncol(r), nrow = nrow(r), nl = nlayers(r)/12,
+rsy <- raster::brick(ncol = ncol(r), nrow = nrow(r), nl = nlayers(r)/12,
                      xmn = extent(r)[1], xmx = extent(r)[2], 
                      ymn = extent(r)[3], ymx = extent(r)[4], 
                      crs = crs(r))
@@ -27,15 +27,15 @@ for (i in 1:(nlayers(r)/12)) {
   start <- (i - 1) * 12 + 1
   end <- start + 11
   yearly_mean <- calc(r[[start:end]], mean)
-  gwy[[i]] <- yearly_mean
+  rsy[[i]] <- yearly_mean
 }
 
 # Salvataggio dati
 years <- unique(format(as.Date(names(r), format = "X%Y.%m.%d"), "%Y"))
-names(gwy) <- paste0("gw", years)
-output_nc <- "Data/gwy.nc"
+names(rsy) <- paste0("gw", years)
+output_nc <- "Data/rsy.nc"
 # Scrivi il RasterBrick in un file NetCDF
-writeRaster(gwy, filename = output_nc, format = "CDF", overwrite = TRUE)
+writeRaster(rsy, filename = output_nc, format = "CDF", overwrite = TRUE)
 
 
 
@@ -45,7 +45,7 @@ writeRaster(gwy, filename = output_nc, format = "CDF", overwrite = TRUE)
 r <- raster::brick("Data_Raw/ISIMIP3a/cwatm_gswp3-w5e5_obsclim_histsoc_default_tws_global_monthly_1901_2019.nc")
 
 # Creazione di un nuovo raster brick per le medie annuali
-twsy <- raster::brick(ncol = ncol(r), nrow = nrow(r), nl = nlayers(r)/12,
+rty <- raster::brick(ncol = ncol(r), nrow = nrow(r), nl = nlayers(r)/12,
                       xmn = extent(r)[1], xmx = extent(r)[2], 
                       ymn = extent(r)[3], ymx = extent(r)[4], 
                       crs = crs(r))
@@ -55,15 +55,15 @@ for (i in 1:(nlayers(r)/12)) {
   start <- (i - 1) * 12 + 1
   end <- start + 11
   yearly_mean <- calc(r[[start:end]], mean)
-  twsy[[i]] <- yearly_mean
+  rty[[i]] <- yearly_mean
 }
 
 # Salvataggio dati
 years <- unique(format(as.Date(names(r), format = "X%Y.%m.%d"), "%Y"))
-names(twsy) <- paste0("tws", years)
-output_nc <- "Data/twsy.nc"
+names(rty) <- paste0("tws", years)
+output_nc <- "Data/rty.nc"
 # Scrivi il RasterBrick in un file NetCDF
-writeRaster(twsy, filename = output_nc, format = "CDF", overwrite = TRUE)
+writeRaster(rty, filename = output_nc, format = "CDF", overwrite = TRUE)
 
 
 
@@ -73,7 +73,7 @@ writeRaster(twsy, filename = output_nc, format = "CDF", overwrite = TRUE)
 r <- raster::brick("Data_Raw/ISIMIP3a/cwatm_gswp3-w5e5_obsclim_histsoc_default_qr_global_monthly_1901_2019.nc")
 
 # Creazione di un nuovo raster brick per le medie annuali
-qry <- raster::brick(ncol = ncol(r), nrow = nrow(r), nl = nlayers(r)/12,
+rqy <- raster::brick(ncol = ncol(r), nrow = nrow(r), nl = nlayers(r)/12,
                      xmn = extent(r)[1], xmx = extent(r)[2], 
                      ymn = extent(r)[3], ymx = extent(r)[4], 
                      crs = crs(r))
@@ -83,15 +83,15 @@ for (i in 1:(nlayers(r)/12)) {
   start <- (i - 1) * 12 + 1
   end <- start + 11
   yearly_mean <- calc(r[[start:end]], mean)
-  qry[[i]] <- yearly_mean
+  rqy[[i]] <- yearly_mean
 }
 
 # Salvataggio dati
 years <- unique(format(as.Date(names(r), format = "X%Y.%m.%d"), "%Y"))
-names(qry) <- paste0("qr", years)
-output_nc <- "Data/qry.nc"
+names(rqy) <- paste0("qr", years)
+output_nc <- "Data/rsy.nc"
 # Scrivi il RasterBrick in un file NetCDF
-writeRaster(qry, filename = output_nc, format = "CDF", overwrite = TRUE)
+writeRaster(rqy, filename = output_nc, format = "CDF", overwrite = TRUE)
 
 
 
