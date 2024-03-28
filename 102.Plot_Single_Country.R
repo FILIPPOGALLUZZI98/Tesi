@@ -16,8 +16,9 @@ print(unique(data_gw_events$region))
 ######################################################################################################
 # Plot mappa GW anno scelto
 
-data_year <- subset(data_gw_events, year == y)
+data_year <- subset(data_gw, year == y)
 data_year <- left_join(state, data_year, by = "region")
+
 ggplot(data_year, aes(fill=value)) + 
   geom_sf(col="black") +
   theme_bw() +
