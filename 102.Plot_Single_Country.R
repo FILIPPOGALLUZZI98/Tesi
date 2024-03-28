@@ -1,20 +1,23 @@
+library(ggplot2); library(sf)
 # Select the country
-country <- "Ethiopia"
+country <- "Nigeria"
 # Select the year
 y <- "2000"
 # Select the raster
 r <- "rs"
 
 path <- paste0("Data/GW_Conflict/", country, "/")
-data_gw_events <- sf::read_sf(paste0(path, country,"_gw_events_", r,".shp"))
+data_gw_events <- read.dbf(paste0(path, country,"_gw_events_", r,".dbf"))
 events <-read.csv(paste0(path, country, "_events.csv"))
-
-
+state <- subset(shp, CNTRY_NAME == country)    ## plot(state[,"geometry"])
+state <- rename(state, region = ADMIN_NAME)
 
 ######################################################################################################
 # Plot mappa GW anno scelto
-data_gw_events<-gw_events_sc
+
 data_year <- subset(data_gw_events, year == y)
+data_year <- left_join(state, data_year, by = "region")
+
 ggplot(data_year, aes(fill=value)) + 
   geom_sf(col="black") +
   theme_bw() +
