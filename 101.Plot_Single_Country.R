@@ -1,7 +1,7 @@
 # Select the country
-country <- "Brazil"
+country <- "Nigeria"
 # Select the year
-y <- "2010"
+y <- "1990"
 # Select the raster
 rast <- "rs"
 
@@ -44,8 +44,9 @@ data_year <- left_join(state, data_year, by = "region")
 ggplot(data_year, aes(fill=value)) + 
   geom_sf(col="black") +
   theme_bw() +
-  labs(fill="gw storage") +
-  scale_fill_viridis_c(option="viridis", end=0.8)
+  labs(fill="GW storage [kg/m^2]") +
+  scale_fill_viridis_c(option="viridis", end=0.8)+
+  labs(title = paste(country, y))
 
 ######################################################################################################
 # Plot serie temporali GW per regioni scelte
@@ -57,7 +58,7 @@ R <- unique(data_gw_events$region)  ## Se voglio vederle tutte insieme
 ggplot(subset(data_gw_events, region %in% R), 
        aes(year, value)) +   
   facet_wrap(region~., ncol=6) +        
-  theme_minimal()+
+  theme_bw()+
   theme(strip.background=element_rect(fill="white")) +          
   geom_line()
 
@@ -69,7 +70,7 @@ ggplot() +
   geom_point(data = events, aes(x = longitude, y = latitude, color = type, size = number)) + 
   scale_color_discrete(name = "Type") +
   scale_color_manual(values = c("state" = "blue", "Nstate" = "red", "onesided" = "green")) +
-  labs(title = "Events") +
+  labs(title = "Events",x="",y="") +
   theme_bw() +                     
   theme(strip.background = element_rect(fill="white"))
 
@@ -77,7 +78,7 @@ ggplot() +
 ######################################################################################################
 # Plot della timeseries in una regione dei conflitti Nstate
 
-reg <- "Gambela"
+reg <- "Nasarawa"
 
 data <- subset(data_gw_events,region==reg)
 data <- subset(data, type=="Nstate")
@@ -87,7 +88,8 @@ agg_data <- data %>%
 
 ggplot(data = agg_data, aes(x = year, y = count)) +
   geom_line() +   # Aggiunge la linea
-  labs(x = "Year", y = "Count")
+  theme_bw()+
+  labs(title = "Events",x="",y="Number")
 
 ######################################################################################################
 # Plot delle timeseries dei conflitti Nstate in varie regioni scelte 
@@ -103,12 +105,13 @@ agg_data <- data %>%
 ggplot(data = agg_data, aes(x = year, y = count)) +
   geom_line() +   # Aggiunge la linea
   labs(x = "Year", y = "Count") +
+  theme_bw()+
   facet_wrap(~ region, ncol = 3)
 
 ######################################################################################################
 # Plot della timeseries dei conflitti in una regione state+Nstate+onesided
 
-reg <- "Gambela"
+reg <- "Nasarawa"
 data <- subset(data_gw_events,region==reg)
 agg_data <- data %>%
   group_by(year) %>%
@@ -116,6 +119,7 @@ agg_data <- data %>%
 
 ggplot(data = agg_data, aes(x = year, y = count)) +
   geom_line() +   # Aggiunge la linea
+  theme_bw()+
   labs(x = "Year", y = "Count")
 
 ######################################################################################################
@@ -138,7 +142,7 @@ ggplot(data = agg_data, aes(x = year, y = count)) +
 ######################################################################################################
 # PLOT GW+CONFLICTS IN ONE REGION state+Nstate+onesided
 
-reg <- "Gambela"
+reg <- "Nasarawa"
 data <- subset(data_gw_events,region==reg); data$geometry=NULL; data$CNTRY_NAME=NULL
 agg_data <- data %>%
   group_by(year, region, value) %>%
@@ -158,7 +162,7 @@ ggplot(agg_data, aes(year)) +
 # PLOT GW+CONFLICTS SLECTED REGIONS state+Nstate+onesided
 
 reg <- c("Abia", "Adamawa", "Anambra", "Borno", "Edo", "Jigawa", "Nasarawa", "Ogun")
-reg <- unique(data_gw_events$region)
+# reg <- unique(data_gw_events$region)
 data <- data_gw_events
 agg_data <- subset(data, region==reg)
 agg_data <- data %>%
@@ -183,8 +187,6 @@ ggplot(data = agg_data, aes(year)) +
   geom_line(aes(y = Svalue), colour = "blue") +
   geom_line(aes(y = Scount), colour = "red")+
   facet_wrap(~ region, ncol = 3)
-
-
 
 
 
