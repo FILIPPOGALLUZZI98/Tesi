@@ -1,13 +1,13 @@
 # Select the country
-country <- "Thailand"
+country <- "Brazil"
 # Select the year
 y <- "2010"
 # Select the raster
 r <- "rs"
 
 path <- paste0("Data/GW_Conflict/", country, "/")
-data_gw_events <- read.dbf(paste0(path, country,"_gw_events_", r,".dbf"))
-data_gw <- read.dbf(paste0(path, country,"_gw_", r,".dbf"))
+data_gw_events <- read.csv(paste0(path, country,"_gw_events_", r,".csv"))
+data_gw <- read.csv(paste0(path, country,"_gw_", r,".csv"))
 events <-read.csv(paste0(path, country, "_events.csv"))
 state <- subset(shp, CNTRY_NAME == country)    ## plot(state[,"geometry"])
 state <- rename(state, region = ADMIN_NAME)
