@@ -1,5 +1,5 @@
 # Select the country
-country <- "Nigeria"
+country <- "Ethiopia"
 # Select the year
 y <- "2010"
 # Select the raster
@@ -53,7 +53,7 @@ ggplot() +
 ######################################################################################################
 # Plot della timeseries in una regione dei conflitti Nstate
 
-reg <- "Borno"
+reg <- "Gambela"
 
 data <- subset(data_gw_events,region==reg)
 data <- subset(data, type=="Nstate")
@@ -68,9 +68,9 @@ ggplot(data = agg_data, aes(x = year, y = count)) +
 ######################################################################################################
 # Plot delle timeseries dei conflitti Nstate in varie regioni scelte 
 
-# reg <- unique(data_gw_events$ADMIN_NAME)  ## Se voglio vederle tutte insieme
+# reg <- unique(data_gw_events$region)  ## Se voglio vederle tutte insieme
 reg <- c("Abia", "Adamawa", "Anambra", "Borno", "Edo", "Jigawa", "Nasarawa", "Ogun")
-data <- data_gw_events; data$geometry=NULL
+data <- data_gw_events
 agg_data <- data %>%
   filter(type == "Nstate", region %in% reg) %>%
   group_by(year, region) %>%
@@ -84,8 +84,8 @@ ggplot(data = agg_data, aes(x = year, y = count)) +
 ######################################################################################################
 # Plot della timeseries dei conflitti in una regione state+Nstate+onesided
 
-reg <- "Borno"
-data <- subset(data_gw_events,region==reg); data$geometry=NULL
+reg <- "Gambela"
+data <- subset(data_gw_events,region==reg)
 agg_data <- data %>%
   group_by(year) %>%
   summarise(count = sum(number))
@@ -97,7 +97,7 @@ ggplot(data = agg_data, aes(x = year, y = count)) +
 ######################################################################################################
 # plot timeseries dei conflitti in regioni scelte state+Nstate+onesided
 
-# reg <- unique(data_gw_events$ADMIN_NAME)  ## Se voglio vederle tutte insieme
+# reg <- unique(data_gw_events$region)  ## Se voglio vederle tutte insieme
 reg <- c("Abia", "Adamawa", "Anambra", "Borno", "Edo", "Jigawa", "Nasarawa", "Ogun")
 data <- data_gw_events
 agg_data <- data %>%
@@ -114,7 +114,7 @@ ggplot(data = agg_data, aes(x = year, y = count)) +
 ######################################################################################################
 # PLOT GW+CONFLICTS IN ONE REGION state+Nstate+onesided
 
-reg <- "Borno"
+reg <- "Gambela"
 data <- subset(data_gw_events,region==reg); data$geometry=NULL; data$CNTRY_NAME=NULL
 agg_data <- data %>%
   group_by(year, region, value) %>%
@@ -159,10 +159,6 @@ ggplot(data = agg_data, aes(year)) +
   geom_line(aes(y = Svalue), colour = "blue") +
   geom_line(aes(y = Scount), colour = "red")+
   facet_wrap(~ region, ncol = 3)
-
-
-
-
 
 
 
