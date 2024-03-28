@@ -26,13 +26,13 @@ suppressPackageStartupMessages({
 
 shp <- sf::read_sf("Data/Shapefile/shapefile.shp")
 shp <- sf::st_transform(shp, sp::CRS("+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs"))
+state <- rename(state, region = ADMIN_NAME)
+state <- subset(shp, CNTRY_NAME == country)    ## plot(state[,"geometry"])
 r <- raster::brick(paste0("Data/GW/",rast,"y.nc")); proj4string(r) <- raster::crs(shp)
 path <- paste0("Data/GW_Conflict/", country, "/")
 data_gw_events <- read.csv(paste0(path, country,"_gw_events_", r,".csv"))
 data_gw <- read.csv(paste0(path, country,"_gw_", r,".csv"))
 events <-read.csv(paste0(path, country, "_events.csv"))
-state <- subset(shp, CNTRY_NAME == country)    ## plot(state[,"geometry"])
-state <- rename(state, region = ADMIN_NAME)
 print(unique(data_gw_events$region))
 
 ######################################################################################################
