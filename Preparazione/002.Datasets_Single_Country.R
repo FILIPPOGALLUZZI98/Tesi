@@ -5,6 +5,7 @@
 # Il dataset 'gw_data_sc'contiene le variabili: CNTRY_NAME, region, geometry, value, year
 # Quindi abbiamo, per lo stato selezionato, per ogni regione e per ogni anno il valore della media del raster selezionato
 # all'interno delle regioni dello stato.
+
 ##############################################################################################################################
 ##############################################################################################################################
 # Select the country
@@ -97,6 +98,10 @@ percorso_cartella <- paste0("Data/GW_Conflict/",country,"/")
 if (!file.exists(percorso_cartella)) {
   dir.create(percorso_cartella, recursive = TRUE)
 }
+
+##############################################################################################################################
+##############################################################################################################################
+# Scrittura datasets
 
 write.csv(gw_data_sc, paste0(percorso_cartella, country, "_gw_",rast, ".csv"))
 write.csv(gw_events_sc, paste0(percorso_cartella, country, "_gw_events_",rast, ".csv"))
