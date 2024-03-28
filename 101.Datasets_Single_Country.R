@@ -12,7 +12,7 @@
 r <- rs
 a <- "rs"
 # Selezionare il paese e anno
-country <- "Nigeria"
+country <- "Thailand"
 
 ##############################################################################################################################
 ##############################################################################################################################
@@ -77,6 +77,7 @@ percorso_cartella <- paste0("Data/GW_Conflict/",country,"/")
 if (!file.exists(percorso_cartella)) {
   dir.create(percorso_cartella, recursive = TRUE)
 }
+write_sf(gw_data_sc, paste0(percorso_cartella, country, "_gw_",a, ".shp"))
 write_sf(gw_events_sc, paste0(percorso_cartella, country, "_gw_events_",a, ".shp"))
 write.csv(events,paste0(percorso_cartella, country, "_events.csv"))
 
