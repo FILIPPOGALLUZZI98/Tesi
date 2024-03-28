@@ -42,21 +42,22 @@ ggplot(subset(data_gw_events, region %in% R),
   scale_fill_viridis_c(option="viridis", end  = 0.8) +                              
   scale_color_viridis_c(option="viridis", end = 0.8)
 
-######################################################################################################
-# Plot data points over geometry figure
 
-shape <- data_gw_events; shape$CNTRY_NAME=NULL; shape$year=NULL; shape$value=NULL;shape$type=NULL
-shape <- shape %>%
-  group_by(region, geometry) %>%
-  summarise(count = sum(number)); shape$count=NULL
-ggplot(shape) +           
-  geom_sf(fill = NA, col = "black") +  
-  geom_point(data = events, aes(longitude, latitude, color=type), size = .7) +
+
+######################################################################################################
+
+# Plot data points over geometry figure
+ggplot() +
+  geom_sf(data = state) +  # Aggiunge le geometrie dello shapefile
+  geom_point(data = events, aes(x = longitude, y = latitude, color = type, size = number)) + # Aggiunge i punti degli eventi
+  scale_color_discrete(name = "Type") +
   # Assegna manualmente i colori ai valori di code_status
-  scale_color_manual(values = c("state" = "red", "Nstate" = "blue", "onesided" = "green"))+
+  scale_color_manual(values = c("state" = "blue", "Nstate" = "red", "onesided" = "green")) +
+  labs(title = "Events") +
   theme_bw() +                     
   # white background for variable names
   theme(strip.background = element_rect(fill="white"))
+
 
 ######################################################################################################
 # Plot della timeseries in una regione dei conflitti Nstate
