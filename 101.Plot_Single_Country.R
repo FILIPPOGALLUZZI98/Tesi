@@ -1,7 +1,7 @@
 # Select the country
-country <- "Nigeria"
+country <- "Mexico"
 # Select the year
-y <- "1990"
+y <- "2005"
 # Select the raster
 rast <- "rs"
 
@@ -57,8 +57,9 @@ R <- unique(data_gw_events$region)  ## Se voglio vederle tutte insieme
 
 ggplot(subset(data_gw_events, region %in% R), 
        aes(year, value)) +   
-  facet_wrap(region~., ncol=6) +        
+  facet_wrap(region~., ncol=4) +        
   theme_bw()+
+  labs(title = paste(country),x="",y="GW Storage [kg/m^2]") +
   theme(strip.background=element_rect(fill="white")) +          
   geom_line()
 
@@ -94,7 +95,7 @@ ggplot(data = agg_data, aes(x = year, y = count)) +
 ######################################################################################################
 # Plot delle timeseries dei conflitti Nstate in varie regioni scelte 
 
-# reg <- unique(data_gw_events$region)  ## Se voglio vederle tutte insieme
+  # reg <- unique(data_gw_events$region)  ## Se voglio vederle tutte insieme
 reg <- c("Abia", "Adamawa", "Anambra", "Borno", "Edo", "Jigawa", "Nasarawa", "Ogun")
 data <- data_gw_events
 agg_data <- data %>%
@@ -103,23 +104,24 @@ agg_data <- data %>%
   summarise(count = sum(number))
 
 ggplot(data = agg_data, aes(x = year, y = count)) +
-  geom_line() +   # Aggiunge la linea
-  labs(x = "Year", y = "Count") +
+  geom_bar(stat = "identity") + 
+  labs(x = "Year", y = "Count", title="Non-State Events") +
   theme_bw()+
-  facet_wrap(~ region, ncol = 3)
+  facet_wrap(~ region, ncol = 6)
 
 ######################################################################################################
 # Plot della timeseries dei conflitti in una regione state+Nstate+onesided
 
-reg <- "Nasarawa"
+reg <- "Chihuahua"
 data <- subset(data_gw_events,region==reg)
 agg_data <- data %>%
   group_by(year) %>%
   summarise(count = sum(number))
 
 ggplot(data = agg_data, aes(x = year, y = count)) +
-  geom_line() +   # Aggiunge la linea
+  geom_bar(stat = "identity") +
   theme_bw()+
+  labs(title = paste(reg, "All Events"))+
   labs(x = "Year", y = "Count")
 
 ######################################################################################################
@@ -142,7 +144,7 @@ ggplot(data = agg_data, aes(x = year, y = count)) +
 ######################################################################################################
 # PLOT GW+CONFLICTS IN ONE REGION state+Nstate+onesided
 
-reg <- "Nasarawa"
+reg <- "Chihuahua"
 data <- subset(data_gw_events,region==reg); data$geometry=NULL; data$CNTRY_NAME=NULL
 agg_data <- data %>%
   group_by(year, region, value) %>%
@@ -155,8 +157,11 @@ agg_data$Svalue <- (agg_data$value-mvalue)/svalue
 agg_data$Scount <- (agg_data$count-mcount)/scount
 
 ggplot(agg_data, aes(year)) +
-  geom_line(aes(y = Svalue), colour = "blue") +
-  geom_line(aes(y = Scount), colour = "red")
+  geom_line(aes(y = Svalue), colour = "blue", size=1) +
+  geom_bar(aes(y = Scount), stat = "identity", fill = "red", alpha = 0.5) +
+  scale_fill_manual(values = "red", name = "Scount") + 
+  labs(title="Mexico GW Storage vs. All Conflicts (Normalized)", x = "Year", y = "", color = "Legend") + 
+  theme_bw()
 
 ######################################################################################################
 # PLOT GW+CONFLICTS SLECTED REGIONS state+Nstate+onesided
