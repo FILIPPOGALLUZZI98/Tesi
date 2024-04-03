@@ -33,20 +33,13 @@ data_gw <- read.csv(paste0(path, country,"_gw_", rast,".csv"))
 events <-read.csv(paste0(path, country, "_events.csv"))
 
 ######################################################################################################
-
-
-data <- subset(data_gw_events, type=="Nstate")
-data
+data <- data_gw_events %>%
+  group_by(year, region, value) %>%
+  summarise(number = sum(number))
 
 lm <- lm(data$number ~ data$value + as.factor(data$year) + as.factor(data$region))
 summary(lm)
 plot(lm)
-
-
-
-
-
-
 
 
 
