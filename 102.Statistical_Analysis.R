@@ -1,7 +1,5 @@
 # Select the country
 country <- "Mexico"
-# Select the year
-y <- "2005"
 # Select the raster
 rast <- "rs"
 
