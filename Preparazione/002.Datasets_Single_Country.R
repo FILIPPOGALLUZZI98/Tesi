@@ -99,6 +99,28 @@ if (!file.exists(percorso_cartella)) {
   dir.create(percorso_cartella, recursive = TRUE)
 }
 
+
+#############################################################################################################################
+####  POINT DATA CONFLICT UPPSALA  ##########################################################################################
+
+file_path <- paste("Data_Raw/Conflict_Data/", country, ".csv", sep = "")
+events <- read.csv(file_path)
+# Seleziono soltanto le variabili che mi interessano
+events <- events[, c("relid", "code_status","latitude" ,"longitude", "best_est")]
+events <- events %>%
+  rename(year = relid,
+         type = code_status)
+events <- mutate(events,
+                 type = case_when(
+                   type == 1 ~ "state",
+                   type == 2 ~ "Nstate",
+                   type == 3 ~ "onesided"
+                 ))
+
+output_folder <- "Data/Conflict"
+output_file <- file.path(output_folder, paste0(country, ".csv"))
+write.csv(events, file = output_file, row.names = FALSE)
+
 ##############################################################################################################################
 ##############################################################################################################################
 # Scrittura datasets
