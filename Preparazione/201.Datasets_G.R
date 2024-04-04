@@ -57,7 +57,10 @@ events <- mutate(events,
 events <- st_as_sf(events, coords = c("longitude", "latitude"), crs = st_crs(shp))
 events <- st_transform(events, st_crs(shp))
 
-# Intersection shapefile-events
+# Remove the invalid geometries from shp
+shp <- shp[st_is_valid(shp), ]
+
+# Intersection shapefile-events and aggregate data 
 events_joined <- st_join(events, shp)
 events_joined$country.x=NULL
 events_joined <- events_joined %>%
