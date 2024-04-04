@@ -10,21 +10,8 @@ rast <- "gws"
 ##############################################################################################################################
 
 suppressPackageStartupMessages({
-  library(sf)              ## useful for spatial manipulations
-  library(sp)              ## useful for spatial manipulations
-  library(plyr )
-  library(raster)          ## useful for working with raster data
-  library(ncdf4)           ## useful for working with raster data
-  library(exactextractr)   ## useful for extracting data from raster files
-  library(dplyr)           ## useful for merging data sets
-  library(stringr)
-  library(reshape2)        ## useful for manipulating data sets
-  library(ggplot2)         ## useful for data visualization
-  library(ggrepel)         ## useful for labeling point plots in ggplot2
-  library(lubridate)
-  library(zoo)   
-  library(foreign)
-})
+  library(sf);library(sp);library(plyr);library(raster);library(ncdf4);library(exactextractr);library(dplyr);library(stringr)
+  library(reshape2);library(ggplot2);library(ggrepel);library(lubridate);library(zoo);library(foreign)})
 
 shp <- st_read("^Data/Shapefile/shp.gpkg")
 shp <- sf::st_transform(shp, sp::CRS("+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs"))
