@@ -1,5 +1,5 @@
 # Select the country
-country <- "Brazil"
+paese <- "Brazil"
 # Select the raster
 rast <- "gws"    ## gws; ...
 
@@ -14,7 +14,12 @@ shp <- st_read("^Data/Shapefile/shp.gpkg")
 shp <- sf::st_transform(shp, sp::CRS("+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs"))
 r <- raster::brick(paste0("^Data/Raster/",rast,".nc")); proj4string(r) <- raster::crs(shp)
 # Subset dello shapefile per il paese selezionato
-state <- subset(shp, country == country)    ## plot(state[,"geom"])
+state <- subset(shp, country == paese)    ## plot(state[,"geom"])
+
+percorso_cartella <- paste0("Data/GW_Conflict/",country,"/")
+if (!file.exists(percorso_cartella)) {
+  dir.create(percorso_cartella, recursive = TRUE)
+}
 
 ##############################################################################################################################
 ##############################################################################################################################
@@ -29,6 +34,9 @@ gw_sc <- gw_sc %>%
   group_by(region) %>%
   mutate(year = anni)
 gw_sc$variable=NULL
+
+# Salvataggio dati
+write.csv(gw_sc, paste0(percorso_cartella, country, "_",rast, ".csv"))
 
 #############################################################################################################################
 ####  POINT DATA CONFLICT UPPSALA  ##########################################################################################
@@ -94,17 +102,12 @@ gw_events_sc <- left_join(gw_events_sc, gw_data_sc[,c("year", "region","value")]
 # st_geometry(gw_events_sc) <- "geometry"
 
 
-percorso_cartella <- paste0("Data/GW_Conflict/",country,"/")
-if (!file.exists(percorso_cartella)) {
-  dir.create(percorso_cartella, recursive = TRUE)
-}
 
 
 ##############################################################################################################################
 ##############################################################################################################################
 # Scrittura datasets
 
-write.csv(gw_sc, paste0(percorso_cartella, country, "_",rast, ".csv"))
 write.csv(gw_events_sc, paste0(percorso_cartella, country, "_gw_events_",rast, ".csv"))
 write.csv(events,paste0(percorso_cartella, country, "_events.csv"))
 
