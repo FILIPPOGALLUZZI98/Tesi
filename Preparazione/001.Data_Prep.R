@@ -1,3 +1,7 @@
+# Preparazione dello shapefile: rimuovere variabili che non interessano, rimuoevere geometrie con errori,
+# rinominare le variabili, impostare il CRS. salvataggio
+# Praparazione del raster:media annuale, impostare CRS, salvataggio
+
 suppressPackageStartupMessages({
   library(sf);library(sp);library(plyr);library(raster);library(ncdf4);library(exactextractr);library(dplyr);library(stringr)
   library(reshape2);library(ggplot2);library(ggrepel);library(lubridate);library(zoo);library(foreign)})
