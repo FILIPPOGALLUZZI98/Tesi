@@ -11,7 +11,7 @@ shp <- shp[!empty, ]
 nomi_geometrie_vuote_rimosse <- rownames(shp)[empty]
 print(nomi_geometrie_vuote_rimosse)
 
-# Salvo il dataset risultante
+# Salvataggio dati
 st_write(shp, "^Data/Shapefile/shp.gpkg")
 
 
