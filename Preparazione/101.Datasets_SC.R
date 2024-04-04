@@ -98,8 +98,13 @@ events <- events[order(events$year),]
 # Save data
 write.csv(events,paste0(percorso_cartella, paese, "_events.csv"), row.names=FALSE)
 
+#############################################################################################################################
+####  MIGRATION DATASET  ####################################################################################################
+
+
+
 ##############################################################################################################################
-##############################################################################################################################
+####  JOINT DATASET GW-CONFLITC  ##############################################################################################
 
 # Select for GW data the same timespan as for conflicts
 # Create a dataset in which I have for each year and for each region the value of GW, the number of
@@ -118,6 +123,8 @@ gw_events_sc <- left_join(gw_events_sc, gw_data_sc[,c("year", "region","value")]
 # Save data
 write.csv(gw_events_sc, paste0(percorso_cartella, paese, "_", rast, "_events", ".csv"), row.names=FALSE)
 
+##############################################################################################################################
+####  JOINT DATASET GW-MIGRATIONS  ###########################################################################################
 
 
 
