@@ -8,6 +8,6 @@ suppressPackageStartupMessages({
 shp <- st_read("^Data/shp.gpkg")
 r <- raster::brick("^Data/gws.nc")
 
-state <- subset(shp, CNTRY_NAME == "Australia")
+state <- subset(shp, country == "Australia")
 plot(r$X1)
 plot(state, add = TRUE)
