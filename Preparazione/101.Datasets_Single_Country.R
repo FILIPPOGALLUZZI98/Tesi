@@ -115,7 +115,7 @@ gw_events_sc <- gw_events_sc %>%
   filter(year != 2020 & year != 2021 & year != 2022)
 gw_events_sc <- left_join(gw_events_sc, gw_data_sc[,c("year", "region","value")], by=c("year", "region"))
 
-# Salvataggio dati
+# Save data
 write.csv(gw_events_sc, paste0(percorso_cartella, paese, "_", rast, "_events", ".csv"), row.names=FALSE)
 
 
