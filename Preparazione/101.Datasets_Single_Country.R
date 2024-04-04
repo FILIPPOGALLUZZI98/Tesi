@@ -14,7 +14,7 @@ shp <- st_read("^Data/Shapefile/shp.gpkg")
 shp <- sf::st_transform(shp, sp::CRS("+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs"))
 r <- raster::brick(paste0("^Data/Raster/",rast,".nc")); proj4string(r) <- raster::crs(shp)
 # Subset dello shapefile per il paese selezionato
-state <- subset(shp, country == country)    ## plot(state[,"geometry"])
+state <- subset(shp, country == country)    ## plot(state[,"geom"])
 
 ##############################################################################################################################
 ##############################################################################################################################
