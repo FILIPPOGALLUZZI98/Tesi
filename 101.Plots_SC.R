@@ -12,7 +12,7 @@ suppressPackageStartupMessages({
   library(sf);library(sp);library(plyr);library(raster);library(ncdf4);library(exactextractr);library(dplyr);library(stringr)
   library(reshape2);library(ggplot2);library(ggrepel);library(lubridate);library(zoo);library(foreign)})
 
-shp <- st_read("^Data/shp.gpkg")
+shp <- st_read("^Data/shp/shp.shp")
 state <- subset(shp, country == paese)  ## plot(state[,"geometry"])
 
 
