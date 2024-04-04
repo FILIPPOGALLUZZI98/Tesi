@@ -6,25 +6,28 @@ suppressPackageStartupMessages({
 ####  SHAPEFILE  ############################################################################
 
 shp <- sf::read_sf("^Data_Raw/world_geolev1_2021/world_geolev1_2021.shp")
-# Rimuovo le variabili che non mi servono
+# Select the variables of interest
 shp$BPL_CODE <- NULL; shp$CNTRY_CODE <- NULL; shp$GEOLEVEL1 <- NULL
-# Rimuovo le regioni che danno geometry error
+# Remove regions with geometry error
 empty <- st_is_empty(shp); shp <- shp[!empty, ]
-# Per vedere quali regioni sono state rimosse
+# List of empty geometry regions
 nomi_geometrie_vuote_rimosse <- rownames(shp)[empty]; print(nomi_geometrie_vuote_rimosse)
-# Rinomino le variabili
+# Rename the variables
 shp <- shp %>%
   rename(country = CNTRY_NAME,
          region = ADMIN_NAME)
 shp$region <- ifelse(is.na(shp$region), shp$country, shp$region)
+# Set the CRS
+shp <- sf::st_transform(shp, sp::CRS("+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs"))
 
-# Salvataggio dati
+# Save data
 st_write(shp, "^Data/shp.gpkg")
 
 #################################################################################################
 ####  GROUNDWATER STORAGE YEAR AVERAGE  #########################################################
 r <- raster::brick("^Data_Raw/ISIMIP3a/cwatm_gswp3-w5e5_obsclim_histsoc_default_groundwstor_global_monthly_1901_2019.nc")
 
+# Annual mean
 media_annuale <- lapply(1:119, function(i) {
   anno_iniziale <- (i - 1) * 12 + 1
   anno_finale <- i * 12
@@ -32,8 +35,10 @@ media_annuale <- lapply(1:119, function(i) {
   return(media)
 })
 gws <- brick(media_annuale)
+# Set the same CRS as for shp
+proj4string(gws) <- raster::crs(shp)
 
-# Salvataggio dati
+# Save data
 years <- unique(format(as.Date(names(r), format = "X%Y.%m.%d"), "%Y"))
 names(gws) <- paste0("gws", years)
 output_nc <- "^Data/gws.nc"
