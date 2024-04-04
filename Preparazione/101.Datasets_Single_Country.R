@@ -14,7 +14,7 @@ shp <- st_read("^Data/Shapefile/shp.gpkg")
 shp <- sf::st_transform(shp, sp::CRS("+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs"))
 r <- raster::brick(paste0("^Data/Raster/",rast,".nc")); proj4string(r) <- raster::crs(shp)
 # Subset dello shapefile per il paese selezionato
-state <- subset(shp, CNTRY_NAME == country)    ## plot(state[,"geometry"])
+state <- subset(shp, country == country)    ## plot(state[,"geometry"])
 
 ##############################################################################################################################
 ##############################################################################################################################
@@ -22,7 +22,7 @@ state <- subset(shp, CNTRY_NAME == country)    ## plot(state[,"geometry"])
 # Media dei valori del raster sulle regioni 
 gw_sc <- exactextractr::exact_extract(r, state, fun="mean")
 # Aggiungo una colonna region al file gw_data_state
-gw_sc$region <- state$ADMIN_NAME
+gw_sc$region <- state$region
 gw_sc <- reshape2::melt(gw_sc, id.vars="region")
 anni <- 1901:2019
 gw_sc <- gw_sc %>%
@@ -104,7 +104,7 @@ if (!file.exists(percorso_cartella)) {
 ##############################################################################################################################
 # Scrittura datasets
 
-write.csv(gw_data_sc, paste0(percorso_cartella, country, "_gw_",rast, ".csv"))
+write.csv(gw_sc, paste0(percorso_cartella, country, "_",rast, ".csv"))
 write.csv(gw_events_sc, paste0(percorso_cartella, country, "_gw_events_",rast, ".csv"))
 write.csv(events,paste0(percorso_cartella, country, "_events.csv"))
 
