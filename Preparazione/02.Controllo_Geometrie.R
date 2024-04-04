@@ -5,8 +5,8 @@ suppressPackageStartupMessages({
 ############################################################################################################################
 ############################################################################################################################
 
-shp <- st_read("^Data/Shapefile/shp.gpkg")
-r <- raster::brick("^Data/Raster/gws.nc")
+shp <- st_read("^Data/shp.gpkg")
+r <- raster::brick("^Data/gws.nc")
 
 state <- subset(shp, CNTRY_NAME == "Australia")
 plot(r$X1)
