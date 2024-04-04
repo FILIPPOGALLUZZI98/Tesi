@@ -21,7 +21,7 @@ shp$region <- ifelse(is.na(shp$region), shp$country, shp$region)
 shp <- sf::st_transform(shp, sp::CRS("+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs"))
 
 # Save data
-st_write(shp, "^Data/shp.gpkg")
+st_write(shp, "^Data/shp")
 
 #################################################################################################
 ####  GROUNDWATER STORAGE YEAR AVERAGE  #########################################################
