@@ -26,7 +26,8 @@ gw_g <- reshape2::melt(gw_g, id.vars=c("country", "region"))
 
 # Rename the years
 gw_g$variable <- gsub("mean.X", "", gw_g$variable)  # Rimuovi "mean.X"
-gw_g$variable <- as.integer(gsub("\\D", "", gw_g$variable)) + 1900 
+gw_g$year <- as.integer(gsub("\\D", "", gw_g$variable)) + 1900 
+gw_g$variable=NULL
 
 # Save data
 write.csv(gw_g, paste0("^Data/", "Global_",rast, ".csv"), row.names=FALSE)
