@@ -84,13 +84,13 @@ intersection[sapply(intersection, length) == 0] <- NA
 
 # Merge region name to conflict data points
 events$region <- state$region[unlist(intersection)]   
-events$geometry <- NULL; events$latitude <- NULL; events$longitude <- NULL
+events$geometry <- NULL
 
 # Group events for the same region and type in one year 
-events <- events %>% group_by(year, region, type) %>% summarise(number_events = n())
+events <- events %>% group_by(year, region, type, latitude, longitude) %>% summarise(number_events = n())
 
 # Rename the variables names
-colnames(events) <- c("year","region", "type", "number")
+colnames(events) <- c("year","region", "type","latitude","longitude", "number")
 
 # Sort datasets by year
 events <- events[order(events$year),]
