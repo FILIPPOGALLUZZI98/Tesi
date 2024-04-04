@@ -30,6 +30,7 @@ st_write(shp, "^Data/shp", driver = "ESRI Shapefile")
 #################################################################################################
 ####  GROUNDWATER STORAGE YEAR AVERAGE  #########################################################
 r <- raster::brick("^Data_Raw/ISIMIP3a/cwatm_gswp3-w5e5_obsclim_histsoc_default_groundwstor_global_monthly_1901_2019.nc")
+proj4string(r) <- raster::crs(shp)
 
 # Annual mean
 media_annuale <- lapply(1:119, function(i) {
@@ -40,7 +41,6 @@ media_annuale <- lapply(1:119, function(i) {
 })
 gws <- brick(media_annuale)
 # Set the same CRS as for shp
-proj4string(gws) <- raster::crs(shp)
 
 # Save data
 years <- unique(format(as.Date(names(r), format = "X%Y.%m.%d"), "%Y"))
