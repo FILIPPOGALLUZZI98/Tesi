@@ -20,6 +20,8 @@ suppressPackageStartupMessages({
   library(foreign)
 })
 
+shp <- st_read("^Data/shp/shp.shp")
+
 shp <- sf::read_sf("Data/Shapefile/shapefile.shp")
 shp <- sf::st_transform(shp, sp::CRS("+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs"))
 state <- subset(shp, CNTRY_NAME == country)    ## plot(state[,"geometry"])
