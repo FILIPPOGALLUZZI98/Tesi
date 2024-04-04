@@ -14,8 +14,12 @@ shp <- shp[!empty, ]
 # Per vedere quali regioni sono state rimosse
 nomi_geometrie_vuote_rimosse <- rownames(shp)[empty]
 print(nomi_geometrie_vuote_rimosse)
+# Rinomino le variabili
+shp <- shp %>%
+  rename(country = CNTRY_NAME,
+         region = ADMIN_NAME)
 
-# Salvataggio dati
+# Salvo il dataset risultante
 st_write(shp, "^Data/Shapefile/shp.gpkg")
 
 
