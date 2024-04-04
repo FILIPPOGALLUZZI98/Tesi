@@ -76,6 +76,9 @@ output_folder <- "Data/Conflict"
 output_file <- file.path(output_folder, paste0(country, ".csv"))
 write.csv(events, file = output_file, row.names = FALSE)
 
+##############################################################################################################################
+####  EVENTS INTERSECTION  ####################################################################################################
+
 
 # Operazioni sui dati events
 file_path <- paste("Data/Conflict/", country, ".csv", sep = "")
