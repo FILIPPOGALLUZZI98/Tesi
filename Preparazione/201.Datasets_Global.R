@@ -27,28 +27,62 @@ r <- raster::brick(paste0("Data/GW/",rast,"y.nc")); proj4string(r) <- raster::cr
 
 
 gw_data_g <- exactextractr::exact_extract(r, shp, fun="mean")
-gw_data_g$region <- shp$ADMIN_NAME
-gw_data_g$country <- shp$CNTRY_NAME
+gw_data_g$region <- shp$ADMIN_NAME ; gw_data_g$country <- shp$CNTRY_NAME
 gw_data_g <- reshape2::melt(gw_data_g, id.vars=c("country", "region"))
 gw_data_g$region <- ifelse(is.na(gw_data_g$region), gw_data_g$country, gw_data_g$region)
 gw_data_g$variable <- gsub("mean.X", "", gw_data_g$variable)  # Rimuovi "mean.X"
 gw_data_g$variable <- as.integer(gsub("\\D", "", gw_data_g$variable)) + 1900 
 
-# gw_data_g <- left_join(shp, gw_data_g, by=c("ADMIN_NAME"="region")) 
 
 ##############################################################################################
 ##############################################################################################
 
 
-file_path <- "Data/Conflict/Global.csv"
+file_path <- "Data_Raw/Conflict_Data/Global.csv"
 events <- read.csv(file_path)
+events <- events[, c("country" ,"year", "type_of_violence","latitude" ,"longitude", "best")]
 
+events <- events %>%
+  rename(type = type_of_violence,
+         number = best)
+events <- mutate(events,
+                 type = case_when(
+                   type == 1 ~ "state",
+                   type == 2 ~ "Nstate",
+                   type == 3 ~ "onesided"
+                 ))
+events <- na.omit(events[, c("country" ,"year", "type","latitude" ,"longitude","number")])
+events <- sf::st_as_sf(events, coords = c("latitude","longitude"), remove = FALSE)
+sf::st_crs(events) <- sf::st_crs(shp)
+intersection <- sf::st_intersects(events, shp)            
+intersection[sapply(intersection, length) == 0] <- NA    
 
-## DA FARE
 
 
 ##############################################################################################
 ##############################################################################################
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
