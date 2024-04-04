@@ -35,11 +35,12 @@ suppressPackageStartupMessages({
 shp <- sf::read_sf("Data/Shapefile/shapefile.shp")
 shp <- sf::st_transform(shp, sp::CRS("+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs"))
 r <- raster::brick(paste0("Data/GW/",rast,"y.nc")); proj4string(r) <- raster::crs(shp)
+# Subset dello shapefile per il paese selezionato
+state <- subset(shp, CNTRY_NAME == country)    ## plot(state[,"geometry"])
+
 ##############################################################################################################################
 ##############################################################################################################################
 
-# Subset dello shapefile per il paese selezionato
-state <- subset(shp, CNTRY_NAME == country)    ## plot(state[,"geometry"])
 # Media dei valori del raster sulle regioni 
 gw_data_sc <- exactextractr::exact_extract(r, state, fun="mean")
 # Aggiungo una colonna region al file gw_data_state
