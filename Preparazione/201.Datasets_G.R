@@ -33,7 +33,7 @@ gw_g$variable=NULL
 write.csv(gw_g, paste0("^Data/", "Global_",rast, ".csv"), row.names=FALSE)
 
 ##############################################################################################
-####  POINT DATA CONFLICT UPPSALA  ###########################################################
+####  GLOBAL CONFLICT UPPSALA  ###############################################################
 
 # Select the conflict data
 file_path <- "^Data_Raw/Conflict_Data/Global.csv"
@@ -52,14 +52,25 @@ events <- mutate(events,
                    type == 2 ~ "Nstate",
                    type == 3 ~ "onesided"
                  ))
+
 # Set the coordinate system
-events <- na.omit(events[, c("country" ,"year", "type","latitude" ,"longitude","number")])
-events <- sf::st_as_sf(events, coords = c("latitude","longitude"), remove = FALSE)
-sf::st_crs(events) <- sf::st_crs(shp)
-events$longitude <- st_coordinates(events)[, "X"]
-events$latitude <- st_coordinates(events)[, "Y"]
-intersection <- sf::st_intersects(events, shp)            
-intersection[sapply(intersection, length) == 0] <- NA    
+events <- st_as_sf(events, coords = c("longitude", "latitude"), crs = st_crs(shp))
+events <- st_transform(events, st_crs(shp))
+
+# Intersection shapefile-events
+events_joined <- st_join(events, shp)
+events_joined$country.x=NULL
+events_joined <- events_joined %>%
+  rename(country = country.y)
+events <- aggregate(number ~ year + country + region + type, data = events_joined, sum)
+
+# Sort datasets by year
+events <- events[order(events$country),]
+events <- events[order(events$year),]
+
+# Save data
+write.csv(events, paste0("^Data/", "Global_events", ".csv"), row.names=FALSE)
+
 
 
 
