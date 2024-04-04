@@ -56,6 +56,7 @@ gw_data_sc$variable=NULL
 
 #############################################################################################################################
 ####  POINT DATA CONFLICT UPPSALA  ##########################################################################################
+# DA OTTIMIZZARE, RIMUOVERE IL SALVATAGGIO INTERMEDIO CHE è INUTILE
 
 file_path <- paste("Data_Raw/Conflict_Data/", country, ".csv", sep = "")
 events <- read.csv(file_path)
