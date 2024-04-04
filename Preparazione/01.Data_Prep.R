@@ -19,7 +19,7 @@ shp <- shp %>%
 shp$region <- ifelse(is.na(shp$region), shp$country, shp$region)
 
 # Salvataggio dati
-st_write(shp, "^Data/Shapefile/shp.gpkg")
+st_write(shp, "^Data/shp.gpkg")
 
 #################################################################################################
 ####  GROUNDWATER STORAGE YEAR AVERAGE  #########################################################
@@ -36,6 +36,6 @@ gws <- brick(media_annuale)
 # Salvataggio dati
 years <- unique(format(as.Date(names(r), format = "X%Y.%m.%d"), "%Y"))
 names(gws) <- paste0("gws", years)
-output_nc <- "^Data/Raster/gws.nc"
+output_nc <- "^Data/gws.nc"
 writeRaster(gws, filename = output_nc, format = "CDF", overwrite = TRUE)
 
