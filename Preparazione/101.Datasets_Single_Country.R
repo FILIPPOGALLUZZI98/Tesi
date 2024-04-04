@@ -1,5 +1,5 @@
 # Select the country
-paese <- "Ethiopia"
+paese <- "Nigeria"
 # Select the raster
 rast <- "gws"    ## gws; ...
 
