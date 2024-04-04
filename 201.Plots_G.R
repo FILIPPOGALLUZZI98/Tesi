@@ -2,7 +2,7 @@ suppressPackageStartupMessages({
   library(sf);library(sp);library(plyr);library(raster);library(ncdf4);library(exactextractr);library(dplyr);library(stringr)
   library(reshape2);library(ggplot2);library(ggrepel);library(lubridate);library(zoo);library(foreign)})
 
-shp <- st_read("^Data/shp.gpkg")
+shp <- st_read("^Data/shp/shp.shp")
 events <-read.csv("^Data/Global_events.csv")
 data_gw <- read.csv("^Data/Global_gws.csv")
 ##  data_gw_events <- read.csv("^Data/Global_gws_events.csv")
