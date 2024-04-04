@@ -107,7 +107,7 @@ write.csv(events,paste0(percorso_cartella, paese, "_events.csv"), row.names=FALS
 
 gw_data_sc <- gw_sc %>%
   filter(year > 1989)
-gw_events_sc <- expand.grid(year = 1989:2022, region = unique(events$region),type=c("state","Nstate","onesided"))
+gw_events_sc <- expand.grid(year = 1990:2022, region = unique(events$region),type=c("state","Nstate","onesided"))
 gw_events_sc <- left_join(gw_events_sc, events, by=c("region", "year", "type"="type"))
 gw_events_sc$number[is.na(gw_events_sc$number)] = 0  ## Assign a zero to each month/province where no data is observed
 gw_events_sc$latitude = NULL ; gw_events_sc$longitude=NULL
