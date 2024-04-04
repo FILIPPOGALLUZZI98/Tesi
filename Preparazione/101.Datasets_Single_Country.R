@@ -1,18 +1,7 @@
-# Il dataset 'gw_events_data' contine le variabili: CNTRY_NAME, ADMIN_REGION, geometry, yera, type, number, value
-# Quindi per lo stato selezionato, per ogni anno, per ogni regione e per ogni tipo di conflitto abbiamo
-# il valore del raster mediato sulla regione ed il numero di eventi.
-
-# Il dataset 'gw_data_sc'contiene le variabili: CNTRY_NAME, region, geometry, value, year
-# Quindi abbiamo, per lo stato selezionato, per ogni regione e per ogni anno il valore della media del raster selezionato
-# all'interno delle regioni dello stato.
-
-##############################################################################################################################
-##############################################################################################################################
 # Select the country
 country <- "Brazil"
 # Select the raster
-rast <- "rs"
-
+rast <- "gws"
 
 
 suppressPackageStartupMessages({
@@ -32,9 +21,9 @@ suppressPackageStartupMessages({
   library(foreign)
 })
 
-shp <- sf::read_sf("Data/Shapefile/shapefile.shp")
+shp <- st_read("^Data/Shapefile/shp.gpkg")
 shp <- sf::st_transform(shp, sp::CRS("+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs"))
-r <- raster::brick(paste0("Data/GW/",rast,"y.nc")); proj4string(r) <- raster::crs(shp)
+r <- raster::brick(paste0("^Data/Raster/",rast,".nc")); proj4string(r) <- raster::crs(shp)
 # Subset dello shapefile per il paese selezionato
 state <- subset(shp, CNTRY_NAME == country)    ## plot(state[,"geometry"])
 
@@ -42,17 +31,15 @@ state <- subset(shp, CNTRY_NAME == country)    ## plot(state[,"geometry"])
 ##############################################################################################################################
 
 # Media dei valori del raster sulle regioni 
-gw_data_sc <- exactextractr::exact_extract(r, state, fun="mean")
+gw_sc <- exactextractr::exact_extract(r, state, fun="mean")
 # Aggiungo una colonna region al file gw_data_state
-gw_data_sc$region <- state$ADMIN_NAME
-gw_data_sc <- reshape2::melt(gw_data_sc, id.vars="region")
+gw_sc$region <- state$ADMIN_NAME
+gw_sc <- reshape2::melt(gw_sc, id.vars="region")
 anni <- 1901:2019
-gw_data_sc <- gw_data_sc %>%
+gw_sc <- gw_sc %>%
   group_by(region) %>%
   mutate(year = anni)
-gw_data_sc$variable=NULL
-# gw_data_sc <- left_join(state, gw_data_sc, by=c("ADMIN_NAME"="region")) 
-# colnames(gw_data_sc)[colnames(gw_data_sc) == "ADMIN_NAME"] <- "region"
+gw_sc$variable=NULL
 
 
 #############################################################################################################################
