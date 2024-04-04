@@ -9,19 +9,16 @@ shp <- sf::read_sf("^Data_Raw/world_geolev1_2021/world_geolev1_2021.shp")
 # Rimuovo le variabili che non mi servono
 shp$BPL_CODE <- NULL; shp$CNTRY_CODE <- NULL; shp$GEOLEVEL1 <- NULL
 # Rimuovo le regioni che danno geometry error
-empty <- st_is_empty(shp)
-shp <- shp[!empty, ]
+empty <- st_is_empty(shp); shp <- shp[!empty, ]
 # Per vedere quali regioni sono state rimosse
-nomi_geometrie_vuote_rimosse <- rownames(shp)[empty]
-print(nomi_geometrie_vuote_rimosse)
+nomi_geometrie_vuote_rimosse <- rownames(shp)[empty]; print(nomi_geometrie_vuote_rimosse)
 # Rinomino le variabili
 shp <- shp %>%
   rename(country = CNTRY_NAME,
          region = ADMIN_NAME)
 
-# Salvo il dataset risultante
+# Salvataggio dati
 st_write(shp, "^Data/Shapefile/shp.gpkg")
-
 
 #################################################################################################
 ####  GROUNDWATER STORAGE YEAR AVERAGE  #########################################################
