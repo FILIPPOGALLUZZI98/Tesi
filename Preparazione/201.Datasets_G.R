@@ -8,7 +8,7 @@ suppressPackageStartupMessages({
   library(reshape2);library(ggplot2);library(ggrepel);library(lubridate);library(zoo);library(foreign)})
 
 # Select shapefile and raster
-shp <- st_read("^Data/shp.gpkg")
+shp <- st_read("^Data/shp.shp")
 r <- raster::brick(paste0("^Data/",rast,".nc"))
 
 
