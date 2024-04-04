@@ -16,6 +16,7 @@ nomi_geometrie_vuote_rimosse <- rownames(shp)[empty]; print(nomi_geometrie_vuote
 shp <- shp %>%
   rename(country = CNTRY_NAME,
          region = ADMIN_NAME)
+shp$region <- ifelse(is.na(shp$region), shp$country, shp$region)
 
 # Salvataggio dati
 st_write(shp, "^Data/Shapefile/shp.gpkg")
@@ -37,49 +38,4 @@ years <- unique(format(as.Date(names(r), format = "X%Y.%m.%d"), "%Y"))
 names(gws) <- paste0("gws", years)
 output_nc <- "^Data/Raster/gws.nc"
 writeRaster(gws, filename = output_nc, format = "CDF", overwrite = TRUE)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
