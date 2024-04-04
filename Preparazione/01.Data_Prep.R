@@ -2,7 +2,6 @@
 ####  SHAPEFILE  ############################################################################
 
 shp <- sf::read_sf("^Data_Raw/world_geolev1_2021/world_geolev1_2021.shp")
-
 # Rimuovo le variabili che non mi servono
 shp$BPL_CODE <- NULL; shp$CNTRY_CODE <- NULL; shp$GEOLEVEL1 <- NULL
 # Rimuovo le regioni che danno geometry error
@@ -15,7 +14,6 @@ print(nomi_geometrie_vuote_rimosse)
 # Salvo il dataset risultante
 st_write(shp, "^Data/Shapefile/shp.gpkg")
 
-######## dati_shapefile <- st_read("^Data/Shapefile/nome_file_shapefile.gpkg")
 
 #################################################################################################
 ####  GROUNDWATER STORAGE YEAR AVERAGE  #########################################################
@@ -27,14 +25,13 @@ media_annuale <- lapply(1:119, function(i) {
   media <- mean(r[[anno_iniziale:anno_finale]])
   return(media)
 })
-rsy <- brick(media_annuale)
+gws <- brick(media_annuale)
 
 # Salvataggio dati
 years <- unique(format(as.Date(names(r), format = "X%Y.%m.%d"), "%Y"))
-names(rsy) <- paste0("gw", years)
-output_nc <- "^Data/GW/rsy.nc"
-# Scrivi il RasterBrick in un file NetCDF
-writeRaster(rsy, filename = output_nc, format = "CDF", overwrite = TRUE)
+names(gws) <- paste0("gws", years)
+output_nc <- "^Data/Raster/gws.nc"
+writeRaster(gws, filename = output_nc, format = "CDF", overwrite = TRUE)
 
 
 
