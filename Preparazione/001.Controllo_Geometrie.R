@@ -1,4 +1,5 @@
-# This is the code to check if the geometries of the shapefile and the raster coincide
+# This is the code to check if the geometries of the modified shapefile and the raster coincide
+# See "Preparazione/100.Data_Prep.R"
 
 suppressPackageStartupMessages({
   library(sf);library(sp);library(plyr);library(raster);library(ncdf4);library(exactextractr);library(dplyr);library(stringr)
