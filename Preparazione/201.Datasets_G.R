@@ -95,7 +95,7 @@ gw_events_g <- left_join(gw_events_g, gw_data_g[,c("year", "region","value")], b
 gw_events_g$country <- ifelse(is.na(gw_events_g$country), gw_events_g$region, gw_events_g$country)
 
 # Save data
-write.csv(gw_events_g, paste0("^Data/", "Global_events", ".csv"), row.names=FALSE)
+write.csv(gw_events_g, paste0("^Data/", "Global_events_gws", ".csv"), row.names=FALSE)
 
 
 
