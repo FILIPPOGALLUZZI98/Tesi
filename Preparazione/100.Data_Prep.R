@@ -1,6 +1,6 @@
-# Preparazione dello shapefile: rimuovere variabili che non interessano, rimuoevere geometrie con errori,
-# rinominare le variabili, impostare il CRS. salvataggio
-# Praparazione del raster: impostare CRS, media annuale, salvataggio
+# Thi is the code to prepare the shapefile and the raster
+# Shapefile: remove the non useful variables; remove geometry errors; rename the variables; set the CRS
+# Raster: set the CRS, annual mean
 
 suppressPackageStartupMessages({
   library(sf);library(sp);library(plyr);library(raster);library(ncdf4);library(exactextractr);library(dplyr);library(stringr)
