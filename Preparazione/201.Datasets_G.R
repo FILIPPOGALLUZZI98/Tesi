@@ -94,7 +94,7 @@ gw_events_g$number[is.na(gw_events_g$number)] = 0  ## Assign a zero to each mont
 
 
 # Save data
-write.csv(gw_events_g, paste0("^Data/", "Global_events", ".csv"), row.names=FALSE)
+write.csv(gw_events_g, paste0("^Data/", "Global_events_gws", ".csv"), row.names=FALSE)
 
 
 
