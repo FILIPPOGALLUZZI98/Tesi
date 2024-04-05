@@ -82,34 +82,20 @@ write.csv(events, paste0("^Data/", "Global_events", ".csv"), row.names=FALSE)
 ##############################################################################################################################
 ####  GLOBAL JOINT DATASET GW-CONFLITC  ######################################################################################
 
+gw_data_g <- gw_g %>%
+  filter(year > 1989)
+gw_events_g <- expand.grid(year = 1990:2022, region = unique(events$region),type=c("state","Nstate","onesided"))
+gw_events_g <- left_join(gw_events_g, events, by=c("region", "year", "type"="type"))
+gw_events_g$number[is.na(gw_events_g$number)] = 0  ## Assign a zero to each month/province where no data is observed
+gw_events_g$latitude = NULL ; gw_events_g$longitude=NULL
+gw_events_g <- gw_events_g %>%
+  filter(year != 2020 & year != 2021 & year != 2022)
+gw_events_g <- left_join(gw_events_g, gw_data_g[,c("year", "region","value")], by=c("year", "region"))
 
+gw_events_g$country <- ifelse(is.na(gw_events_g$country), gw_events_g$region, gw_events_g$country)
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+# Save data
+write.csv(gw_events_g, paste0("^Data/", "Global_events", ".csv"), row.names=FALSE)
 
 
 
