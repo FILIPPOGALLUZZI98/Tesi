@@ -1,3 +1,14 @@
+# This is the code to prepare the datasets for single countries from the modified shapefile and
+# raster (see Preparazione/100.Data_Prep.R). This code will create a new repository with the name of the 
+# country that contains the datasets.
+# This is a list of the saved datasets:
+# GW --> (region, value, year)
+# Conflict --> (year, region, type, lat, lon, number)  this contains only the obseerved ones, there are no zeros
+# GW-Conflict --> (year, region,type, number, value) the dataset contains also zeros in the number columns if in
+                                                     # that year and region no conflict happened
+# Migr --> () 
+# GW-Migr -->()
+
 # Select the country
 paese <- "Nigeria"
 # Select the raster
