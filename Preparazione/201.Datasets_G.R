@@ -1,3 +1,14 @@
+# This is the code to prepare the datasets for global data from the modified shapefile and
+# raster (see Preparazione/100.Data_Prep.R). This code will create the datasets of global variables.
+# This is a list of the saved datasets:
+# GW --> (country, region, value, year)
+# Conflict --> (year, country, region, type, number)  this contains only the observed ones, there are no zeros
+# GW-Conflict --> (country, region, value, year, type, number) the dataset contains also zeros in the number columns if in
+                                                               # that year and region no conflict happened
+# Migr --> () 
+# GW-Migr -->()
+
+
 # Select the raster (gws, ...)
 rast <- "gws"
 
