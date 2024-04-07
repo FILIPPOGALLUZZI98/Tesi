@@ -23,7 +23,7 @@ data_gw <- read.csv(paste0(path, paese, "_",rast, ".csv"))
 data_gw_events <- read.csv(paste0(path, paese, "_", rast,"_events",".csv"))
 
 ######################################################################################################
-# Plot mappa GW anno scelto
+# Plot mapp for GW selected year
 
 data_year <- subset(data_gw, year == y)
 data_year <- left_join(state, data_year, by = "region")
@@ -36,7 +36,7 @@ ggplot(data_year, aes(fill=value)) +
   labs(title = paste(paese, y))
 
 ######################################################################################################
-# Plot serie temporali GW per regioni scelte
+# Plot timeseries GW for selected regions
 
 # Selezionare le regioni per le serie temporali
 # R <- c("", "", "", "")
@@ -51,8 +51,8 @@ ggplot(subset(data_gw_events, region %in% R),
   geom_line()
 
 ######################################################################################################
+# Plot data points over map of the country
 
-# Plot data points over geometry figure
 ggplot() +
   geom_sf(data = state)+
   geom_point(data = events, aes(x = longitude, y = latitude, color = type, size = number_deaths)) + 
@@ -64,7 +64,7 @@ ggplot() +
 
 
 ######################################################################################################
-# Plot della timeseries in una regione dei conflitti Nstate
+# Plot timeseries in a selected region for Nstate conflicts
 
 reg <- "Nasarawa"
 
@@ -80,7 +80,7 @@ ggplot(data = agg_data, aes(x = year, y = count)) +
   labs(title = "Events",x="",y="Number of Deaths")
 
 ######################################################################################################
-# Plot delle timeseries dei conflitti Nstate in varie regioni scelte 
+# Plot timeseries of conflicts Nstate in selected regions 
 
   # reg <- unique(data_gw_events$region)  ## Se voglio vederle tutte insieme
 reg <- c("Abia", "Adamawa", "Anambra", "Borno", "Edo", "Jigawa", "Nasarawa", "Ogun")
@@ -97,7 +97,7 @@ ggplot(data = agg_data, aes(x = year, y = count)) +
   facet_wrap(~ region, ncol = 6)
 
 ######################################################################################################
-# Plot della timeseries dei conflitti in una regione state+Nstate+onesided
+# Plot timeseries of all conflicts in a selected region
 
 reg <- "Abia"
 data <- subset(data_gw_events,region==reg)
@@ -112,7 +112,7 @@ ggplot(data = agg_data, aes(x = year, y = count)) +
   labs(x = "Year", y = "Count")
 
 ######################################################################################################
-# plot timeseries dei conflitti in regioni scelte state+Nstate+onesided
+# plot timeseries of conflicts in selected regions
 
 # reg <- unique(data_gw_events$region)  ## Se voglio vederle tutte insieme
 reg <- c("Abia", "Adamawa", "Anambra", "Borno", "Edo", "Jigawa", "Nasarawa", "Ogun")
