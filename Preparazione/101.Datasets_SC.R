@@ -52,6 +52,7 @@ gw_sc <- gw_sc %>%
   group_by(region) %>%
   mutate(year = anni)
 gw_sc$variable=NULL
+gw_sc <- gw_sc[, c("year", "region", "value")]
 
 # Save data
 write.csv(gw_sc, paste0(percorso_cartella, paese, "_",rast, ".csv"), row.names=FALSE)
@@ -98,13 +99,11 @@ events$region <- state$region[unlist(intersection)]
 events$geometry <- NULL
 
 # Group events for the same region and type in one year 
-events <- events %>% group_by(year, region, type, latitude, longitude) %>% summarise(number_events = n())
-
-# Rename the variables names
-colnames(events) <- c("year","region", "type","latitude","longitude", "number")
+events <- events %>% group_by(year, region, type, latitude, longitude) %>% summarise(number_deaths = n())
 
 # Sort datasets by year
 events <- events[order(events$year),]
+events <- events[, c("year", "region", "latitude", "longitude", "type", "number_deaths")]
 
 # Save data
 write.csv(events,paste0(percorso_cartella, paese, "_events.csv"), row.names=FALSE)
@@ -124,10 +123,12 @@ write.csv(events,paste0(percorso_cartella, paese, "_events.csv"), row.names=FALS
 gw_data_sc <- gw_sc %>%
   filter(year > 1988)
 gw_events_sc <- expand.grid(year = 1989:2019, region = unique(events$region),type=c("state","Nstate","onesided"))
-gw_events_sc <- left_join(gw_events_sc, events, by=c("region", "year", "type"="type"))
-gw_events_sc$number[is.na(gw_events_sc$number)] = 0  ## Assign a zero to each month/province where no data is observed
+gw_events_sc <- left_join(gw_events_sc, events, by=c("region", "year", "type"))
+gw_events_sc$number_deaths[is.na(gw_events_sc$number_deaths)] = 0  ## Assign a zero to each month/province where no data is observed
 gw_events_sc$latitude = NULL ; gw_events_sc$longitude=NULL
 gw_events_sc <- left_join(gw_events_sc, gw_data_sc[,c("year", "region","value")], by=c("year", "region"))
+
+gw_events_sc <- gw_events_sc[, c("year", "region", "type", "number_deaths", "value")]
 
 # Save data
 write.csv(gw_events_sc, paste0(percorso_cartella, paese, "_", rast, "_events", ".csv"), row.names=FALSE)
