@@ -10,7 +10,7 @@ data_gw_events <-read.csv("^Data/Global_events_gws.csv")
 
 data <- data_gw_events %>%
   group_by(country, region, year, value) %>%
-  summarise(conflict = sum(number))
+  summarise(conflict = sum(number_deaths))
 
 lm <- lm(data$conflict ~ data$value + as.factor(data$year) + as.factor(data$region))
 summary(lm)
