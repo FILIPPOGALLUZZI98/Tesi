@@ -1,46 +1,32 @@
 # Select the country
-country <- "Mexico"
+paese <- "Nigeria"
 # Select the raster
-rast <- "rs"
+rast <- "gws"
+
 
 suppressPackageStartupMessages({
-  library(sf)              ## useful for spatial manipulations
-  library(sp)              ## useful for spatial manipulations
-  library(plyr )
-  library(raster)          ## useful for working with raster data
-  library(ncdf4)           ## useful for working with raster data
-  library(exactextractr)   ## useful for extracting data from raster files
-  library(dplyr)           ## useful for merging data sets
-  library(stringr)
-  library(reshape2)        ## useful for manipulating data sets
-  library(ggplot2)         ## useful for data visualization
-  library(ggrepel)         ## useful for labeling point plots in ggplot2
-  library(lubridate)
-  library(zoo)   
-  library(foreign)
-})
+  library(sf);library(sp);library(plyr);library(raster);library(ncdf4);library(exactextractr);library(dplyr);library(stringr)
+  library(reshape2);library(ggplot2);library(ggrepel);library(lubridate);library(zoo);library(foreign)})
 
 shp <- st_read("^Data/shp/shp.shp")
+state <- subset(shp, country == paese)  ## plot(state[,"geometry"])
 
-shp <- sf::read_sf("Data/Shapefile/shapefile.shp")
-shp <- sf::st_transform(shp, sp::CRS("+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs"))
-state <- subset(shp, CNTRY_NAME == country)    ## plot(state[,"geometry"])
-state <- rename(state, region = ADMIN_NAME)
-r <- raster::brick(paste0("Data/GW/",rast,"y.nc")); proj4string(r) <- raster::crs(shp)
-path <- paste0("Data/GW_Conflict/", country, "/")
-data_gw_events <- read.csv(paste0(path, country,"_gw_events_", rast,".csv"))
-data_gw <- read.csv(paste0(path, country,"_gw_", rast,".csv"))
-events <-read.csv(paste0(path, country, "_events.csv"))
+path <- paste0("^Data/Single_Country/", paese, "/")
+events <-read.csv(paste0(path, paese, "_events.csv"))
+data_gw <- read.csv(paste0(path, paese, "_",rast, ".csv"))
+data_gw_events <- read.csv(paste0(path, paese, "_", rast,"_events",".csv"))
 
 ######################################################################################################
 data <- data_gw_events %>%
   group_by(year, region, value) %>%
-  summarise(number = sum(number))
+  summarise(number = sum(number_deaths))
 
 lm <- lm(data$number ~ data$value + as.factor(data$year) + as.factor(data$region))
 summary(lm)
 plot(lm)
 
+plot(data$number ~ data$value )
+abline(lm) # Per fare la retta di regressione sul grafico dei punti
 
 
 
