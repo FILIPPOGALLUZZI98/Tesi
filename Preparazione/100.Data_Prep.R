@@ -1,4 +1,4 @@
-# Thi is the code to prepare the shapefile and the raster
+# This is the code to prepare the shapefile and the raster
 # Shapefile: remove the non useful variables; remove geometry errors; rename the variables; set the CRS
 # Raster: set the CRS, annual mean
 
@@ -20,6 +20,7 @@ nomi_geometrie_vuote_rimosse <- rownames(shp)[empty]; print(nomi_geometrie_vuote
 shp <- shp %>%
   rename(country = CNTRY_NAME,
          region = ADMIN_NAME)
+# Set the country name equal to the region if the country has no subregions
 shp$region <- ifelse(is.na(shp$region), shp$country, shp$region)
 # Set the CRS
 shp <- sf::st_transform(shp, sp::CRS("+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs"))
