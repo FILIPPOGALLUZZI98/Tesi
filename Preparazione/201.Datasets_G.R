@@ -14,6 +14,7 @@ rast <- "gws"
 
 ##############################################################################################################################
 ##############################################################################################################################
+
 suppressPackageStartupMessages({
   library(sf);library(sp);library(plyr);library(raster);library(ncdf4);library(exactextractr);library(dplyr);library(stringr)
   library(reshape2);library(ggplot2);library(ggrepel);library(lubridate);library(zoo);library(foreign)})
@@ -39,6 +40,7 @@ gw_g <- reshape2::melt(gw_g, id.vars=c("country", "region"))
 gw_g$variable <- gsub("mean.X", "", gw_g$variable)  # Rimuovi "mean.X"
 gw_g$year <- as.integer(gsub("\\D", "", gw_g$variable)) + 1900 
 gw_g$variable=NULL
+gw_g <- gw_g[, c("year","country", "region", "value")]
 
 # Save data
 write.csv(gw_g, paste0("^Data/", "Global_",rast, ".csv"), row.names=FALSE)
@@ -56,7 +58,7 @@ events <- events[, c("country" ,"year", "type_of_violence","latitude" ,"longitud
 # Rename the variables
 events <- events %>%
   rename(type = type_of_violence,
-         number = best)
+         number_deaths = best)
 events <- mutate(events,
                  type = case_when(
                    type == 1 ~ "state",
@@ -76,7 +78,7 @@ events_joined <- st_join(events, shp)
 events_joined$country.x=NULL
 events_joined <- events_joined %>%
   rename(country = country.y)
-events <- aggregate(number ~ year + country + region + type, data = events_joined, sum)
+events <- aggregate(number_deaths ~ year + country + region + type, data = events_joined, sum)
 
 # Sort datasets by year
 events <- events[order(events$country),]
@@ -101,8 +103,8 @@ events <- events %>%
 vettore <- expand.grid(year=1989:2019, type=c("state","Nstate","onesided"))
 gw_events_g <- left_join(gw_data_g, vettore, by=c("year"))
 gw_events_g <- left_join(gw_events_g,events,by=c("country","region","year","type"))
-gw_events_g$number[is.na(gw_events_g$number)] = 0  ## Assign a zero to each month/province where no data is observed
-
+gw_events_g$number_deaths[is.na(gw_events_g$number_deaths)] = 0  ## Assign a zero to each month/province where no data is observed
+gw_events_g <- gw_events_g[, c("year","country", "region","type","number_deaths", "value")]
 
 # Save data
 write.csv(gw_events_g, paste0("^Data/", "Global_events_gws", ".csv"), row.names=FALSE)
