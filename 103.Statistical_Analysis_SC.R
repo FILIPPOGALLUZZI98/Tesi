@@ -23,10 +23,8 @@ data <- data_gw_events %>%
 
 lm <- lm(data$number ~ data$value + as.factor(data$year) + as.factor(data$region))
 summary(lm)
-plot(lm)
-
 plot(data$number ~ data$value )
-abline(lm) # Per fare la retta di regressione sul grafico dei punti
+abline(lm)
 
 
 
