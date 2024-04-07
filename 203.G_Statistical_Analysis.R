@@ -13,5 +13,6 @@ data <- data_gw_events %>%
   summarise(conflict = sum(number_deaths))
 
 lm <- lm(data$conflict ~ data$value + as.factor(data$year) + as.factor(data$region))
-summary(lm)
-
+# summary(lm)
+plot(data$conflict ~ data$value)
+abline(lm)
