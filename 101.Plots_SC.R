@@ -55,7 +55,7 @@ ggplot(subset(data_gw_events, region %in% R),
 # Plot data points over geometry figure
 ggplot() +
   geom_sf(data = state)+
-  geom_point(data = events, aes(x = longitude, y = latitude, color = type, size = number)) + 
+  geom_point(data = events, aes(x = longitude, y = latitude, color = type, size = number_deaths)) + 
   scale_color_discrete(name = "Type") +
   scale_color_manual(values = c("state" = "blue", "Nstate" = "red", "onesided" = "green")) +
   labs(title = "Events",x="",y="") +
@@ -72,12 +72,12 @@ data <- subset(data_gw_events,region==reg)
 data <- subset(data, type=="Nstate")
 agg_data <- data %>%
   group_by(year, region) %>%
-  summarise(count = sum(number))
+  summarise(count = sum(number_deaths))
 
 ggplot(data = agg_data, aes(x = year, y = count)) +
   geom_line() +   # Aggiunge la linea
   theme_bw()+
-  labs(title = "Events",x="",y="Number")
+  labs(title = "Events",x="",y="Number of Deaths")
 
 ######################################################################################################
 # Plot delle timeseries dei conflitti Nstate in varie regioni scelte 
@@ -88,7 +88,7 @@ data <- data_gw_events
 agg_data <- data %>%
   filter(type == "Nstate", region %in% reg) %>%
   group_by(year, region) %>%
-  summarise(count = sum(number))
+  summarise(count = sum(number_deaths))
 
 ggplot(data = agg_data, aes(x = year, y = count)) +
   geom_bar(stat = "identity") + 
@@ -99,11 +99,11 @@ ggplot(data = agg_data, aes(x = year, y = count)) +
 ######################################################################################################
 # Plot della timeseries dei conflitti in una regione state+Nstate+onesided
 
-reg <- "Chihuahua"
+reg <- "Abia"
 data <- subset(data_gw_events,region==reg)
 agg_data <- data %>%
   group_by(year) %>%
-  summarise(count = sum(number))
+  summarise(count = sum(number_deaths))
 
 ggplot(data = agg_data, aes(x = year, y = count)) +
   geom_bar(stat = "identity") +
@@ -120,22 +120,23 @@ data <- data_gw_events
 agg_data <- data %>%
   filter(region %in% reg) %>%
   group_by(year, region) %>%
-  summarise(count = sum(number))
+  summarise(count = sum(number_deaths))
 
 
 ggplot(data = agg_data, aes(x = year, y = count)) +
-  geom_line() +   # Aggiunge la linea
+  geom_bar(stat = "identity") +
+  theme_bw()+
   labs(x = "Year", y = "Count") +
   facet_wrap(~ region, ncol = 3)
 
 ######################################################################################################
 # PLOT GW+CONFLICTS IN ONE REGION state+Nstate+onesided
 
-reg <- "Chihuahua"
+reg <- "Borno"
 data <- subset(data_gw_events,region==reg); data$geometry=NULL; data$CNTRY_NAME=NULL
 agg_data <- data %>%
   group_by(year, region, value) %>%
-  summarise(count = sum(number))
+  summarise(count = sum(number_deaths))
 mvalue <- mean(agg_data$value)
 svalue <- sd(agg_data$value)
 mcount <- mean(agg_data$count)
@@ -160,7 +161,7 @@ agg_data <- subset(data, region==reg)
 agg_data <- data %>%
   filter(region %in% reg) %>%
   group_by(year, region, value) %>%
-  summarise(count = sum(number))
+  summarise(count = sum(number_deaths))
 
 b<-data.frame()
 for (i in reg){
@@ -176,8 +177,8 @@ for (i in reg){
 agg_data <- b
 
 ggplot(data = agg_data, aes(year)) +
-  geom_line(aes(y = Svalue), colour = "blue") +
-  geom_line(aes(y = Scount), colour = "red")+
+  geom_line(aes(y = Svalue), colour = "blue", size=1) +
+  geom_bar(aes(y = Scount), stat="identity", colour = "red")+
   facet_wrap(~ region, ncol = 3)
 
 
