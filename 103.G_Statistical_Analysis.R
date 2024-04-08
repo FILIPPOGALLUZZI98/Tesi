@@ -13,16 +13,16 @@ data_conflicts <-read.csv("^Data/Global_conflicts_gws.csv")
 ##############################################################################################################################
 ####  DEATHS  ########################################################################################################################
 
-lm <- lm(log(1+data_deaths$number_deaths) ~ data_deaths$value + as.factor(data_deaths$year) + as.factor(data_deaths$region))
+lm <- lm(log(1+data_deaths$deaths) ~ data_deaths$value + as.factor(data_deaths$year) + as.factor(data_deaths$region))
 summary(lm)
-plot(data_deaths$number_deaths ~ data_deaths$value)
+plot(data_deaths$deaths ~ data_deaths$value)
 
 # All the data, not divided by type of conflict
-fixest::feols(data=data_deaths, log(1+number_deaths)~value|region + year)
-fixest::feglm(data=data_deaths, log(1+number_deaths)~value|region + year, family=quasipoisson)
+fixest::feols(data=data_deaths, log(1+deaths)~value|region + year)
+fixest::feglm(data=data_deaths, log(1+deaths)~value|region + year, family=quasipoisson)
 
 # For the type of conflict
-fixest::feglm(data=subset(data_deaths, type=="Nstate"), log(1+number_deaths)~value|region + year, family=quasipoisson)
+fixest::feglm(data=subset(data_deaths, type=="Nstate"), log(1+deaths)~value|region + year, family=quasipoisson)
 
 # For the continent
 continent <- "Africa"
@@ -31,7 +31,7 @@ get_continent <- function(countries) {
 }
 conflict_continent <- data_deaths %>%
   filter(get_continent(country) == continent)
-fixest::feglm(data=conflict_continent, log(1+number_deaths)~value|region + year, family=quasipoisson)
+fixest::feglm(data=conflict_continent, log(1+deaths)~value|region + year, family=quasipoisson)
 
 ##############################################################################################################################
 ####  CONFLICTS  ########################################################################################################################
