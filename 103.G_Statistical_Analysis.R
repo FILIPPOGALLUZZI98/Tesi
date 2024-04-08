@@ -48,7 +48,7 @@ fixest::feglm(data=data_conflicts, log(1+conflicts)~value|region + year, family=
 fixest::feglm(data=subset(data_conflicts, type=="Nstate"), log(1+conflicts)~value|region + year, family=quasipoisson)
 
 # For the continent
-continent <- "Africa"
+continent <- "Asia"
 get_continent <- function(countries) {
   countrycode(countries, "country.name", "continent")
 }
@@ -58,7 +58,11 @@ conflict_continent <- data_conflicts %>%
 fixest::feglm(data=conflict_continent, log(1+conflicts)~value|region + year, family=quasipoisson)
 fixest::feglm(data=subset(conflict_continent, type=="onesided"), log(1+conflicts)~value|region + year, family=quasipoisson)
 
+# MENA REGION
+MENA_list <- c("Algeria", "Bahrain", "Djibouti", "Egypt", "Iran", "Iraq", "Israel", "Jordan", "Kuwait", "Lebanon", "Libya", "Malta", "Mauritania", "Morocco", "Oman", "Palestine", "Qatar", "Saudi Arabia", "Syria", "Tunisia", "United Arab Emirates", "Yemen")
+MENA <- data_conflicts[data_conflicts$country %in% MENA_list, ]
 
+fixest::feglm(data=MENA, log(1+conflicts)~value|country+region + year, family=quasipoisson)
 
 
 
