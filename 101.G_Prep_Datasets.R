@@ -45,8 +45,8 @@ gw_g$year <- as.integer(gsub("\\D", "", gw_g$variable)) + 1900
 gw_g$variable=NULL
 gw_g <- gw_g[, c("year","country", "region", "value")]
 
-# Save data
-write.csv(gw_g, paste0("^Data/", "Global_",rast, ".csv"), row.names=FALSE)
+# Save Data
+write.csv(gw_g, paste0("^Data/", "Global_gws", ".csv"), row.names=FALSE)
 
 ##############################################################################################
 ####  GLOBAL CONFLICT UPPSALA (N_DEATHS+CONFLICTS)  ##########################################
@@ -78,59 +78,52 @@ shp <- shp[st_is_valid(shp), ]
 
 # Intersection shapefile-events and aggregate data 
 events_joined <- st_join(events, shp)
-events_joined$country.x=NULL
 events_joined <- events_joined %>%
   rename(country = country.y)
 events_joined$geometry=NULL
+events_joined$country.x=NULL
 
 
 
-events_deaths <- events_joined %>%
+events1 <- events_joined %>%
   group_by(year, country, region, type) %>%
   summarise(deaths = sum(number_deaths, na.rm = TRUE))
-# Sort datasets by year
-events_deaths <- events_deaths[order(events_deaths$country),]
-events_deaths <- events_deaths[order(events_deaths$year),]
 
-events_conflicts <- events_joined %>%
+events2 <- events_joined %>%
   group_by(year, country, region, type) %>%
   summarise(conflicts = n())
+events <- left_join(events1, events2, by=c("year", "country","region","type"))
+
 # Sort datasets by year
-events_conflicts <- events_conflicts[order(events_conflicts$country),]
-events_conflicts <- events_conflicts[order(events_conflicts$year),]
+events <- events[order(events$country),]
+events <- events[order(events$year),]
 
-# Save data
-write.csv(events_conflicts, paste0("^Data/", "Global_conflicts", ".csv"), row.names=FALSE)
-write.csv(events_deaths, paste0("^Data/", "Global_deaths", ".csv"), row.names=FALSE)
-
-
-#############################################################################################################################
-####  GLOBAL MIGRATION DATASET  #############################################################################################
+# Save Data
+write.csv(events, paste0("^Data/", "Global_events", ".csv"), row.names=FALSE)
 
 
 ##############################################################################################################################
-####  GLOBAL JOINT DATASET GW-(DEATHS+CONFLITCT)  ############################################################################
+####  GLOBAL JOINT DATASET GW-(EVENTS)  ############################################################################
 
 gw_data_g <- gw_g %>%
   filter(year > 1988)
-events_deaths <- events_deaths %>%
-  filter(year<2020)
-events_conflicts <- events_conflicts %>%
+events <- events %>%
   filter(year<2020)
 vettore <- expand.grid(year=1989:2019, type=c("state","Nstate","onesided"))
 gw_events_g <- left_join(gw_data_g, vettore, by=c("year"))
 
 
-gw_deaths <- left_join(gw_events_g,events_deaths,by=c("country","region","year","type"))
-gw_conflicts <- left_join(gw_events_g,events_conflicts,by=c("country","region","year","type"))
-gw_deaths$deaths[is.na(gw_deaths$deaths)] = 0  ## Assign a zero to each month/province where no data is observed
-gw_conflicts$conflicts[is.na(gw_conflicts$conflicts)] = 0  ## Assign a zero to each month/province where no data is observed
-gw_deaths <- gw_deaths[, c("year","country", "region","type","deaths", "value")]
-gw_conflicts <- gw_conflicts[, c("year","country", "region","type","conflicts", "value")]
+gw_events <- left_join(gw_events_g,events,by=c("country","region","year","type"))
+gw_events$deaths[is.na(gw_events$deaths)] = 0  ## Assign a zero to each month/province where no data is observed
+gw_events$conflicts[is.na(gw_events$conflicts)] = 0  ## Assign a zero to each month/province where no data is observed
+gw_events <- gw_events[, c("year","country", "region","type","deaths", "conflicts","value")]
 
 # Save data
-write.csv(gw_deaths, paste0("^Data/", "Global_deaths_gws", ".csv"), row.names=FALSE)
-write.csv(gw_conflicts, paste0("^Data/", "Global_conflicts_gws", ".csv"), row.names=FALSE)
+write.csv(gw_events, paste0("^Data/", "Global_gws_events", ".csv"), row.names=FALSE)
+
+
+#############################################################################################################################
+####  GLOBAL MIGRATION DATASET  #############################################################################################
 
 
 
