@@ -9,20 +9,13 @@ data_gw <- read.csv("^Data/Global_gws.csv")
 data_deaths <-read.csv("^Data/Global_deaths_gws.csv")
 data_conflicts <-read.csv("^Data/Global_conflicts_gws.csv")
 
-##############################################################################################################################
-####  TEMP  ########################################################################################################################
-
-data <- data_gw_deaths %>%
-  group_by(country, region, year, value, type) %>%
-  summarise(count = sum(number_deaths))
-
-lm <- lm(log(1+data$count) ~ data$value + as.factor(data$year) + as.factor(data$region))
-summary(lm)
-plot(data$count ~ data$value )
-
 
 ##############################################################################################################################
 ####  DEATHS  ########################################################################################################################
+
+lm <- lm(log(1+data_deaths$number_deaths) ~ data_deaths$value + as.factor(data_deaths$year) + as.factor(data_deaths$region))
+summary(lm)
+plot(data_deaths$number_deaths ~ data_deaths$value)
 
 # All the data, not divided by type of conflict
 fixest::feols(data=data_deaths, log(1+number_deaths)~value|region + year)
@@ -42,6 +35,10 @@ fixest::feglm(data=conflict_continent, log(1+number_deaths)~value|region + year,
 
 ##############################################################################################################################
 ####  CONFLICTS  ########################################################################################################################
+
+lm <- lm(log(1+data_conflicts$conflicts) ~ data_conflicts$value + as.factor(data_conflicts$year) + as.factor(data_conflicts$region))
+summary(lm)
+plot(data_conflicts$conflicts ~ data_conflicts$value)
 
 # All the data, not divided by type of conflict
 fixest::feols(data=data_conflicts, log(1+conflicts)~value|region + year)
