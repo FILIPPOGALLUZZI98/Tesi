@@ -2,10 +2,12 @@
 # raster (see Preparazione/100.Data_Prep.R). This code will create the datasets of global variables.
 # This is a list of the saved datasets:
 # GW --> (year, country, region, value)
-# Conflict --> (year, country, region, type, number_deaths)  this contains only the observed ones, there are no zeros
-# GW-Conflict --> (year, country, region, type, number_deaths, value) the dataset contains also zeros in the number columns if in
+# Conflict --> (year, country, region, type, conflicts)  this contains only the observed ones, there are no zeros
+# Deaths --> (year, country, region, type, number_deaths)  this contains only the observed ones, there are no zeros
+# GW-Conflict --> (year, country, region, type, conflicts, value) the dataset contains also zeros in the number columns if in
                                                                # that year and region no conflict happened
-# Migr --> () 
+# GW-Deaths --> (year, country, region, type, number_deaths, value) the dataset contains also zeros in the number columns if in
+                                                               # that year and region no conflict happened# Migr --> () 
 # GW-Migr -->()
 
 
