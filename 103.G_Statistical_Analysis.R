@@ -54,7 +54,9 @@ get_continent <- function(countries) {
 }
 conflict_continent <- data_conflicts %>%
   filter(get_continent(country) == continent)
+
 fixest::feglm(data=conflict_continent, log(1+conflicts)~value|region + year, family=quasipoisson)
+fixest::feglm(data=subset(conflict_continent, type=="onesided"), log(1+conflicts)~value|region + year, family=quasipoisson)
 
 
 
