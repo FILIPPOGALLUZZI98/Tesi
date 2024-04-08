@@ -82,8 +82,11 @@ events_joined <- st_join(events, shp)
 events_joined$country.x=NULL
 events_joined <- events_joined %>%
   rename(country = country.y)
+events_joined$geometry=NULL
 
-events <- aggregate(number_deaths ~ year + country + region + type, data = events_joined, sum)
+events <- events_joined %>%
+  group_by(country, region, year, type) %>%
+  summarise(deaths = sum(number_deaths, na.rm = TRUE))
 
 # Sort datasets by year
 events <- events[order(events$country),]
@@ -125,8 +128,8 @@ events_joined <- st_join(events, shp)
 events_joined$country.x=NULL
 events_joined <- events_joined %>%
   rename(country = country.y)
-
 events_joined$geometry=NULL
+
 events <- events_joined %>%
   group_by(country, region, year, type) %>%
   summarise(count = n())
@@ -154,8 +157,8 @@ events <- events %>%
 vettore <- expand.grid(year=1989:2019, type=c("state","Nstate","onesided"))
 gw_events_g <- left_join(gw_data_g, vettore, by=c("year"))
 gw_events_g <- left_join(gw_events_g,events,by=c("country","region","year","type"))
-gw_events_g$number_deaths[is.na(gw_events_g$number_deaths)] = 0  ## Assign a zero to each month/province where no data is observed
-gw_events_g <- gw_events_g[, c("year","country", "region","type","number_deaths", "value")]
+gw_events_g$deaths[is.na(gw_events_g$deaths)] = 0  ## Assign a zero to each month/province where no data is observed
+gw_events_g <- gw_events_g[, c("year","country", "region","type","deaths", "value")]
 
 # Save data
 write.csv(gw_events_g, paste0("^Data/", "Global_deaths_gws", ".csv"), row.names=FALSE)
