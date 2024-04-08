@@ -2,10 +2,10 @@ suppressPackageStartupMessages({
   library(sf);library(sp);library(plyr);library(raster);library(ncdf4);library(exactextractr);library(dplyr);library(stringr)
   library(reshape2);library(ggplot2);library(ggrepel);library(lubridate);library(zoo);library(foreign); library(countrycode)})
 
-shp <- st_read("^Data/shp/shp.shp")
-deaths <- read.csv("^Data/Global_deaths.csv")
-conflicts <- read.csv("^Data/Global_conflicts.csv")
-data_gw <- read.csv("^Data/Global_gws.csv")
+# shp <- st_read("^Data/shp/shp.shp")
+# deaths <- read.csv("^Data/Global_deaths.csv")
+# conflicts <- read.csv("^Data/Global_conflicts.csv")
+# data_gw <- read.csv("^Data/Global_gws.csv")
 data_deaths <-read.csv("^Data/Global_deaths_gws.csv")
 data_conflicts <-read.csv("^Data/Global_conflicts_gws.csv")
 
