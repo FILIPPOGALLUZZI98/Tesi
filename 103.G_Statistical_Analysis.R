@@ -36,16 +36,12 @@ fixest::feglm(data=conflict_continent, log(1+number_deaths)~value|region + year,
 ##############################################################################################################################
 ####  CONFLICTS  ########################################################################################################################
 
-lm <- lm(log(1+data_conflicts$conflicts) ~ data_conflicts$value + as.factor(data_conflicts$year) + as.factor(data_conflicts$region))
-summary(lm)
-plot(data_conflicts$conflicts ~ data_conflicts$value)
-
 # All the data, not divided by type of conflict
 fixest::feols(data=data_conflicts, log(1+conflicts)~value|region + year)
-fixest::feglm(data=data_conflicts, log(1+conflicts)~value|region + year, family=quasipoisson)
+fixest::feglm(data=data_conflicts, conflicts~value|region + year, family=quasipoisson)
 
 # For the type of conflict
-fixest::feglm(data=subset(data_conflicts, type=="Nstate"), log(1+conflicts)~value|region + year, family=quasipoisson)
+fixest::feglm(data=subset(data_conflicts, type=="Nstate"), conflicts~value|region + year, family=quasipoisson)
 
 # For the continent
 continent <- "Asia"
@@ -55,14 +51,11 @@ get_continent <- function(countries) {
 conflict_continent <- data_conflicts %>%
   filter(get_continent(country) == continent)
 
-fixest::feglm(data=conflict_continent, log(1+conflicts)~value|region + year, family=quasipoisson)
-fixest::feglm(data=subset(conflict_continent, type=="onesided"), log(1+conflicts)~value|region + year, family=quasipoisson)
+fixest::feols(data=conflict_continent, log(1+conflicts)~value|region + year)
+fixest::feglm(data=conflict_continent, conflicts~value|region + year, family=quasipoisson)
 
-# MENA REGION
-MENA_list <- c("Algeria", "Bahrain", "Djibouti", "Egypt", "Iran", "Iraq", "Israel", "Jordan", "Kuwait", "Lebanon", "Libya", "Malta", "Mauritania", "Morocco", "Oman", "Palestine", "Qatar", "Saudi Arabia", "Syria", "Tunisia", "United Arab Emirates", "Yemen")
-MENA <- data_conflicts[data_conflicts$country %in% MENA_list, ]
 
-fixest::feglm(data=MENA, log(1+conflicts)~value|country+region + year, family=quasipoisson)
+
 
 
 
