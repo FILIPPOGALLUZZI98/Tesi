@@ -139,6 +139,10 @@ events <- events %>%
   rename(conflicts = count)
 events <- events[, c("year","country", "region","type","conflicts")]
 
+# Sort datasets by year
+events <- events[order(events$country),]
+events <- events[order(events$year),]
+
 # Save data
 write.csv(events, paste0("^Data/", "Global_conflicts", ".csv"), row.names=FALSE)
 
