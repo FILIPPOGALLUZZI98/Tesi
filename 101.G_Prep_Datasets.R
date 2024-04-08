@@ -7,7 +7,8 @@
 # GW-Conflict --> (year, country, region, type, conflicts, value) the dataset contains also zeros in the number columns if in
                                                                # that year and region no conflict happened
 # GW-Deaths --> (year, country, region, type, number_deaths, value) the dataset contains also zeros in the number columns if in
-                                                               # that year and region no conflict happened# Migr --> () 
+                                                               # that year and region no conflict happened
+# Migr --> () 
 # GW-Migr -->()
 
 
