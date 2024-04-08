@@ -1,5 +1,5 @@
 # This is the code to prepare the datasets for global data from the modified shapefile and
-# raster (see 100.Data_Prep.R). This code will create the datasets of global variables.
+# raster (see 100.Prep_Shapefile_Raster.R). This code will create the datasets of global variables.
 # This is a list of the saved datasets:
 # GW --> (year, country, region, value)
 # Conflict --> (year, country, region, type, conflicts)  this contains only the observed ones, there are no zeros
