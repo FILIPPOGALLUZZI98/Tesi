@@ -1,5 +1,5 @@
 # This is the code to prepare the datasets for single countries from the modified shapefile and
-# raster (see Preparazione/100.Data_Prep.R). This code will create a new repository with the name of the 
+# raster (see 100.Data_Prep.R). This code will create a new repository with the name of the 
 # country that contains the datasets.
 # This is a list of the saved datasets:
 # GW --> (year, region, value)
