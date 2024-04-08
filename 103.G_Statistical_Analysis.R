@@ -32,7 +32,7 @@ get_continent <- function(countries) {
 conflict_continent <- data_deaths %>%
   filter(get_continent(country) == continent)
 fixest::feglm(data=conflict_continent, log(1+deaths)~value|region + year, family=quasipoisson)
-
+number_deaths
 ##############################################################################################################################
 ####  CONFLICTS  ########################################################################################################################
 
