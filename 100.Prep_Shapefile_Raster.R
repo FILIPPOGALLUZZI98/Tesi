@@ -11,9 +11,6 @@ suppressPackageStartupMessages({
 
 shp <- sf::read_sf("^Data_Raw/world_geolev1_2021/world_geolev1_2021.shp")
 
-# Select the variables of interest
-shp$GEOLEVEL1 <- NULL; shp$CNTRY_CODE <- NULL
-
 # Remove regions with geometry error
 empty <- st_is_empty(shp); shp <- shp[!empty, ]
 
@@ -23,8 +20,7 @@ nomi_geometrie_vuote_rimosse <- rownames(shp)[empty]; print(nomi_geometrie_vuote
 # Rename the variables
 shp <- shp %>%
   rename(country = CNTRY_NAME,
-         region = ADMIN_NAME,
-         orig = BPL_CODE)
+         region = ADMIN_NAME)
 
 # Set the country name equal to the region if the country has no subregions
 shp$region <- ifelse(is.na(shp$region), shp$country, shp$region)
