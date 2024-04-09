@@ -9,7 +9,6 @@ suppressPackageStartupMessages({
 gw <- read.csv("^Data/gws.csv")
 events <- read.csv("^Data/events.csv")
 migr <- read.csv("^Data/migr.csv")
-
 gw <- gw %>%
   filter(year > 1954)
 
