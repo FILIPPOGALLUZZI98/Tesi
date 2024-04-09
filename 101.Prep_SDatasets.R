@@ -32,6 +32,9 @@ gw_g$variable <- gsub("mean.X", "", gw_g$variable)  # Rimuovi "mean.X"
 gw_g$year <- as.integer(gsub("\\D", "", gw_g$variable)) + 1900 
 gw_g$variable=NULL
 gw_g <- gw_g[, c("year","country", "region", "value","GEOLEVEL1")]
+gw_g <- gw_g %>%
+  rename(orig = GEOLEVEL1)
+
 
 # Save Data
 write.csv(gw_g, paste0("^Data/", "gws", ".csv"), row.names=FALSE)
@@ -71,8 +74,7 @@ events_joined <- events_joined %>%
 events_joined$geometry=NULL
 events_joined$country.x=NULL
 
-
-
+# Create 2 variables: number of conflicts and deaths (per year)
 events1 <- events_joined %>%
   group_by(year, country, region, type, GEOLEVEL1) %>%
   summarise(deaths = sum(number_deaths, na.rm = TRUE))
@@ -82,6 +84,10 @@ events2 <- events_joined %>%
   summarise(conflicts = n())
 events <- left_join(events1, events2, by=c("year", "country","region","type","GEOLEVEL1"))
 events <- events[, c("year","country", "region","type","deaths", "conflicts","GEOLEVEL1")]
+
+# Rename GEOLEVEL1 -> orig
+events <- events %>%
+  rename(orig = GEOLEVEL1)
 
 # Sort datasets by year
 events <- events[order(events$country),]
