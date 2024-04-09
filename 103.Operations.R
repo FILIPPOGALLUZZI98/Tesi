@@ -6,8 +6,6 @@ suppressPackageStartupMessages({
 ge <- read.csv("^Data/gws_events.csv")
 gem <- read.csv("^Data/gws_migr_events.csv")
 
-# gem and ge have different rownumber because ge cointains also the type (three values)
-
 #################################################################################################
 #################################################################################################
 
