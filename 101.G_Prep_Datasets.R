@@ -149,30 +149,36 @@ gw_data_g <- gw_g %>%
 gw_data_g <- gw_data_g %>%
   rename(orig=GEOLEVEL1)
 
-# CHECK FOR COUNTRIES WITHOUT GEOLEVEL1
-na_val <- subset(gw_data_g, is.na(GEOLEVEL1))$country
+# Check for countries without GEOLEV1
+na_val <- subset(gw_data_g, is.na(orig))$country
 a <- unique(countries_with_na); b <- unique(data_migr$country)
 intersect(a, b)
 
-# Remove NA values from gw_data_g
+# Check if the datasets gw_data_g cointains all the regions of data_migr
+length(intersect(unique(gw_data_g$orig), data_migr$orig))
+length(qunique(data_migr$orig))
+
+# Remove NA values from gw_data_g and data_migr
 gw_data_g <- na.omit(gw_data_g[!is.na(gw_data_g$orig), ])
 
 # Convert the values of 'orig' in gw_data_g into integers
 gw_data_g$orig <- as.integer(gw_data_g$orig)
 
 # Merge the datasets
-gw_migr <- left_join(gw_data_g, data_migr, by=c("year", "country", "orig"))
+gw_migr <- left_join(gw_data_g, data_migr, by=c("year", "orig"))
+
+# Remove NA values
+gw_migr <- na.omit(gw_migr[!is.na(gw_migr$population), ])
+
+# Sort and rename the variables
+gw_migr <- gw_migr %>%
+  rename(country=country.x)
+gw_migr$country.y=NULL
+gw_migr <- gw_migr[,c("year", "country", "region", "worldregion", "value", "population","interval", "flow","flow_annual",
+                      "outflow_rate_annual","year_cat10", "orig", "CNTRY_CODE","BPL_CODE")]
 
 # Save data
-write.csv(gw_migr, paste0("^Data/", "Global_gws_migr", ".csv"), row.names=FALSE)
-
-
-
-
-
-
-
-
+write.csv(gw_migr, paste0("^Data/", "gws_migr", ".csv"), row.names=FALSE)
 
 
 
