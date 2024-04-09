@@ -24,7 +24,7 @@ nomi_geometrie_vuote_rimosse <- rownames(shp)[empty]; print(nomi_geometrie_vuote
 shp <- shp %>%
   rename(country = CNTRY_NAME,
          region = ADMIN_NAME,
-         orig=GEOLEVEL1)
+         orig = GEOLEVEL1)
 
 # Set the country name equal to the region if the country has no subregions
 shp$region <- ifelse(is.na(shp$region), shp$country, shp$region)
