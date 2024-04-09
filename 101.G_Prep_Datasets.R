@@ -141,15 +141,14 @@ write.csv(data_migr, paste0("^Data/", "Global_migr", ".csv"), row.names=FALSE)
 
 ##############################################################################################################################
 ####  GLOBAL JOINT DATASET GW-MIGR  ##########################################################################################
-#  DA FARE
-
-
 
 # Select the timespan for GW
 gw_data_g <- gw_g %>%
   filter(year > 1959 & year<2018)
+# Rename the variable
 gw_data_g <- gw_data_g %>%
   rename(orig=GEOLEVEL1)
+
 
 
 # Merge the datasets
@@ -157,3 +156,20 @@ gw_migr <- left_join(gw_data_g, data_migr, by=c("year", "country", "orig"))
 
 # Save data
 write.csv(gw_migr, paste0("^Data/", "Global_gws_migr", ".csv"), row.names=FALSE)
+
+
+missing_values <- gw_data_g$is.na(orig)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
