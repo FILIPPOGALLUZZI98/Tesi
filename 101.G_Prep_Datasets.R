@@ -87,13 +87,13 @@ events_joined$country.x=NULL
 
 
 events1 <- events_joined %>%
-  group_by(year, country, region, type) %>%
+  group_by(year, country, region, type, CNTRY_CODE, BPL_CODE, GEOLEVEL1) %>%
   summarise(deaths = sum(number_deaths, na.rm = TRUE))
 
 events2 <- events_joined %>%
-  group_by(year, country, region, type) %>%
+  group_by(year, country, region, type, CNTRY_CODE, BPL_CODE, GEOLEVEL1) %>%
   summarise(conflicts = n())
-events <- left_join(events1, events2, by=c("year", "country","region","type"))
+events <- left_join(events1, events2, by=c("year", "country","region","type", "CNTRY_CODE", "BPL_CODE", "GEOLEVEL1"))
 
 # Sort datasets by year
 events <- events[order(events$country),]
@@ -114,10 +114,10 @@ vettore <- expand.grid(year=1989:2019, type=c("state","Nstate","onesided"))
 gw_events_g <- left_join(gw_data_g, vettore, by=c("year"))
 
 # Merge the datasets
-gw_events <- left_join(gw_events_g,events,by=c("country","region","year","type"))
+gw_events <- left_join(gw_events_g,events,by=c("country","region","year","type", "CNTRY_CODE", "BPL_CODE", "GEOLEVEL1"))
 gw_events$deaths[is.na(gw_events$deaths)] = 0  ## Assign a zero to each month/province where no data is observed
 gw_events$conflicts[is.na(gw_events$conflicts)] = 0  ## Assign a zero to each month/province where no data is observed
-gw_events <- gw_events[, c("year","country", "region","type","deaths", "conflicts","value")]
+gw_events <- gw_events[, c("year","country", "region","type","deaths", "conflicts","value", "CNTRY_CODE", "BPL_CODE", "GEOLEVEL1")]
 
 # Save data
 write.csv(gw_events, paste0("^Data/", "Global_gws_events", ".csv"), row.names=FALSE)
@@ -140,10 +140,16 @@ write.csv(data_migr, paste0("^Data/", "Global_migr", ".csv"), row.names=FALSE)
 
 ##############################################################################################################################
 ####  GLOBAL JOINT DATASET GW-MIGR  ##########################################################################################
+#  DA FARE
+
+
 
 # Select the timespan for GW
 gw_data_g <- gw_g %>%
   filter(year > 1959 & year<2018)
+gw_data_g <- gw_data_g %>%
+  rename(orig=GEOLEVEL1)
+
 
 # Merge the datasets
 gw_migr <- left_join(gw_data_g, data_migr, by=c("year", "country", "orig"))
