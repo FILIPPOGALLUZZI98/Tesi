@@ -15,24 +15,31 @@ gem <- read.csv("^Data/gws_migr_events.csv")
 # Per ogni 'orig', per ogni 'type, per ogni 'year': media di 'conflicts' con i 5 anni precedenti e mettere in 'mconfl5'
 
 
-
+# Mean value 1-year
 gem <- gem %>%
   arrange(type, orig, year) %>%
   group_by(orig, type) %>%
   mutate(mvalue1 = (value + lag(value, default = 0)) / 2)
-
+# Mean conflicts 1-year
 gem <- gem %>%
   arrange(type, orig, year) %>%
   group_by(orig, type) %>%
-  mutate(mvalue1 = (value + lag(value, default = 0)) / 2)
-
+  mutate(mconfl1 = (conflicts + lag(conflicts, default = 0)) / 2)
+# Mean deaths 1-year
 gem <- gem %>%
   arrange(type, orig, year) %>%
   group_by(orig, type) %>%
-  mutate(mvalue1 = rollmean(value, k = 5, fill = NA, align = "right", na.pad = TRUE))
-
-
-
+  mutate(mdeaths1 = (deaths + lag(deaths, default = 0)) / 2)
+# Variation value 1-year
+gem <- gem %>%
+  arrange(type, orig, year) %>%
+  group_by(orig, type) %>%
+  mutate(vvalue1 = (value - lag(value, default = 0)))
+# Mean conflicts 1-year
+gem <- gem %>%
+  arrange(type, orig, year) %>%
+  group_by(orig, type) %>%
+  mutate(vconfl1 = (conflicts - lag(conflicts, default = 0)))
 
 
 
