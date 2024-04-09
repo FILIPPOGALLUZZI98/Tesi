@@ -143,17 +143,9 @@ write.csv(data_migr, paste0("^Data/", "Global_migr", ".csv"), row.names=FALSE)
 # Select the timespan for GW
 gw_data_g <- gw_g %>%
   filter(year > 1959 & year<2018)
-# Average GW over countries
-gw_data_g <- gw_data_g %>%
-  group_by(year, country) %>%
-  summarize(mvalue = mean(value, na.rm = TRUE))
 
-# Merge the dataasets
-gw_migr <- left_join(gw_data_g, data_migr, by=c("year", "country"))
-
-# For some regions there were no data for migrations, so I had to neglect those regions
-gw_migr <- gw_migr %>%
-  filter(complete.cases(population))
+# Merge the datasets
+gw_migr <- left_join(gw_data_g, data_migr, by=c("year", "country", "orig"))
 
 # Save data
 write.csv(gw_migr, paste0("^Data/", "Global_gws_migr", ".csv"), row.names=FALSE)
