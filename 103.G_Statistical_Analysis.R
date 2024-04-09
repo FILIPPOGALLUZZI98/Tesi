@@ -102,39 +102,6 @@ fixest::feglm(data=conflict_continent, log(1+number_deaths)~value|region + year,
 ##############################################################################################################################
 ####  MIGRATIONS  ############################################################################################################
 
-lm <-fixest::feols(data=data_migr, log(1+outflow_rate_annual)~mvalue|country + year)
-lm2 <-fixest::feglm(data=data_migr, outflow_rate_annual~mvalue|country + year, family=quasipoisson)
-
-
-
-migr_continent <- subset(data_migr, worldregion=="Africa & Middle East")
-lmAf <- fixest::feols(data=migr_continent, log(1+outflow_rate_annual)~mvalue|country + year)
-lm2Af <- fixest::feglm(data=migr_continent, outflow_rate_annual~mvalue|country + year, family=quasipoisson)  
-lmAf; lm2Af
-
-migr_continent <- subset(data_migr, worldregion=="Central America & Caribbean")
-lmCA <- fixest::feols(data=migr_continent, log(1+outflow_rate_annual)~mvalue|country + year)
-lm2CA <- fixest::feglm(data=migr_continent, outflow_rate_annual~mvalue|country + year, family=quasipoisson)  
-lmCA; lm2CA
-
-migr_continent <- subset(data_migr, worldregion=="South America")
-lmSA <- fixest::feols(data=migr_continent, log(1+outflow_rate_annual)~mvalue|country + year)
-lm2SA <- fixest::feglm(data=migr_continent, outflow_rate_annual~mvalue|country + year, family=quasipoisson)  
-lmSA; lm2SA
-
-migr_continent <- subset(data_migr, worldregion=="East Asia & Pacific")
-lmEA <- fixest::feols(data=migr_continent, log(1+outflow_rate_annual)~mvalue|country + year)
-lm2EA <- fixest::feglm(data=migr_continent, outflow_rate_annual~mvalue|country + year, family=quasipoisson)  
-lmEA; lm2EA
-
-
-
-
-
-
-
-
-
 
 
 
