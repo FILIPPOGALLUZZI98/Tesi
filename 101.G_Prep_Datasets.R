@@ -94,6 +94,7 @@ events2 <- events_joined %>%
   group_by(year, country, region, type, CNTRY_CODE, BPL_CODE, GEOLEVEL1) %>%
   summarise(conflicts = n())
 events <- left_join(events1, events2, by=c("year", "country","region","type", "CNTRY_CODE", "BPL_CODE", "GEOLEVEL1"))
+events <- events_s[, c("year","country", "region","type","deaths", "conflicts","CNTRY_CODE", "BPL_CODE", "GEOLEVEL1")]
 
 # Sort datasets by year
 events <- events[order(events$country),]
