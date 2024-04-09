@@ -125,6 +125,10 @@ write.csv(gw_events, paste0("^Data/", "Global_gws_events", ".csv"), row.names=FA
 #############################################################################################################################
 ####  GLOBAL MIGRATION DATASET  #############################################################################################
 
+shpm <- sf::read_sf("^Data_Raw/world_geolev1_2021/world_geolev1_2021.shp")
+shpm$BPL_CODE<-NULL; shpm$CNTRY_CODE<-NULL
+
+
 data_migr <-read.csv("^Data_Raw/Global_migr_raw.csv")
 # Sort the order of the variables
 data_migr <- data_migr[,c("year", "country_name", "worldregion", "population","mig_interval","year_cat10","flow","flow_annual", "outflow_rate_annual", "orig")]
