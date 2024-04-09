@@ -57,7 +57,6 @@ write.csv(gw_migr, paste0("^Data/", "gws_migr", ".csv"), row.names=FALSE)
 ##############################################################################################################################
 ####  GLOBAL JOINT DATASET GW-MIGR-CONFL  ####################################################################################
 
-
 gw_migr_conf <- left_join(gw_events, migr, by=c("year", "orig"))
 gw_migr_conf <- gw_migr_conf %>%
   rename(country=country.x)
