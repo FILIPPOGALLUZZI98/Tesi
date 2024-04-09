@@ -153,13 +153,12 @@ gw_data_g <- gw_data_g %>%
 na_val <- subset(gw_data_g, is.na(orig))$country
 a <- unique(countries_with_na); b <- unique(data_migr$country)
 intersect(a, b)
-
 # Check if the datasets gw_data_g cointains all the regions of data_migr
 length(intersect(unique(gw_data_g$orig), data_migr$orig))
 length(qunique(data_migr$orig))
 
-# Remove NA values from gw_data_g and data_migr
-gw_data_g <- na.omit(gw_data_g[!is.na(gw_data_g$orig), ])
+# Remove NA values from gw_data_g
+# gw_data_g <- na.omit(gw_data_g[!is.na(gw_data_g$orig), ])
 
 # Convert the values of 'orig' in gw_data_g into integers
 gw_data_g$orig <- as.integer(gw_data_g$orig)
@@ -168,7 +167,7 @@ gw_data_g$orig <- as.integer(gw_data_g$orig)
 gw_migr <- left_join(gw_data_g, data_migr, by=c("year", "orig"))
 
 # Remove NA values
-gw_migr <- na.omit(gw_migr[!is.na(gw_migr$population), ])
+# gw_migr <- na.omit(gw_migr[!is.na(gw_migr$population), ])
 
 # Sort and rename the variables
 gw_migr <- gw_migr %>%
