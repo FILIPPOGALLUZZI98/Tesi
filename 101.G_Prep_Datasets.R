@@ -47,7 +47,7 @@ gw_g$variable=NULL
 gw_g <- gw_g[, c("year","country", "region", "value","CNTRY_CODE", "BPL_CODE","GEOLEVEL1")]
 
 # Save Data
-write.csv(gw_g, paste0("^Data/", "Global_gws", ".csv"), row.names=FALSE)
+write.csv(gw_g, paste0("^Data/", "gws", ".csv"), row.names=FALSE)
 
 ##############################################################################################
 ####  GLOBAL CONFLICT UPPSALA (N_DEATHS+CONFLICTS)  ##########################################
@@ -94,14 +94,14 @@ events2 <- events_joined %>%
   group_by(year, country, region, type, CNTRY_CODE, BPL_CODE, GEOLEVEL1) %>%
   summarise(conflicts = n())
 events <- left_join(events1, events2, by=c("year", "country","region","type", "CNTRY_CODE", "BPL_CODE", "GEOLEVEL1"))
-events <- events_s[, c("year","country", "region","type","deaths", "conflicts","CNTRY_CODE", "BPL_CODE", "GEOLEVEL1")]
+events <- events[, c("year","country", "region","type","deaths", "conflicts","CNTRY_CODE", "BPL_CODE", "GEOLEVEL1")]
 
 # Sort datasets by year
 events <- events[order(events$country),]
 events <- events[order(events$year),]
 
 # Save Data
-write.csv(events, paste0("^Data/", "Global_events", ".csv"), row.names=FALSE)
+write.csv(events, paste0("^Data/", "events", ".csv"), row.names=FALSE)
 
 
 ##############################################################################################################################
@@ -121,7 +121,7 @@ gw_events$conflicts[is.na(gw_events$conflicts)] = 0  ## Assign a zero to each mo
 gw_events <- gw_events[, c("year","country", "region","type","deaths", "conflicts","value", "CNTRY_CODE", "BPL_CODE", "GEOLEVEL1")]
 
 # Save data
-write.csv(gw_events, paste0("^Data/", "Global_gws_events", ".csv"), row.names=FALSE)
+write.csv(gw_events, paste0("^Data/", "gws_events", ".csv"), row.names=FALSE)
 
 
 #############################################################################################################################
@@ -136,7 +136,7 @@ data_migr <- data_migr %>%
          interval=mig_interval)
 
 # Save data
-write.csv(data_migr, paste0("^Data/", "Global_migr", ".csv"), row.names=FALSE)
+write.csv(data_migr, paste0("^Data/", "migr", ".csv"), row.names=FALSE)
 
 
 ##############################################################################################################################
@@ -151,6 +151,13 @@ gw_data_g <- gw_data_g %>%
 
 
 
+
+
+
+
+
+
+
 # Merge the datasets
 gw_migr <- left_join(gw_data_g, data_migr, by=c("year", "country", "orig"))
 
@@ -161,6 +168,9 @@ write.csv(gw_migr, paste0("^Data/", "Global_gws_migr", ".csv"), row.names=FALSE)
 missing_values <- gw_data_g$is.na(orig)
 
 
+
+
+events <-read.csv("^Data/Global_gws_events.csv")
 
 
 
