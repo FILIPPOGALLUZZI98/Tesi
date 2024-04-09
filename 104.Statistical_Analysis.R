@@ -1,3 +1,11 @@
+#########
+## GW DATA 1901-2019
+## CONFLICTS DATA 1989-2019
+## MIGRATION DATA START FROM 2019
+
+##############################################################################################################################
+####  CONFLICTS  ########################################################################################################################
+
 suppressPackageStartupMessages({
   library(sf);library(sp);library(plyr);library(raster);library(ncdf4);library(exactextractr);library(dplyr);library(stringr)
   library(reshape2);library(ggplot2);library(ggrepel);library(lubridate);library(zoo);library(foreign); library(countrycode);
