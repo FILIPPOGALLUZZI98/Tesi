@@ -34,7 +34,7 @@ r <- raster::brick(paste0("^Data/",rast,".nc"))
 gw_g <- exactextractr::exact_extract(r, shp, fun="mean")
 
 # Add columns for regions and countries
-gw_g$region <- shp$region ; gw_g$country <- shp$country
+gw_g$region <- shp$region ; gw_g$country <- shp$country; gw_g$orig <- shp$orig
 
 # Reshape the dataset into a long form
 gw_g <- reshape2::melt(gw_g, id.vars=c("country", "region"))
@@ -43,7 +43,7 @@ gw_g <- reshape2::melt(gw_g, id.vars=c("country", "region"))
 gw_g$variable <- gsub("mean.X", "", gw_g$variable)  # Rimuovi "mean.X"
 gw_g$year <- as.integer(gsub("\\D", "", gw_g$variable)) + 1900 
 gw_g$variable=NULL
-gw_g <- gw_g[, c("year","country", "region", "value")]
+gw_g <- gw_g[, c("year","country", "region", "value", "orig")]
 
 # Save Data
 write.csv(gw_g, paste0("^Data/", "Global_gws", ".csv"), row.names=FALSE)
