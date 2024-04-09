@@ -1,161 +1,87 @@
-# This is the code to prepare the datasets for global data from the modified shapefile and
-# raster (see 100.Prep_Shapefile_Raster.R). This code will create the datasets of global variables.
-# This is a list of the saved datasets:
-# GW --> (year, country, region, value)
-# Conflict --> (year, country, region, type, conflicts)  this contains only the observed ones, there are no zeros
-# Deaths --> (year, country, region, type, number_deaths)  this contains only the observed ones, there are no zeros
-# GW-Conflict --> (year, country, region, type, conflicts, value) the dataset contains also zeros in the number columns if in
-                                                               # that year and region no conflict happened
-# GW-Deaths --> (year, country, region, type, number_deaths, value) the dataset contains also zeros in the number columns if in
-                                                               # that year and region no conflict happened
-# Migr --> () 
-# GW-Migr -->()
-
-
-# Select the raster (gws, ...)
-rast <- "gws"
-
-##############################################################################################################################
-##############################################################################################################################
-
 suppressPackageStartupMessages({
   library(sf);library(sp);library(plyr);library(raster);library(ncdf4);library(exactextractr);library(dplyr);library(stringr)
-  library(reshape2);library(ggplot2);library(ggrepel);library(lubridate);library(zoo);library(foreign)})
+  library(reshape2);library(ggplot2);library(ggrepel);library(lubridate);library(zoo);library(foreign); library(countrycode)})
+  library(reshape2);library(ggplot2);library(ggrepel);library(lubridate);library(zoo);library(foreign); library(countrycode);
+  library(fixest); library(broom);library(knitr)} )
 
-# Select shapefile and raster
-shp <- st_read("^Data/shp/shp.shp")
-r <- raster::brick(paste0("^Data/",rast,".nc"))
-
-
-##############################################################################################
-####  GLOBAL GW  #############################################################################
-
-# Merging data gw-shapefile
-gw_g <- exactextractr::exact_extract(r, shp, fun="mean")
-
-# Add columns for regions and countries
-gw_g$region <- shp$region ; gw_g$country <- shp$country
-
-# Reshape the dataset into a long form
-gw_g <- reshape2::melt(gw_g, id.vars=c("country", "region"))
-
-# Rename the years
-gw_g$variable <- gsub("mean.X", "", gw_g$variable)  # Rimuovi "mean.X"
-gw_g$year <- as.integer(gsub("\\D", "", gw_g$variable)) + 1900 
-gw_g$variable=NULL
-gw_g <- gw_g[, c("year","country", "region", "value")]
-
-# Save Data
-write.csv(gw_g, paste0("^Data/", "Global_gws", ".csv"), row.names=FALSE)
-
-##############################################################################################
-####  GLOBAL CONFLICT UPPSALA (N_DEATHS+CONFLICTS)  ##########################################
-
-# Select the conflict data
-file_path <- "^Data_Raw/Conflict_Data/Global.csv"
-events <- read.csv(file_path)
-
-# Select the variables of interest
-events <- events[, c("country" ,"year", "type_of_violence","latitude" ,"longitude", "best")]
-
-# Rename the variables
-events <- events %>%
-  rename(type = type_of_violence,
-         number_deaths = best)
-events <- mutate(events,
-                 type = case_when(
-                   type == 1 ~ "state",
-                   type == 2 ~ "Nstate",
-                   type == 3 ~ "onesided"
-                 ))
-
-# Set the coordinate system
-events <- st_as_sf(events, coords = c("longitude", "latitude"), crs = st_crs(shp))
-events <- st_transform(events, st_crs(shp))
-
-# Remove the invalid geometries from shp
-shp <- shp[st_is_valid(shp), ]
-
-# Intersection shapefile-events and aggregate data 
-events_joined <- st_join(events, shp)
-events_joined <- events_joined %>%
-  rename(country = country.y)
-events_joined$geometry=NULL
-events_joined$country.x=NULL
-
-
-
-events1 <- events_joined %>%
-  group_by(year, country, region, type) %>%
-  summarise(deaths = sum(number_deaths, na.rm = TRUE))
-
-events2 <- events_joined %>%
-  group_by(year, country, region, type) %>%
-  summarise(conflicts = n())
-events <- left_join(events1, events2, by=c("year", "country","region","type"))
-
-# Sort datasets by year
-events <- events[order(events$country),]
-events <- events[order(events$year),]
-
-# Save Data
-write.csv(events, paste0("^Data/", "Global_events", ".csv"), row.names=FALSE)
+data_events <-read.csv("^Data/Global_gws_events.csv")
 
 
 ##############################################################################################################################
-####  GLOBAL JOINT DATASET GW-EVENTS  ########################################################################################
+####  CONFLICTS  ########################################################################################################################
 
-gw_data_g <- gw_g %>%
-  filter(year > 1988)
-events <- events %>%
-  filter(year<2020)
-vettore <- expand.grid(year=1989:2019, type=c("state","Nstate","onesided"))
-gw_events_g <- left_join(gw_data_g, vettore, by=c("year"))
-
-
-gw_events <- left_join(gw_events_g,events,by=c("country","region","year","type"))
-gw_events$deaths[is.na(gw_events$deaths)] = 0  ## Assign a zero to each month/province where no data is observed
-gw_events$conflicts[is.na(gw_events$conflicts)] = 0  ## Assign a zero to each month/province where no data is observed
-gw_events <- gw_events[, c("year","country", "region","type","deaths", "conflicts","value")]
-
-# Save data
-write.csv(gw_events, paste0("^Data/", "Global_gws_events", ".csv"), row.names=FALSE)
+# All the data, not divided by type of conflict
+fixest::feols(data=data_events, log(1+conflicts)~value|region + year)
+fixest::feglm(data=data_events, conflicts~value|region + year, family=quasipoisson)
+lm <-fixest::feols(data=data_events, log(1+conflicts)~value|region + year)
+lm2 <-fixest::feglm(data=data_events, conflicts~value|region + year, family=quasipoisson)
 
 
-#############################################################################################################################
-####  GLOBAL MIGRATION DATASET  #############################################################################################
+# For the type of conflict
+fixest::feglm(data=subset(data_events, type=="Nstate"), conflicts~value|region + year, family=quasipoisson)
+lmN <- fixest::feols(data=subset(data_events, type=="Nstate"), log(1+conflicts)~value|region + year)
+lm2N <- fixest::feglm(data=subset(data_events, type=="Nstate"), conflicts~value|region + year, family=quasipoisson)
+lmS <- fixest::feols(data=subset(data_events, type=="state"), log(1+conflicts)~value|region + year)
+lm2S <- fixest::feglm(data=subset(data_events, type=="state"), conflicts~value|region + year, family=quasipoisson)
+lmOS <- fixest::feols(data=subset(data_events, type=="onesided"), log(1+conflicts)~value|region + year)
+lm2OS <- fixest::feglm(data=subset(data_events, type=="onesided"), conflicts~value|region + year, family=quasipoisson)
 
-data_migr <-read.csv("^Data_Raw/Global_migr_raw.csv")
-
-# Sort the columns order
-data_migr <- data_migr[,c("year", "country_name", "worldregion", "population","mig_interval","year_cat10","flow","flow_annual", "outflow_rate_annual", "orig")]
-# Rename the variables
-data_migr <- data_migr %>%
-  rename(country = country_name, 
-         interval=mig_interval)
-
-# Save data
-write.csv(data_migr, paste0("^Data/", "Global_migr", ".csv"), row.names=FALSE)
+# For the continent
+continent <- "Asia"
+results <- bind_rows(tidy(lmN), tidy(lm2N), tidy(lmS), tidy(lm2S), tidy(lmOS), tidy(lm2OS))
+results$type <- c("Nstate", "Nstate", "state", "state", "onesided", "onesided")
+results$model <- c("feols", "feglm", "feols", "feglm", "feols", "feglm")
+print(kable(results))
 
 
-##############################################################################################################################
-####  GLOBAL JOINT DATASET GW-MIGR  ##########################################################################################
+# For different continents
+get_continent <- function(countries) {
+  countrycode(countries, "country.name", "continent")
+}
+continent <- "Africa"
+conflict_continent <- data_events %>%
+  filter(get_continent(country) == continent)
 
-gw_data_g <- gw_g %>%
-  filter(year > 1959 & year<2018)
+fixest::feols(data=conflict_continent, log(1+conflicts)~value|region + year)
+fixest::feglm(data=conflict_continent, conflicts~value|region + year, family=quasipoisson)
 
-gw_data_g <- gw_data_g %>%
-  group_by(year, country) %>%
-  summarize(mvalue = mean(value, na.rm = TRUE))
+lmAf <- fixest::feols(data=conflict_continent, log(1+conflicts)~value|region + year)
+lm2Af <- fixest::feglm(data=conflict_continent, conflicts~value|region + year, family=quasipoisson)  
+continent <- "Europe"
+conflict_continent <- data_events %>%
+  filter(get_continent(country) == continent)
+lmE <- fixest::feols(data=conflict_continent, log(1+conflicts)~value|region + year)
+lm2E <- fixest::feglm(data=conflict_continent, conflicts~value|region + year, family=quasipoisson)  
+continent <- "Oceania"
+conflict_continent <- data_events %>%
+  filter(get_continent(country) == continent)
+lmOc <- fixest::feols(data=conflict_continent, log(1+conflicts)~value|region + year)
+lm2Oc <- fixest::feglm(data=conflict_continent, conflicts~value|region + year, family=quasipoisson)  
+continent <- "Asia"
+conflict_continent <- data_events %>%
+  filter(get_continent(country) == continent)
+lmAs <- fixest::feols(data=conflict_continent, log(1+conflicts)~value|region + year)
+lm2As <- fixest::feglm(data=conflict_continent, conflicts~value|region + year, family=quasipoisson)  
+N_A <- c("United States", "Canada", "Mexico")
+S_A <- c("Belize", "Costa Rica", "El Salvador", "Guatemala", "Honduras", "Nicaragua", "Panama", "Argentina", "Bolivia", "Brasile", "Cile", "Colombia", "Ecuador", "Guyana", "Paraguay", "Perù", "Suriname", "Uruguay", "Venezuela", "Aruba", "Bahamas", "Barbados", "Cuba", "Dominica", "Giamaica", "Haiti", "Trinidad and Tobago", "Sint Maarten", "Saint Vincent and the Grenadines", "Saint Lucia", "Saint Kitts and Nevis", "Puerto Rico", "Dominican Republic", "Grenada", "Martinique", "Saint Martin", "Virgin Islands", "Turks and Caicos Islands", "Cayman Islands", "British Virgin Islands", "Guadeloupe", "Antigua and Barbuda", "Bonaire", "Curacao", "Saint Barthelemy", "Saba", "Saint Eustatius", "Saint Pierre and Miquelon", "Falkland Islands", "French Guiana", "South Georgia and the South Sandwich Islands", "British West Indies")
+N_A <- data_events[data_events$country %in% N_A, ]
+S_A <- data_events[data_events$country %in% S_A, ]
+lmNA <- fixest::feols(data=N_A, log(1+conflicts)~value|region + year)
+lm2NA <- fixest::feglm(data=N_A, conflicts~value|region + year, family=quasipoisson)
+lmSA <- fixest::feols(data=S_A, log(1+conflicts)~value|region + year)
+lm2SA <- fixest::feglm(data=S_A, conflicts~value|region + year, family=quasipoisson)
 
-gw_migr <- left_join(gw_data_g, data_migr, by=c("year", "country"))
+results_continents <- bind_rows(tidy(lmAf), tidy(lm2Af), tidy(lmE), tidy(lm2E), tidy(lmOc), tidy(lm2Oc), 
+                     tidy(lmAs),tidy(lm2As),tidy(lmNA),tidy(lm2NA),tidy(lmSA),tidy(lm2SA))
+results_continents$continents <- c("Africa", "Africa","Europe", "Europe","Oceania","Oceania", "Asia",  "Asia",
+                        "North America", "North America","South America","South America")
+results_continents$model <- c("feols", "feglm", "feols", "feglm", "feols", "feglm", "feols", "feglm","feols", "feglm","feols", "feglm")
+print(kable(results_continents))
 
-# For some regions there were no data for migrations, so I had to neglect those regions
-gw_migr <- gw_migr %>%
-  filter(complete.cases(population))
+View(results_continents)
 
-# Save data
-write.csv(gw_migr, paste0("^Data/", "Global_gws_migr", ".csv"), row.names=FALSE)
+
+
 
 
 
