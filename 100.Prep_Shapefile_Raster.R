@@ -10,6 +10,7 @@ suppressPackageStartupMessages({
 ####  SHAPEFILE  ############################################################################
 
 shp <- sf::read_sf("^Data_Raw/world_geolev1_2021/world_geolev1_2021.shp")
+shp$BPL_CODE=NULL; shp$CNTRY_CODE=NULL
 
 # Remove regions with geometry error
 empty <- st_is_empty(shp); shp <- shp[!empty, ]
