@@ -22,17 +22,16 @@ r <- raster::brick(paste0("^Data/",rast,".nc"))
 gw_g <- exactextractr::exact_extract(r, shp, fun="mean")
 
 # Add columns for regions and countries
-gw_g$region <- shp$region ; gw_g$country <- shp$country; gw_g$CNTRY_CODE<-shp$CNTRY_CODE
-gw_g$BPL_CODE <- shp$BPL_CODE; gw_g$GEOLEVEL1<-shp$GEOLEVEL1
+gw_g$region <- shp$region ; gw_g$country <- shp$country; gw_g$GEOLEVEL1<-shp$GEOLEVEL1
 
 # Reshape the dataset into a long form
-gw_g <- reshape2::melt(gw_g, id.vars=c("country", "region", "CNTRY_CODE","BPL_CODE","GEOLEVEL1"))
+gw_g <- reshape2::melt(gw_g, id.vars=c("country", "region", "GEOLEVEL1"))
 
 # Rename the years
 gw_g$variable <- gsub("mean.X", "", gw_g$variable)  # Rimuovi "mean.X"
 gw_g$year <- as.integer(gsub("\\D", "", gw_g$variable)) + 1900 
 gw_g$variable=NULL
-gw_g <- gw_g[, c("year","country", "region", "value","CNTRY_CODE", "BPL_CODE","GEOLEVEL1")]
+gw_g <- gw_g[, c("year","country", "region", "value","GEOLEVEL1")]
 
 # Save Data
 write.csv(gw_g, paste0("^Data/", "gws", ".csv"), row.names=FALSE)
@@ -75,14 +74,14 @@ events_joined$country.x=NULL
 
 
 events1 <- events_joined %>%
-  group_by(year, country, region, type, CNTRY_CODE, BPL_CODE, GEOLEVEL1) %>%
+  group_by(year, country, region, type, GEOLEVEL1) %>%
   summarise(deaths = sum(number_deaths, na.rm = TRUE))
 
 events2 <- events_joined %>%
-  group_by(year, country, region, type, CNTRY_CODE, BPL_CODE, GEOLEVEL1) %>%
+  group_by(year, country, region, type, GEOLEVEL1) %>%
   summarise(conflicts = n())
-events <- left_join(events1, events2, by=c("year", "country","region","type", "CNTRY_CODE", "BPL_CODE", "GEOLEVEL1"))
-events <- events[, c("year","country", "region","type","deaths", "conflicts","CNTRY_CODE", "BPL_CODE", "GEOLEVEL1")]
+events <- left_join(events1, events2, by=c("year", "country","region","type","GEOLEVEL1"))
+events <- events[, c("year","country", "region","type","deaths", "conflicts","GEOLEVEL1")]
 
 # Sort datasets by year
 events <- events[order(events$country),]
