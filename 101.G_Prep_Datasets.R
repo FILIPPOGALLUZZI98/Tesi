@@ -149,28 +149,22 @@ gw_data_g <- gw_g %>%
 gw_data_g <- gw_data_g %>%
   rename(orig=GEOLEVEL1)
 
+# CHECK FOR COUNTRIES WITHOUT GEOLEVEL1
+na_val <- subset(gw_data_g, is.na(GEOLEVEL1))$country
+a <- unique(countries_with_na); b <- unique(data_migr$country)
+intersect(a, b)
 
+# Remove NA values from gw_data_g
+gw_data_g <- na.omit(gw_data_g[!is.na(gw_data_g$orig), ])
 
-
-
-
-
-
-
+# Convert the values of 'orig' in gw_data_g into integers
+gw_data_g$orig <- as.integer(gw_data_g$orig)
 
 # Merge the datasets
 gw_migr <- left_join(gw_data_g, data_migr, by=c("year", "country", "orig"))
 
 # Save data
 write.csv(gw_migr, paste0("^Data/", "Global_gws_migr", ".csv"), row.names=FALSE)
-
-
-missing_values <- gw_data_g$is.na(orig)
-
-
-
-
-events <-read.csv("^Data/Global_gws_events.csv")
 
 
 
