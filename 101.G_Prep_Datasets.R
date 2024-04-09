@@ -125,6 +125,34 @@ write.csv(gw_events, paste0("^Data/", "Global_gws_events", ".csv"), row.names=FA
 #############################################################################################################################
 ####  GLOBAL MIGRATION DATASET  #############################################################################################
 
+data_migr <-read.csv("^Data_Raw/Global_migr_raw.csv")
+data_migr <- data_migr[,c("year", "country_name", "worldregion", "population","mig_interval","year_cat10","flow","flow_annual", "outflow_rate_annual", "orig")]
+data_migr <- data_migr %>%
+  rename(country = country_name, 
+         interval=mig_interval)
+
+# Save data
+write.csv(data_migr, paste0("^Data/", "Global_migr", ".csv"), row.names=FALSE)
+
+
+##############################################################################################################################
+####  GLOBAL JOINT DATASET GW-(EVENTS)  ############################################################################
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
