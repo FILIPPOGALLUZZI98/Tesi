@@ -112,7 +112,7 @@ events <- events %>%
 vettore <- expand.grid(year=1989:2019, type=c("state","Nstate","onesided"))
 gw_events_g <- left_join(gw_data_g, vettore, by=c("year"))
 
-
+# Merge the datasets
 gw_events <- left_join(gw_events_g,events,by=c("country","region","year","type"))
 gw_events$deaths[is.na(gw_events$deaths)] = 0  ## Assign a zero to each month/province where no data is observed
 gw_events$conflicts[is.na(gw_events$conflicts)] = 0  ## Assign a zero to each month/province where no data is observed
@@ -126,7 +126,9 @@ write.csv(gw_events, paste0("^Data/", "Global_gws_events", ".csv"), row.names=FA
 ####  GLOBAL MIGRATION DATASET  #############################################################################################
 
 data_migr <-read.csv("^Data_Raw/Global_migr_raw.csv")
+# Sort the order of the variables
 data_migr <- data_migr[,c("year", "country_name", "worldregion", "population","mig_interval","year_cat10","flow","flow_annual", "outflow_rate_annual", "orig")]
+# Rename some variables
 data_migr <- data_migr %>%
   rename(country = country_name, 
          interval=mig_interval)
@@ -138,13 +140,15 @@ write.csv(data_migr, paste0("^Data/", "Global_migr", ".csv"), row.names=FALSE)
 ##############################################################################################################################
 ####  GLOBAL JOINT DATASET GW-MIGR  ##########################################################################################
 
+# Select the timespan for GW
 gw_data_g <- gw_g %>%
   filter(year > 1959 & year<2018)
-
+# Average GW over countries
 gw_data_g <- gw_data_g %>%
   group_by(year, country) %>%
   summarize(mvalue = mean(value, na.rm = TRUE))
 
+# Merge the dataasets
 gw_migr <- left_join(gw_data_g, data_migr, by=c("year", "country"))
 
 # For some regions there were no data for migrations, so I had to neglect those regions
