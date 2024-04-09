@@ -1,8 +1,17 @@
-##############################################################################################################################
-####  GLOBAL JOINT DATASET GW-EVENTS  ########################################################################################
+# This is the code to prepare the shapefile and the raster
+# Shapefile: remove the non useful variables; remove geometry errors; rename the variables; set the CRS
+# Raster: set the CRS, annual mean
+
+suppressPackageStartupMessages({
+  library(sf);library(sp);library(plyr);library(raster);library(ncdf4);library(exactextractr);library(dplyr);library(stringr)
+  library(reshape2);library(ggplot2);library(ggrepel);library(lubridate);library(zoo);library(foreign)})
 
 gw_g <- read.csv("^Data/gws.csv")
 events <- read.csv("^Data/events.csv")
+migr <- read.csv("^Data/migr.csv")
+
+##############################################################################################################################
+####  GLOBAL JOINT DATASET GW-EVENTS  ########################################################################################
 
 gw_data_g <- gw_g %>%
   filter(year > 1988)
