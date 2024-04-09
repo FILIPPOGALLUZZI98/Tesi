@@ -9,6 +9,7 @@ suppressPackageStartupMessages({
 gw <- read.csv("^Data/gws.csv")
 events <- read.csv("^Data/events.csv")
 migr <- read.csv("^Data/migr.csv")
+
 gw <- gw %>%
   filter(year > 1954)
 
@@ -19,7 +20,7 @@ gw_data <-gw
 events_data <- events %>%
   filter(year<2020)
 
-vettore <- expand.grid(year=1955:2019, type=c("state","Nstate","onesided"))
+vettore <- expand.grid(year=1953:2019, type=c("state","Nstate","onesided"))
 gw_events <- left_join(gw_data, vettore, by=c("year"))
 
 # Merge the datasets
@@ -57,13 +58,14 @@ write.csv(gw_migr, paste0("^Data/", "gws_migr", ".csv"), row.names=FALSE)
 ##############################################################################################################################
 ####  GLOBAL JOINT DATASET GW-MIGR-CONFL  ####################################################################################
 
+
 gw_migr_conf <- left_join(gw_events, migr, by=c("year", "orig"))
 gw_migr_conf <- gw_migr_conf %>%
   rename(country=country.x)
 gw_migr_conf$country.y=NULL
 
 # Save data
-write.csv(gw_migr, paste0("^Data/", "gws_migr_events", ".csv"), row.names=FALSE)
+write.csv(gw_migr, paste0("^Data/", "gws_migr_confl", ".csv"), row.names=FALSE)
 
 
 
