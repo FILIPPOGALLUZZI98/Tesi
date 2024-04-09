@@ -11,30 +11,10 @@ gem <- read.csv("^Data/gws_migr_events.csv")
 #################################################################################################
 #################################################################################################
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+# Per ogni 'orig', per ogni 'interval =1', per ogni 'year': media di 'value' con l'anno precedente e mettere in 'mvalue1'
+# Per ogni 'orig', per ogni 'interval =5', per ogni 'year': media di 'value' con i 5 anni precedenti e mettere in 'mvalue5'
+# Per ogni 'orig', per ogni 'interval =1', per ogni 'year': media di 'conflicts' con l'anno precedente e mettere in 'mconfl1'
+# Per ogni 'orig', per ogni 'interval =5', per ogni 'year': media di 'conflicts' con i 5 anni precedenti e mettere in 'mconfl5'
 
 
 
