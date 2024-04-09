@@ -65,7 +65,7 @@ gw_migr_conf <- gw_migr_conf %>%
 gw_migr_conf$country.y=NULL
 
 # Save data
-write.csv(gw_migr, paste0("^Data/", "gws_migr_confl", ".csv"), row.names=FALSE)
+write.csv(gw_migr_confl, paste0("^Data/", "gws_migr_events", ".csv"), row.names=FALSE)
 
 
 
