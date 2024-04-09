@@ -76,6 +76,8 @@ View(results_continents)
 ##############################################################################################################################
 ####  DEATHS  ################################################################################################################
 
+##  DA FARE UGUALE A CONFLICTS SE VA BENE IL CODICE
+
 lm <- lm(log(1+data_events$number_deaths) ~ data_events$value + as.factor(data_events$year) + as.factor(data_events$region))
 summary(lm)
 plot(data_events$number_deaths ~ data_events$value)
