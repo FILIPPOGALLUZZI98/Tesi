@@ -3,25 +3,25 @@ suppressPackageStartupMessages({
   library(reshape2);library(ggplot2);library(ggrepel);library(lubridate);library(zoo);library(foreign); library(countrycode);
   library(fixest); library(broom);library(knitr)} )
 
-data_events <-read.csv("^Data/Global_gws_events.csv")
-data_migr <- read.csv("^Data/Global_gws_migr.csv")
+events <-read.csv("^Data/gws_events.csv")
+migr <- read.csv("^Data/gws_migr.csv")
 
 
 ##############################################################################################################################
 ####  CONFLICTS  ########################################################################################################################
 
 # All the data, not divided by type of conflict
-lm <-fixest::feols(data=data_events, log(1+conflicts)~value|region + year)
-lm2 <-fixest::feglm(data=data_events, conflicts~value|region + year, family=quasipoisson)
+lm <-fixest::feols(data=events, log(1+conflicts)~value|region + year)
+lm2 <-fixest::feglm(data=events, conflicts~value|region + year, family=quasipoisson)
 
 
 # For the type of conflict
-lmN <- fixest::feols(data=subset(data_events, type=="Nstate"), log(1+conflicts)~value|region + year)
-lm2N <- fixest::feglm(data=subset(data_events, type=="Nstate"), conflicts~value|region + year, family=quasipoisson)
-lmS <- fixest::feols(data=subset(data_events, type=="state"), log(1+conflicts)~value|region + year)
-lm2S <- fixest::feglm(data=subset(data_events, type=="state"), conflicts~value|region + year, family=quasipoisson)
-lmOS <- fixest::feols(data=subset(data_events, type=="onesided"), log(1+conflicts)~value|region + year)
-lm2OS <- fixest::feglm(data=subset(data_events, type=="onesided"), conflicts~value|region + year, family=quasipoisson)
+lmN <- fixest::feols(data=subset(events, type=="Nstate"), log(1+conflicts)~value|region + year)
+lm2N <- fixest::feglm(data=subset(events, type=="Nstate"), conflicts~value|region + year, family=quasipoisson)
+lmS <- fixest::feols(data=subset(events, type=="state"), log(1+conflicts)~value|region + year)
+lm2S <- fixest::feglm(data=subset(events, type=="state"), conflicts~value|region + year, family=quasipoisson)
+lmOS <- fixest::feols(data=subset(events, type=="onesided"), log(1+conflicts)~value|region + year)
+lm2OS <- fixest::feglm(data=subset(events, type=="onesided"), conflicts~value|region + year, family=quasipoisson)
 
 results <- bind_rows(tidy(lmN), tidy(lm2N), tidy(lmS), tidy(lm2S), tidy(lmOS), tidy(lm2OS))
 results$type <- c("Nstate", "Nstate", "state", "state", "onesided", "onesided")
@@ -34,29 +34,29 @@ get_continent <- function(countries) {
   countrycode(countries, "country.name", "continent")
 }
 continent <- "Africa"
-conflict_continent <- data_events %>%
+conflict_continent <- events %>%
   filter(get_continent(country) == continent)
 lmAf <- fixest::feols(data=conflict_continent, log(1+conflicts)~value|region + year)
 lm2Af <- fixest::feglm(data=conflict_continent, conflicts~value|region + year, family=quasipoisson)  
 continent <- "Europe"
-conflict_continent <- data_events %>%
+conflict_continent <- events %>%
   filter(get_continent(country) == continent)
 lmE <- fixest::feols(data=conflict_continent, log(1+conflicts)~value|region + year)
 lm2E <- fixest::feglm(data=conflict_continent, conflicts~value|region + year, family=quasipoisson)  
 continent <- "Oceania"
-conflict_continent <- data_events %>%
+conflict_continent <- events %>%
   filter(get_continent(country) == continent)
 lmOc <- fixest::feols(data=conflict_continent, log(1+conflicts)~value|region + year)
 lm2Oc <- fixest::feglm(data=conflict_continent, conflicts~value|region + year, family=quasipoisson)  
 continent <- "Asia"
-conflict_continent <- data_events %>%
+conflict_continent <- events %>%
   filter(get_continent(country) == continent)
 lmAs <- fixest::feols(data=conflict_continent, log(1+conflicts)~value|region + year)
 lm2As <- fixest::feglm(data=conflict_continent, conflicts~value|region + year, family=quasipoisson)  
 N_A <- c("United States", "Canada", "Mexico")
 S_A <- c("Belize", "Costa Rica", "El Salvador", "Guatemala", "Honduras", "Nicaragua", "Panama", "Argentina", "Bolivia", "Brasile", "Cile", "Colombia", "Ecuador", "Guyana", "Paraguay", "Perù", "Suriname", "Uruguay", "Venezuela", "Aruba", "Bahamas", "Barbados", "Cuba", "Dominica", "Giamaica", "Haiti", "Trinidad and Tobago", "Sint Maarten", "Saint Vincent and the Grenadines", "Saint Lucia", "Saint Kitts and Nevis", "Puerto Rico", "Dominican Republic", "Grenada", "Martinique", "Saint Martin", "Virgin Islands", "Turks and Caicos Islands", "Cayman Islands", "British Virgin Islands", "Guadeloupe", "Antigua and Barbuda", "Bonaire", "Curacao", "Saint Barthelemy", "Saba", "Saint Eustatius", "Saint Pierre and Miquelon", "Falkland Islands", "French Guiana", "South Georgia and the South Sandwich Islands", "British West Indies")
-N_A <- data_events[data_events$country %in% N_A, ]
-S_A <- data_events[data_events$country %in% S_A, ]
+N_A <- events[events$country %in% N_A, ]
+S_A <- events[events$country %in% S_A, ]
 lmNA <- fixest::feols(data=N_A, log(1+conflicts)~value|region + year)
 lm2NA <- fixest::feglm(data=N_A, conflicts~value|region + year, family=quasipoisson)
 lmSA <- fixest::feols(data=S_A, log(1+conflicts)~value|region + year)
@@ -75,28 +75,9 @@ View(results_continents)
 
 ##############################################################################################################################
 ####  DEATHS  ################################################################################################################
-
 ##  DA FARE UGUALE A CONFLICTS SE VA BENE IL CODICE
 
-lm <- lm(log(1+data_events$number_deaths) ~ data_events$value + as.factor(data_events$year) + as.factor(data_events$region))
-summary(lm)
-plot(data_events$number_deaths ~ data_events$value)
 
-# All the data, not divided by type of conflict
-fixest::feols(data=data_events, log(1+number_deaths)~value|region + year)
-fixest::feglm(data=data_events, log(1+number_deaths)~value|region + year, family=quasipoisson)
-
-# For the type of conflict
-fixest::feglm(data=subset(data_events, type=="Nstate"), log(1+number_deaths)~value|region + year, family=quasipoisson)
-
-# For the continent
-continent <- "Africa"
-get_continent <- function(countries) {
-  countrycode(countries, "country.name", "continent")
-}
-conflict_continent <- data_events %>%
-  filter(get_continent(country) == continent)
-fixest::feglm(data=conflict_continent, log(1+number_deaths)~value|region + year, family=quasipoisson)
 
 
 ##############################################################################################################################
