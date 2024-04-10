@@ -10,6 +10,15 @@ gem <- read.csv("^Data/gws_migr_events_temp.csv")
 #################################################################################################
 #################################################################################################
 
+# Create a new variable with the sum of the conflicts for the same year, country, region for the three types
+gem <- gem %>% 
+  group_by(year, country, region) %>% 
+  mutate(all_confl = sum(conflicts))
+gem <- gem %>% 
+  group_by(year, country, region) %>% 
+  mutate(all_deaths = sum(deaths))
+
+
 # Mean value 1-year
 gem <- gem %>%
   arrange(year, country, region, type) %>%
