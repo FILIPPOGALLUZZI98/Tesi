@@ -87,7 +87,7 @@ world <- c("Africa", "Europe", "Oceania", "Asia")
 for (continent in world){
   get_continent <- function(countries) {
     countrycode(countries, "country.name", "continent")}
-  data_state <- subset(gem, country==i)
+  data_state <- subset(gem, country==continent)
   data_continent <- gem %>%
     filter(get_continent(country)==continent)
   glm_v <- fixest::feglm(data=data_continent, conflicts~value|region + year, family=quasipoisson)
