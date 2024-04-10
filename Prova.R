@@ -133,6 +133,129 @@ write.table(table, file = "^Tables/glm_confl_South_America.txt", sep = "\t", quo
 
 
 
+glm <- list()
+world <- c("Africa", "Europe", "Oceania", "Asia")
+for (continent in world){
+  get_continent <- function(countries) {
+    countrycode(countries, "country.name", "continent")}
+  data_continent <- gem %>%
+    filter(get_continent(country) == continent)
+  a <- fixest::feglm(data = data_continent, conflicts ~ value | region + year, family = quasipoisson)
+  glm[[continent]] <- a 
+}
+North_America <- c("United States", "Canada", "Mexico")
+N_A <- gem[gem$country %in% North_America, ]
+a <- fixest::feglm(data=N_A, conflicts~value|region + year, family=quasipoisson)
+glm[["North_America"]] <- a
+South_America <- c("Belize", "Costa Rica", "El Salvador", "Guatemala", "Honduras", "Nicaragua", "Panama", "Argentina", "Bolivia", "Brasile", "Cile", "Colombia", "Ecuador", "Guyana", "Paraguay", "Perù", "Suriname", "Uruguay", "Venezuela", "Aruba", "Bahamas", "Barbados", "Cuba", "Dominica", "Giamaica", "Haiti", "Trinidad and Tobago", "Sint Maarten", "Saint Vincent and the Grenadines", "Saint Lucia", "Saint Kitts and Nevis", "Puerto Rico", "Dominican Republic", "Grenada", "Martinique", "Saint Martin", "Virgin Islands", "Turks and Caicos Islands", "Cayman Islands", "British Virgin Islands", "Guadeloupe", "Antigua and Barbuda", "Bonaire", "Curacao", "Saint Barthelemy", "Saba", "Saint Eustatius", "Saint Pierre and Miquelon", "Falkland Islands", "French Guiana", "South Georgia and the South Sandwich Islands", "British West Indies")
+S_A <- gem[gem$country %in% South_America, ]
+a <- fixest::feglm(data=S_A, conflicts~value|region + year, family=quasipoisson)
+glm[["South America"]] <- a 
+
+table <- etable(glm, tex = TRUE)
+write.table(table, file = "^Tables/glm_value.txt", sep = "\t", quote = FALSE, row.names = FALSE)
+
+
+glm <- list()
+world <- c("Africa", "Europe", "Oceania", "Asia")
+for (continent in world){
+  get_continent <- function(countries) {
+    countrycode(countries, "country.name", "continent")}
+  data_continent <- gem %>%
+    filter(get_continent(country) == continent)
+  a <- fixest::feglm(data = data_continent, conflicts ~ mvalue1 | region + year, family = quasipoisson)
+  glm[[continent]] <- a 
+}
+North_America <- c("United States", "Canada", "Mexico")
+N_A <- gem[gem$country %in% North_America, ]
+a <- fixest::feglm(data=N_A, conflicts~mvalue1|region + year, family=quasipoisson)
+glm[["North_America"]] <- a
+South_America <- c("Belize", "Costa Rica", "El Salvador", "Guatemala", "Honduras", "Nicaragua", "Panama", "Argentina", "Bolivia", "Brasile", "Cile", "Colombia", "Ecuador", "Guyana", "Paraguay", "Perù", "Suriname", "Uruguay", "Venezuela", "Aruba", "Bahamas", "Barbados", "Cuba", "Dominica", "Giamaica", "Haiti", "Trinidad and Tobago", "Sint Maarten", "Saint Vincent and the Grenadines", "Saint Lucia", "Saint Kitts and Nevis", "Puerto Rico", "Dominican Republic", "Grenada", "Martinique", "Saint Martin", "Virgin Islands", "Turks and Caicos Islands", "Cayman Islands", "British Virgin Islands", "Guadeloupe", "Antigua and Barbuda", "Bonaire", "Curacao", "Saint Barthelemy", "Saba", "Saint Eustatius", "Saint Pierre and Miquelon", "Falkland Islands", "French Guiana", "South Georgia and the South Sandwich Islands", "British West Indies")
+S_A <- gem[gem$country %in% South_America, ]
+a <- fixest::feglm(data=S_A, conflicts~mvalue1|region + year, family=quasipoisson)
+glm[["South America"]] <- a 
+
+table <- etable(glm, tex = TRUE)
+write.table(table, file = "^Tables/glm_mvalue1.txt", sep = "\t", quote = FALSE, row.names = FALSE)
+
+
+glm <- list()
+world <- c("Africa", "Europe", "Oceania", "Asia")
+for (continent in world){
+  get_continent <- function(countries) {
+    countrycode(countries, "country.name", "continent")}
+  data_continent <- gem %>%
+    filter(get_continent(country) == continent)
+  a <- fixest::feglm(data = data_continent, conflicts ~ mvalue5 | region + year, family = quasipoisson)
+  glm[[continent]] <- a 
+}
+North_America <- c("United States", "Canada", "Mexico")
+N_A <- gem[gem$country %in% North_America, ]
+a <- fixest::feglm(data=N_A, conflicts~mvalue5|region + year, family=quasipoisson)
+glm[["North_America"]] <- a
+South_America <- c("Belize", "Costa Rica", "El Salvador", "Guatemala", "Honduras", "Nicaragua", "Panama", "Argentina", "Bolivia", "Brasile", "Cile", "Colombia", "Ecuador", "Guyana", "Paraguay", "Perù", "Suriname", "Uruguay", "Venezuela", "Aruba", "Bahamas", "Barbados", "Cuba", "Dominica", "Giamaica", "Haiti", "Trinidad and Tobago", "Sint Maarten", "Saint Vincent and the Grenadines", "Saint Lucia", "Saint Kitts and Nevis", "Puerto Rico", "Dominican Republic", "Grenada", "Martinique", "Saint Martin", "Virgin Islands", "Turks and Caicos Islands", "Cayman Islands", "British Virgin Islands", "Guadeloupe", "Antigua and Barbuda", "Bonaire", "Curacao", "Saint Barthelemy", "Saba", "Saint Eustatius", "Saint Pierre and Miquelon", "Falkland Islands", "French Guiana", "South Georgia and the South Sandwich Islands", "British West Indies")
+S_A <- gem[gem$country %in% South_America, ]
+a <- fixest::feglm(data=S_A, conflicts~mvalue5|region + year, family=quasipoisson)
+glm[["South America"]] <- a 
+
+table <- etable(glm, tex = TRUE)
+write.table(table, file = "^Tables/glm_mvalue5.txt", sep = "\t", quote = FALSE, row.names = FALSE)
+
+
+glm <- list()
+world <- c("Africa", "Europe", "Oceania", "Asia")
+for (continent in world){
+  get_continent <- function(countries) {
+    countrycode(countries, "country.name", "continent")}
+  data_continent <- gem %>%
+    filter(get_continent(country) == continent)
+  a <- fixest::feglm(data = data_continent, conflicts ~ vvalue1 | region + year, family = quasipoisson)
+  glm[[continent]] <- a 
+}
+North_America <- c("United States", "Canada", "Mexico")
+N_A <- gem[gem$country %in% North_America, ]
+a <- fixest::feglm(data=N_A, conflicts~vvalue1|region + year, family=quasipoisson)
+glm[["North_America"]] <- a
+South_America <- c("Belize", "Costa Rica", "El Salvador", "Guatemala", "Honduras", "Nicaragua", "Panama", "Argentina", "Bolivia", "Brasile", "Cile", "Colombia", "Ecuador", "Guyana", "Paraguay", "Perù", "Suriname", "Uruguay", "Venezuela", "Aruba", "Bahamas", "Barbados", "Cuba", "Dominica", "Giamaica", "Haiti", "Trinidad and Tobago", "Sint Maarten", "Saint Vincent and the Grenadines", "Saint Lucia", "Saint Kitts and Nevis", "Puerto Rico", "Dominican Republic", "Grenada", "Martinique", "Saint Martin", "Virgin Islands", "Turks and Caicos Islands", "Cayman Islands", "British Virgin Islands", "Guadeloupe", "Antigua and Barbuda", "Bonaire", "Curacao", "Saint Barthelemy", "Saba", "Saint Eustatius", "Saint Pierre and Miquelon", "Falkland Islands", "French Guiana", "South Georgia and the South Sandwich Islands", "British West Indies")
+S_A <- gem[gem$country %in% South_America, ]
+a <- fixest::feglm(data=S_A, conflicts~vvalue1|region + year, family=quasipoisson)
+glm[["South America"]] <- a 
+
+table <- etable(glm, tex = TRUE)
+write.table(table, file = "^Tables/glm_vvalue1.txt", sep = "\t", quote = FALSE, row.names = FALSE)
+
+glm <- list()
+world <- c("Africa", "Europe", "Oceania", "Asia")
+for (continent in world){
+  get_continent <- function(countries) {
+    countrycode(countries, "country.name", "continent")}
+  data_continent <- gem %>%
+    filter(get_continent(country) == continent)
+  a <- fixest::feglm(data = data_continent, conflicts ~ sdvalue5 | region + year, family = quasipoisson)
+  glm[[continent]] <- a 
+}
+North_America <- c("United States", "Canada", "Mexico")
+N_A <- gem[gem$country %in% North_America, ]
+a <- fixest::feglm(data=N_A, conflicts~sdvalue5|region + year, family=quasipoisson)
+glm[["North_America"]] <- a
+South_America <- c("Belize", "Costa Rica", "El Salvador", "Guatemala", "Honduras", "Nicaragua", "Panama", "Argentina", "Bolivia", "Brasile", "Cile", "Colombia", "Ecuador", "Guyana", "Paraguay", "Perù", "Suriname", "Uruguay", "Venezuela", "Aruba", "Bahamas", "Barbados", "Cuba", "Dominica", "Giamaica", "Haiti", "Trinidad and Tobago", "Sint Maarten", "Saint Vincent and the Grenadines", "Saint Lucia", "Saint Kitts and Nevis", "Puerto Rico", "Dominican Republic", "Grenada", "Martinique", "Saint Martin", "Virgin Islands", "Turks and Caicos Islands", "Cayman Islands", "British Virgin Islands", "Guadeloupe", "Antigua and Barbuda", "Bonaire", "Curacao", "Saint Barthelemy", "Saba", "Saint Eustatius", "Saint Pierre and Miquelon", "Falkland Islands", "French Guiana", "South Georgia and the South Sandwich Islands", "British West Indies")
+S_A <- gem[gem$country %in% South_America, ]
+a <- fixest::feglm(data=S_A, conflicts~sdvalue5|region + year, family=quasipoisson)
+glm[["South America"]] <- a 
+
+table <- etable(glm, tex = TRUE)
+write.table(table, file = "^Tables/glm_sdvalue5.txt", sep = "\t", quote = FALSE, row.names = FALSE)
+
+
+
+
+
+
+
+
+
+
+
 
 
 
