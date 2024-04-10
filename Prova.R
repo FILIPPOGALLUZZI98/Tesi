@@ -120,6 +120,7 @@ glm_vv5 <- fixest::feglm(data=S_A, conflicts~sdvalue5|region + year, family=quas
 table <-etable(glm_v, glm_mv1, glm_mv5, glm_vv1, glm_vv5, tex=TRUE)
 write.table(table, file = "^Tables/glm_confl_South_America.txt", sep = "\t", quote = FALSE, row.names = FALSE)
 
+##############################################################################################################################
 
 
 
@@ -131,8 +132,7 @@ write.table(table, file = "^Tables/glm_confl_South_America.txt", sep = "\t", quo
 
 
 
-
-
+# CONTINENTS - VALUE
 glm <- list()
 world <- c("Africa", "Europe", "Oceania", "Asia")
 for (continent in world){
@@ -151,11 +151,11 @@ South_America <- c("Belize", "Costa Rica", "El Salvador", "Guatemala", "Honduras
 S_A <- gem[gem$country %in% South_America, ]
 a <- fixest::feglm(data=S_A, conflicts~value|region + year, family=quasipoisson)
 glm[["South America"]] <- a 
-
 table <- etable(glm, tex = TRUE)
-write.table(table, file = "^Tables/glm_value.txt", sep = "\t", quote = FALSE, row.names = FALSE)
+write.table(table, file = "^Tables/glm_continents_value.txt", sep = "\t", quote = FALSE, row.names = FALSE)
 
 
+# CONTINENTS - MEAN VALUE 1
 glm <- list()
 world <- c("Africa", "Europe", "Oceania", "Asia")
 for (continent in world){
@@ -174,11 +174,11 @@ South_America <- c("Belize", "Costa Rica", "El Salvador", "Guatemala", "Honduras
 S_A <- gem[gem$country %in% South_America, ]
 a <- fixest::feglm(data=S_A, conflicts~mvalue1|region + year, family=quasipoisson)
 glm[["South America"]] <- a 
-
 table <- etable(glm, tex = TRUE)
-write.table(table, file = "^Tables/glm_mvalue1.txt", sep = "\t", quote = FALSE, row.names = FALSE)
+write.table(table, file = "^Tables/glm_continents_mvalue1.txt", sep = "\t", quote = FALSE, row.names = FALSE)
 
 
+# CONTINENTS - MEAN VALUE 5
 glm <- list()
 world <- c("Africa", "Europe", "Oceania", "Asia")
 for (continent in world){
@@ -197,11 +197,11 @@ South_America <- c("Belize", "Costa Rica", "El Salvador", "Guatemala", "Honduras
 S_A <- gem[gem$country %in% South_America, ]
 a <- fixest::feglm(data=S_A, conflicts~mvalue5|region + year, family=quasipoisson)
 glm[["South America"]] <- a 
-
 table <- etable(glm, tex = TRUE)
-write.table(table, file = "^Tables/glm_mvalue5.txt", sep = "\t", quote = FALSE, row.names = FALSE)
+write.table(table, file = "^Tables/glm_continents_mvalue5.txt", sep = "\t", quote = FALSE, row.names = FALSE)
 
 
+# CONTINENTS - VARIATION VALUE 1
 glm <- list()
 world <- c("Africa", "Europe", "Oceania", "Asia")
 for (continent in world){
@@ -220,10 +220,11 @@ South_America <- c("Belize", "Costa Rica", "El Salvador", "Guatemala", "Honduras
 S_A <- gem[gem$country %in% South_America, ]
 a <- fixest::feglm(data=S_A, conflicts~vvalue1|region + year, family=quasipoisson)
 glm[["South America"]] <- a 
-
 table <- etable(glm, tex = TRUE)
-write.table(table, file = "^Tables/glm_vvalue1.txt", sep = "\t", quote = FALSE, row.names = FALSE)
+write.table(table, file = "^Tables/glm_continents_vvalue1.txt", sep = "\t", quote = FALSE, row.names = FALSE)
 
+
+# CONTINENTS - VARIATION VALUE 5
 glm <- list()
 world <- c("Africa", "Europe", "Oceania", "Asia")
 for (continent in world){
@@ -242,9 +243,8 @@ South_America <- c("Belize", "Costa Rica", "El Salvador", "Guatemala", "Honduras
 S_A <- gem[gem$country %in% South_America, ]
 a <- fixest::feglm(data=S_A, conflicts~sdvalue5|region + year, family=quasipoisson)
 glm[["South America"]] <- a 
-
 table <- etable(glm, tex = TRUE)
-write.table(table, file = "^Tables/glm_sdvalue5.txt", sep = "\t", quote = FALSE, row.names = FALSE)
+write.table(table, file = "^Tables/glm_continents_sdvalue5.txt", sep = "\t", quote = FALSE, row.names = FALSE)
 
 
 
