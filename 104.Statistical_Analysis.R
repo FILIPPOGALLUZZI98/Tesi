@@ -9,7 +9,7 @@
 suppressPackageStartupMessages({
   library(sf);library(sp);library(plyr);library(raster);library(ncdf4);library(exactextractr);library(dplyr);library(stringr)
   library(reshape2);library(ggplot2);library(ggrepel);library(lubridate);library(zoo);library(foreign); library(countrycode);
-  library(fixest); library(broom);library(knitr)} )
+  library(fixest); library(broom);library(knitr); library(stargazer)} )
 
 events <-read.csv("^Data/gws_events.csv")
 migr <- read.csv("^Data/gws_migr.csv")
