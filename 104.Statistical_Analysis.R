@@ -13,6 +13,7 @@ suppressPackageStartupMessages({
 
 events <-read.csv("^Data/gws_events.csv")
 migr <- read.csv("^Data/gws_migr.csv")
+gem <- read.csv("^Data/gws_migr_events.csv")
 
 
 ##############################################################################################################################
@@ -80,16 +81,37 @@ print(kable(results_continents))
 View(results_continents)
 
 
-
 ##############################################################################################################################
-####  DEATHS  ################################################################################################################
-##  DA FARE UGUALE A CONFLICTS SE VA BENE IL CODICE
+####  PROVE  ########################################################################################################################
+data1 <- subset(gem, interval==1)
+data1 <- subset(data1, type=="onesided")
+data1 <- subset(data1, worldregion=="Africa & Middle East")
+
+lm <-fixest::feols(data=data1, log(1+flow)~value|region + year); lm
+lm <-fixest::feols(data=data1, log(1+flow)~mvalue1|region + year); lm
+lm <-fixest::feols(data=data1, log(1+flow)~vvalue1|region + year); lm
+
+
+lm2 <-fixest::feglm(data=data1, outflow_rate_annual~value|region + year, family=quasipoisson)
+lm2 <-fixest::feglm(data=data1, conflicts~mvalue1|region + year, family=quasipoisson)
+lm2 <-fixest::feglm(data=data1, conflicts~vvalue1|region + year, family=quasipoisson)
 
 
 
 
-##############################################################################################################################
-####  MIGRATIONS  ############################################################################################################
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
