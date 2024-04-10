@@ -4,28 +4,29 @@ suppressPackageStartupMessages({
   library(fixest); library(broom);library(knitr)} )
 
 ge <- read.csv("^Data/gws_events.csv")
-gem <- read.csv("^Data/gws_migr_events.csv")
+gemp <- read.csv("^Data/gws_migr_events.csv")
 
 
 #################################################################################################
 #################################################################################################
-
-#### CONTROLLARE BENE!!
-#### SEMBRA SBAGLIATO
+gem <- gemp
 
 
-
-
-
-gemp <- gem
 # Mean value 1-year
-gemp <- gemp %>%
+gem <- gem %>%
   arrange(year, country, region, type) %>%
   group_by(country, region, type) %>%
   mutate(mvalue1 = (lag(value) + value) / 2)
-
-
-
+# Mean conflicts 1-year
+gem <- gem %>%
+  arrange(year, country, region, type) %>%
+  group_by(country, region, type) %>%
+  mutate(mconfl1 = (lag(conflicts) + conflicts) / 2)
+# Mean deaths 1-year
+gem <- gem %>%
+  arrange(year, country, region, type) %>%
+  group_by(country, region, type) %>%
+  mutate(mdeaths1 = (lag(deaths) + deaths) / 2)
 
 
 
