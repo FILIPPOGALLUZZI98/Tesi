@@ -14,13 +14,15 @@ gem <- read.csv("^Data/gws_migr_events.csv")
 #### SEMBRA SBAGLIATO
 
 
+
+
+
+gemp <- gem
 # Mean value 1-year
-gem <- gem %>%
-  arrange(type, orig, year) %>%
-  group_by(orig, type) %>%
-  mutate(mvalue1 = (value + lag(value, default = 0)) / 2)
-
-
+gemp <- gemp %>%
+  arrange(year, country, region, type) %>%
+  group_by(country, region, type) %>%
+  mutate(mvalue1 = (lag(value) + value) / 2)
 
 
 
