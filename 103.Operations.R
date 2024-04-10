@@ -74,7 +74,7 @@ gem <- gem %>%
 
 
 # Save data
-write.csv(gem, paste0("^Data/", "gws_migr", ".csv"), row.names=FALSE)
+write.csv(gem, paste0("^Data/", "gws_migr_events", ".csv"), row.names=FALSE)
 
 
 
