@@ -27,10 +27,38 @@ gem <- gem %>%
   arrange(year, country, region, type) %>%
   group_by(country, region, type) %>%
   mutate(mdeaths1 = (lag(deaths) + deaths) / 2)
+# Variation value 1-year
+gem <- gem %>%
+  arrange(year, country, region, type) %>%
+  group_by(country, region, type) %>%
+  mutate(vvalue1 = value - lag(value))
+# Variation conflicts 1-year
+gem <- gem %>%
+  arrange(year, country, region, type) %>%
+  group_by(country, region, type) %>%
+  mutate(vconfl1 = conflicts - lag(conflicts))
+# Vatiation deaths 1-year
+gem <- gem %>%
+  arrange(year, country, region, type) %>%
+  group_by(country, region, type) %>%
+  mutate(vdeaths1 = deaths - lag(deaths))
 
 
-
-
+# Mean value 5-years
+gem <- gem %>%
+  arrange(year, country, region, type) %>%
+  group_by(country, region, type) %>%
+  mutate(mvalue5 = rollmean(value, k = 5, align = "right", fill = NA))
+# Mean conflicts 5-years
+gem <- gem %>%
+  arrange(year, country, region, type) %>%
+  group_by(country, region, type) %>%
+  mutate(mconflict5 = rollmean(conflicts, k = 5, align = "right", fill = NA))
+# Mean deaths 5-years
+gem <- gem %>%
+  arrange(year, country, region, type) %>%
+  group_by(country, region, type) %>%
+  mutate(mdeaths5 = rollmean(deaths, k = 5, align = "right", fill = NA))
 
 
 
