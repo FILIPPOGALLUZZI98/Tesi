@@ -10,9 +10,59 @@ suppressPackageStartupMessages({
 
 gem <- read.csv("^Data/gws_migr_events.csv")
 
-head(gem)
 ##############################################################################################################################
-####  CONFLICTS  #####
+
+events_sum <- subset(gem, type=="state")
+
+####  VALUE - SUM OF EVENTS  #####
+ols_c <- fixest::feols(data=events_sum, log(1+all_confl)~value|region + year)
+glm_c <- fixest::feglm(data=events_sum, all_confl~value|region + year, family=quasipoisson)
+ols_d <- fixest::feols(data=events_sum, log(1+all_deaths)~value|region + year)
+glm_d <- fixest::feglm(data=events_sum, all_deaths~value|region + year, family=quasipoisson)
+table <-etable(ols_c, glm_c, ols_d, glm_d, tex=TRUE)
+write.table(table, file = "^Tables/value_sum_events.txt", sep = "\t", quote = FALSE)
+
+####  MEAN VALUE 1 - SUM OF EVENTS  #####
+ols_c <- fixest::feols(data=events_sum, log(1+all_confl)~mvalue1|region + year)
+glm_c <- fixest::feglm(data=events_sum, all_confl~mvalue1|region + year, family=quasipoisson)
+ols_d <- fixest::feols(data=events_sum, log(1+all_deaths)~mvalue1|region + year)
+glm_d <- fixest::feglm(data=events_sum, all_deaths~mvalue1|region + year, family=quasipoisson)
+table <-etable(ols_c, glm_c, ols_d, glm_d, tex=TRUE)
+write.table(table, file = "^Tables/mvalue1_sum_events.txt", sep = "\t", quote = FALSE)
+
+####  MEAN VALUE 5 - SUM OF EVENTS  #####
+ols_c <- fixest::feols(data=events_sum, log(1+all_confl)~mvalue5|region + year)
+glm_c <- fixest::feglm(data=events_sum, all_confl~mvalue5|region + year, family=quasipoisson)
+ols_d <- fixest::feols(data=events_sum, log(1+all_deaths)~mvalue5|region + year)
+glm_d <- fixest::feglm(data=events_sum, all_deaths~mvalue5|region + year, family=quasipoisson)
+table <-etable(ols_c, glm_c, ols_d, glm_d, tex=TRUE)
+write.table(table, file = "^Tables/mvalue5_sum_events.txt", sep = "\t", quote = FALSE)
+
+####  VARIATION VALUE 1 - SUM OF EVENTS  #####
+ols_c <- fixest::feols(data=events_sum, log(1+all_confl)~vvalue1|region + year)
+glm_c <- fixest::feglm(data=events_sum, all_confl~vvalue1|region + year, family=quasipoisson)
+ols_d <- fixest::feols(data=events_sum, log(1+all_deaths)~vvalue1|region + year)
+glm_d <- fixest::feglm(data=events_sum, all_deaths~vvalue1|region + year, family=quasipoisson)
+table <-etable(ols_c, glm_c, ols_d, glm_d, tex=TRUE)
+write.table(table, file = "^Tables/vvalue1_sum_events.txt", sep = "\t", quote = FALSE)
+
+####  VARIATION VALUE 5 - SUM OF EVENTS  #####
+ols_c <- fixest::feols(data=events_sum, log(1+all_confl)~sdvalue5|region + year)
+glm_c <- fixest::feglm(data=events_sum, all_confl~sdvalue5|region + year, family=quasipoisson)
+ols_d <- fixest::feols(data=events_sum, log(1+all_deaths)~sdvalue5|region + year)
+glm_d <- fixest::feglm(data=events_sum, all_deaths~sdvalue5|region + year, family=quasipoisson)
+table <-etable(ols_c, glm_c, ols_d, glm_d, tex=TRUE)
+write.table(table, file = "^Tables/vvalue5_sum_events.txt", sep = "\t", quote = FALSE)
+
+
+
+
+
+
+
+
+
+##############################################################################################################################
 
 
 
@@ -25,29 +75,4 @@ head(gem)
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-ols_c <- fixest::feols(data=gem, log(1+all_confl)~value|region + year)
-glm_c <- fixest::feglm(data=gem, conflicts~value|region + year, family=quasipoisson)
-ols_cm1 <- fixest::feols(data=gem, log(1+conflicts)~mvalue1|region + year)
-glm_cm1 <- fixest::feglm(data=gem, conflicts~mvalue1|region + year, family=quasipoisson)
-ols_cm5 <- fixest::feols(data=gem, log(1+conflicts)~mvalue5|region + year)
-glm_cm5 <- fixest::feglm(data=gem, conflicts~mvalue5|region + year, family=quasipoisson)
-ols_cv1 <- fixest::feols(data=gem, log(1+conflicts)~vvalue1|region + year)
-glm_cv1 <- fixest::feglm(data=gem, conflicts~vvalue1|region + year, family=quasipoisson)
-ols_cv5 <- fixest::feols(data=gem, log(1+conflicts)~sdvalue5|region + year)
-glm_cv5 <- fixest::feglm(data=gem, conflicts~sdvalue5|region + year, family=quasipoisson)
-
-
-
-etable(ols_c, glm_c, ols_cm1,glm_cm1, ols_cm5,glm_cm5, ols_cv1, glm_cv1,ols_cv5, glm_cv5)
 
