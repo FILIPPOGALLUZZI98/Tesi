@@ -4,13 +4,11 @@ suppressPackageStartupMessages({
   library(fixest); library(broom);library(knitr)} )
 
 ge <- read.csv("^Data/gws_events.csv")
-gemp <- read.csv("^Data/gws_migr_events.csv")
+gem <- read.csv("^Data/gws_migr_events_temp.csv")
 
 
 #################################################################################################
 #################################################################################################
-gem <- gemp
-
 
 # Mean value 1-year
 gem <- gem %>%
@@ -43,7 +41,6 @@ gem <- gem %>%
   group_by(country, region, type) %>%
   mutate(vdeaths1 = deaths - lag(deaths))
 
-
 # Mean value 5-years
 gem <- gem %>%
   arrange(year, country, region, type) %>%
@@ -59,8 +56,25 @@ gem <- gem %>%
   arrange(year, country, region, type) %>%
   group_by(country, region, type) %>%
   mutate(mdeaths5 = rollmean(deaths, k = 5, align = "right", fill = NA))
+# Variation value 5-year
+gem <- gem %>%
+  arrange(year, country, region, type) %>%
+  group_by(country, region, type) %>%
+  mutate(sdvalue5 = rollapply(value, width = 5, FUN = sd, align = "right", fill = NA))
+# Variation conflicts 5-year
+gem <- gem %>%
+  arrange(year, country, region, type) %>%
+  group_by(country, region, type) %>%
+  mutate(sdvalue5 = rollapply(conflicts, width = 5, FUN = sd, align = "right", fill = NA))
+# Vatiation deaths 5-year
+gem <- gem %>%
+  arrange(year, country, region, type) %>%
+  group_by(country, region, type) %>%
+  mutate(sdvalue5 = rollapply(deaths, width = 5, FUN = sd, align = "right", fill = NA))
 
 
+# Save data
+write.csv(gem, paste0("^Data/", "gws_migr", ".csv"), row.names=FALSE)
 
 
 
