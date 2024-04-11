@@ -43,7 +43,7 @@ gem <- gem %>%
   group_by(country, region, type) %>%
   mutate(growth_value1=((value-lag(value))/lag(value))*100)
 
-# Growth rate value 1-year
+# Growth rate value 5-year
 gem <- gem %>%
   arrange(year, country, region, type) %>%
   group_by(country, region, type) %>%
@@ -76,7 +76,7 @@ gem <- gem %>%
 gem <- gem %>%
   arrange(year, country, region, type) %>%
   group_by(country, region, type) %>%
-  mutate(mutate(growth_deaths1=((deaths-lag(deaths))/lag(deaths))*100))
+  mutate((growth_deaths1=((deaths-lag(deaths))/lag(deaths))*100))
 # Mean conflicts 5-years
 gem <- gem %>%
   arrange(year, country, region, type) %>%
@@ -96,17 +96,17 @@ gem <- gem %>%
 gem <- gem %>%
   arrange(year, country, region, type) %>%
   group_by(country, region, type) %>%
-  mutate(mutate(growth_deaths5=((all_deaths-lag(all_deaths, n=5))/lag(all_deaths, n=5))*100))
+  mutate((growth_deaths5=((all_deaths-lag(all_deaths, n=5))/lag(all_deaths, n=5))*100))
 # Standard deviation conflicts 5-year
 gem <- gem %>%
   arrange(year, country, region, type) %>%
   group_by(country, region, type) %>%
-  mutate(sdvalue5 = rollapply(conflicts, width = 5, FUN = sd, align = "right", fill = NA))
+  mutate(sconflicts5 = rollapply(conflicts, width = 5, FUN = sd, align = "right", fill = NA))
 # Standard deviation deaths 5-year
 gem <- gem %>%
   arrange(year, country, region, type) %>%
   group_by(country, region, type) %>%
-  mutate(sdvalue5 = rollapply(deaths, width = 5, FUN = sd, align = "right", fill = NA))
+  mutate(sddeaths5 = rollapply(deaths, width = 5, FUN = sd, align = "right", fill = NA))
 
 
 
