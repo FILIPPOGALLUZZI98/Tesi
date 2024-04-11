@@ -76,7 +76,7 @@ gem <- gem %>%
 gem <- gem %>%
   arrange(year, country, region, type) %>%
   group_by(country, region, type) %>%
-  mutate((growth_deaths1=((deaths-lag(deaths))/lag(deaths))*100))
+  mutate(growth_deaths1=((deaths-lag(deaths))/lag(deaths))*100)
 # Mean conflicts 5-years
 gem <- gem %>%
   arrange(year, country, region, type) %>%
@@ -120,15 +120,27 @@ write.csv(gem, paste0("^Data/", "gws_migr_events", ".csv"), row.names=FALSE)
 
 
 
+
 gem <- gem %>%
-  arrange(year, country, region, type) %>%
+  filter(year >= 1980 & year <= 2010) %>%
   group_by(country, region, type) %>%
-  mutate(mean_region = (mean(value)))
+  mutate(mean_region = mean(value))
 
 gem <- gem %>%
   arrange(year, country, region, type) %>%
   group_by(country, region, type) %>%
   mutate(sd_region = (sd(value)))
+
+
+
+
+
+gem <- gem %>%
+  arrange(year, country, region, type) %>%
+  group_by(country, region, type) %>%
+  mutate(mean_region = (mean(value)))
+
+
 gem <- gem %>%
   arrange(year, country, region, type) %>%
   group_by(country, region, type) %>%
@@ -136,30 +148,30 @@ gem <- gem %>%
 
 
 
-
-
 medie <- gem %>%
+  select(year, country, region, type, value)
+medie <- medie %>%
   filter(year >= 1980 & year <= 2010) %>%
   arrange(year, country, region, type) %>%
   group_by(country, region, type) %>%
   mutate(mean_region = mean(value))
-gem <- left_join(gem, medie, by=c("country", "region"))
+
+
+medie_all <- gem %>%
+  select(year, country, region, type, value)
+medie <- left_join(medie_all, medie, by=c("year","country", "region", "type", "value"))
+
+
+gem_copiato <- gem %>%
+  left_join(medie, by = c("year", "country", "region", "type")) %>%
+  mutate(mean_region = ifelse(is.na(mean_region), mean_region, mean_region))
 
 
 
 
-gem <- gem %>%
-  filter(year >= 1980 & year <= 2010) %>%
+medie_filled <- medie %>%
   group_by(country, region, type) %>%
-  mutate(mean_region = mean(value))
-
-
-
-
-
-
-
-
+  fill(mean_region, .direction = "down")
 
 
 
