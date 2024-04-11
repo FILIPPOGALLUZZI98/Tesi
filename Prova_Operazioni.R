@@ -108,7 +108,34 @@ gem <- gem %>%
   group_by(country, region, type) %>%
   mutate(sddeaths5 = rollapply(deaths, width = 5, FUN = sd, align = "right", fill = NA))
 
+medie <- gem %>%
+  select(year, country, region, type, value)
+medie <- medie %>%
+  filter(year >= 1980 & year <= 2010) %>%
+  arrange(year, country, region, type) %>%
+  group_by(country, region, type) %>%
+  mutate(mean_region = mean(value))
+medie$year <- NULL; medie$type <- NULL; medie$value <- NULL
+medie <- medie %>%
+  distinct(country, region, .keep_all = TRUE)
+gem <- left_join(gem,medie,by=c("country","region"))
 
+std_t <- gem %>%
+  select(year, country, region, type, value)
+std_t <- std_t %>%
+  filter(year >= 1980 & year <= 2010) %>%
+  arrange(year, country, region, type) %>%
+  group_by(country, region, type) %>%
+  mutate(std = sd(value))
+std_t$year <- NULL; std_t$type <- NULL; std_t$value <- NULL
+std_t <- std_t %>%
+  distinct(country, region, .keep_all = TRUE)
+gem <- left_join(gem,std_t,by=c("country","region"))
+
+gem <- gem %>%
+  arrange(year, country, region, type) %>%
+  group_by(country, region, type) %>%
+  mutate(anomaly_it = (value-mean_region)/std)
 
 # Save data
 write.csv(gem, paste0("^Data/", "gws_migr_events", ".csv"), row.names=FALSE)
@@ -118,60 +145,6 @@ write.csv(gem, paste0("^Data/", "gws_migr_events", ".csv"), row.names=FALSE)
 
 
 
-
-
-
-gem <- gem %>%
-  filter(year >= 1980 & year <= 2010) %>%
-  group_by(country, region, type) %>%
-  mutate(mean_region = mean(value))
-
-gem <- gem %>%
-  arrange(year, country, region, type) %>%
-  group_by(country, region, type) %>%
-  mutate(sd_region = (sd(value)))
-
-
-
-
-
-gem <- gem %>%
-  arrange(year, country, region, type) %>%
-  group_by(country, region, type) %>%
-  mutate(mean_region = (mean(value)))
-
-
-gem <- gem %>%
-  arrange(year, country, region, type) %>%
-  group_by(country, region, type) %>%
-  mutate(anomaly = (value-mean_region)/sd_region)
-
-
-
-medie <- gem %>%
-  select(year, country, region, type, value)
-medie <- medie %>%
-  filter(year >= 1980 & year <= 2010) %>%
-  arrange(year, country, region, type) %>%
-  group_by(country, region, type) %>%
-  mutate(mean_region = mean(value))
-
-
-medie_all <- gem %>%
-  select(year, country, region, type, value)
-medie <- left_join(medie_all, medie, by=c("year","country", "region", "type", "value"))
-
-
-gem_copiato <- gem %>%
-  left_join(medie, by = c("year", "country", "region", "type")) %>%
-  mutate(mean_region = ifelse(is.na(mean_region), mean_region, mean_region))
-
-
-
-
-medie_filled <- medie %>%
-  group_by(country, region, type) %>%
-  fill(mean_region, .direction = "down")
 
 
 
