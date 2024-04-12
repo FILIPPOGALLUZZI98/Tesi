@@ -60,7 +60,23 @@ table_europe <- etable(Europe)
 ##############################################################################################################################
 #### ALL CONFLICTS GLM  ####
 
+state <- subset(gem, type=="state")
+state1 <- fixest::feglm(data=state, conflicts~sw(value,mvalue1,vvalue1,growth_value1)|region + year, family=quasipoisson)
+state2 <- fixest::feglm(data=state, conflicts~sw(mvalue5,growth_value5,sdvalue5,anomaly_it)|region + year, family=quasipoisson)
+table1<- etable(state1)
+table2<- etable(state2)
 
+Nstate <- subset(gem, type=="Nstate")
+Nstate1 <- fixest::feglm(data=Nstate, conflicts~sw(value,mvalue1,vvalue1,growth_value1)|region + year, family=quasipoisson)
+Nstate2 <- fixest::feglm(data=Nstate, conflicts~sw(mvalue5,growth_value5,sdvalue5,anomaly_it)|region + year, family=quasipoisson)
+table1<- etable(Nstate1)
+table2<- etable(Nstate2)
+
+onesided <- subset(gem, type=="onesided")
+onesided1 <- fixest::feglm(data=onesided, conflicts~sw(value,mvalue1,vvalue1,growth_value1)|region + year, family=quasipoisson)
+onesided2 <- fixest::feglm(data=onesided, conflicts~sw(mvalue5,growth_value5,sdvalue5,anomaly_it)|region + year, family=quasipoisson)
+table1<- etable(onesided1)
+table2<- etable(onesided2)
 
 
 write.table(table, file = "^Tables/glm_conflicts.txt", sep = "\t", quote = FALSE, row.names = FALSE)
