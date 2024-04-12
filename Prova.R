@@ -12,15 +12,18 @@ gem <- read.csv("^Data/gws_migr_events.csv")
 
 setFixest_dict(c(all_confl="# of conflicts",value = "GWS", mvalue1 = "GWS 1-year average ",vvalue1="GWS 1-year variation",growth_value1="% 1-year GWS variation",
        mvalue5="GWS 5-year average", growth_value5="% 5-year GWS variation", sdvalue5="GWS std 5-year", anomaly_it="GWS Anomalies 1980-2010 "))
-
+col4 <- c("0", "1", "2", "3", "4")
+col5 <- c("0", "1", "2", "3", "4", "5")
+col7 <- c("0", "1", "2", "3", "4", "5", "6","7")
 ##############################################################################################################################
 #### ALL CONFLICTS GLM  ####
 events_sum <- subset(gem, type=="state")
 
 gws1 <- fixest::feglm(data=events_sum, all_confl~sw(value,mvalue1,vvalue1,growth_value1)|region + year, family=quasipoisson)
 gws2 <- fixest::feglm(data=events_sum, all_confl~sw(mvalue5,growth_value5,sdvalue5,anomaly_it)|region + year, family=quasipoisson)
-table1<- etable(gws1)
-table2<- etable(gws2)
+table1<- etable(gws1); colnames(table1) <- col4
+table2<- etable(gws2); colnames(table2) <- col5
+
 
 ##############################################################################################################################
 #### ALL CONFLICTS - CONTINENTS GLM  ####
@@ -31,7 +34,7 @@ get_continent <- function(countries) {
 data_continent <- events_sum %>%
   filter(get_continent(country) == continent)
 Africa <- fixest::feglm(data = data_continent, all_confl ~ sw(value,mvalue1,growth_value1,mvalue5,growth_value5,sdvalue5,anomaly_it) | region + year, family = quasipoisson)
-table_africa <- etable(Africa)
+table_africa <- etable(Africa); colnames(table_africa) <- col7
 
 continent <- "Asia"
 get_continent <- function(countries) {
@@ -39,7 +42,7 @@ get_continent <- function(countries) {
 data_continent <- events_sum %>%
   filter(get_continent(country) == continent)
 Asia <- fixest::feglm(data = data_continent, all_confl ~ sw(value,mvalue1,growth_value1,mvalue5,growth_value5,sdvalue5,anomaly_it) | region + year, family = quasipoisson)
-table_Asia <- etable(Asia)
+table_asia <- etable(Asia); colnames(table_asia) <- col7
 
 continent <- "Oceania"
 get_continent <- function(countries) {
@@ -47,7 +50,7 @@ get_continent <- function(countries) {
 data_continent <- events_sum %>%
   filter(get_continent(country) == continent)
 Oceania <- fixest::feglm(data = data_continent, all_confl ~ sw(value,mvalue1,growth_value1,mvalue5,growth_value5,sdvalue5,anomaly_it) | region + year, family = quasipoisson)
-table_oceania <- etable(Oceania)
+table_oceania <- etable(Oceania); colnames(table_oceania) <- col7
 
 continent <- "Europe"
 get_continent <- function(countries) {
@@ -55,7 +58,9 @@ get_continent <- function(countries) {
 data_continent <- events_sum %>%
   filter(get_continent(country) == continent)
 Europe <- fixest::feglm(data = data_continent, all_confl ~ sw(value,mvalue1,growth_value1,mvalue5,growth_value5,sdvalue5,anomaly_it) | region + year, family = quasipoisson)
-table_europe <- etable(Europe)
+table_europe <- etable(Europe); colnames(table_europe) <- col7
+
+
 
 ##############################################################################################################################
 #### ALL CONFLICTS GLM  ####
@@ -63,20 +68,20 @@ table_europe <- etable(Europe)
 state <- subset(gem, type=="state")
 state1 <- fixest::feglm(data=state, conflicts~sw(value,mvalue1,vvalue1,growth_value1)|region + year, family=quasipoisson)
 state2 <- fixest::feglm(data=state, conflicts~sw(mvalue5,growth_value5,sdvalue5,anomaly_it)|region + year, family=quasipoisson)
-table1<- etable(state1)
-table2<- etable(state2)
+table1<- etable(state1); colnames(table1) <- col4
+table2<- etable(state2); colnames(table2) <- col5
 
 Nstate <- subset(gem, type=="Nstate")
 Nstate1 <- fixest::feglm(data=Nstate, conflicts~sw(value,mvalue1,vvalue1,growth_value1)|region + year, family=quasipoisson)
 Nstate2 <- fixest::feglm(data=Nstate, conflicts~sw(mvalue5,growth_value5,sdvalue5,anomaly_it)|region + year, family=quasipoisson)
-table1<- etable(Nstate1)
-table2<- etable(Nstate2)
+table1<- etable(Nstate1); colnames(table1) <- col4
+table2<- etable(Nstate2); colnames(table2) <- col5
 
 onesided <- subset(gem, type=="onesided")
 onesided1 <- fixest::feglm(data=onesided, conflicts~sw(value,mvalue1,vvalue1,growth_value1)|region + year, family=quasipoisson)
 onesided2 <- fixest::feglm(data=onesided, conflicts~sw(mvalue5,growth_value5,sdvalue5,anomaly_it)|region + year, family=quasipoisson)
-table1<- etable(onesided1)
-table2<- etable(onesided2)
+table1<- etable(onesided1); colnames(table1) <- col4
+table2<- etable(onesided2); colnames(table2) <- col5
 
 
 write.table(table, file = "^Tables/glm_conflicts.txt", sep = "\t", quote = FALSE, row.names = FALSE)
