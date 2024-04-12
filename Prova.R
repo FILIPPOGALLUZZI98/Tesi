@@ -10,7 +10,7 @@ suppressPackageStartupMessages({
 
 gem <- read.csv("^Data/gws_migr_events.csv")
 
-setFixest_dict(c(all_confl="Number of conflicts",,value = "GWS", mvalue1 = "GWS 1-year average ",vvalue1="GWS 1-year variation",growth_value1="% 1-year GWS variation",
+setFixest_dict(c(all_confl="Total number of conflicts",conflicts="Number of conflicts per type",value = "GWS", mvalue1 = "GWS 1-year average ",vvalue1="GWS 1-year variation",growth_value1="% 1-year GWS variation",
        mvalue5="GWS 5-year average", growth_value5="% 5-year GWS variation", sdvalue5="GWS std 5-year", anomaly_it="GWS Anomalies 1980-2010 "))
 
 
@@ -54,7 +54,7 @@ data_continent <- events_sum %>%
   filter(get_continent(country) == continent)
 Oceania <- fixest::feglm(data = data_continent, all_confl ~ sw(value,mvalue1,growth_value1,mvalue5,growth_value5,sdvalue5,anomaly_it) | region + year, family = quasipoisson)
 table_oceania <- etable(Oceania, tex=TRUE)
-write.table(table_oceania, file = "^Tables/glm_conflicts.oceania.txt", sep = "\t", quote = FALSE, row.names = FALSE)
+write.table(table_oceania, file = "^Tables/glm_conflicts_oceania.txt", sep = "\t", quote = FALSE, row.names = FALSE)
 
 continent <- "Europe"
 get_continent <- function(countries) {
@@ -68,10 +68,10 @@ write.table(table_europe, file = "^Tables/glm_conflicts_europe.txt", sep = "\t",
 
 North_America <- c("United States", "Canada", "Mexico")
 N_A <- events_sum[events_sum$country %in% North_America, ]
-Namerica <- fixest::feglm(data=N_A, all_confl~mvalue5|region + year, family=quasipoisson)
+Namerica <- fixest::feglm(data = N_A, all_confl ~ sw(value,mvalue1,growth_value1,mvalue5,growth_value5,sdvalue5,anomaly_it) | region + year, family = quasipoisson)
 South_America <- c("Belize", "Costa Rica", "El Salvador", "Guatemala", "Honduras", "Nicaragua", "Panama", "Argentina", "Bolivia", "Brasile", "Cile", "Colombia", "Ecuador", "Guyana", "Paraguay", "Perù", "Suriname", "Uruguay", "Venezuela", "Aruba", "Bahamas", "Barbados", "Cuba", "Dominica", "Giamaica", "Haiti", "Trinidad and Tobago", "Sint Maarten", "Saint Vincent and the Grenadines", "Saint Lucia", "Saint Kitts and Nevis", "Puerto Rico", "Dominican Republic", "Grenada", "Martinique", "Saint Martin", "Virgin Islands", "Turks and Caicos Islands", "Cayman Islands", "British Virgin Islands", "Guadeloupe", "Antigua and Barbuda", "Bonaire", "Curacao", "Saint Barthelemy", "Saba", "Saint Eustatius", "Saint Pierre and Miquelon", "Falkland Islands", "French Guiana", "South Georgia and the South Sandwich Islands", "British West Indies")
 S_A <- events_sum[events_sum$country %in% South_America, ]
-Samerica <- fixest::feglm(data=S_A, all_confl~mvalue5|region + year, family=quasipoisson)
+Samerica <- fixest::feglm(data = S_A, all_confl ~ sw(value,mvalue1,growth_value1,mvalue5,growth_value5,sdvalue5,anomaly_it) | region + year, family = quasipoisson)
 table_Namerica <- etable(Namerica, tex=TRUE)
 write.table(table_Namerica, file = "^Tables/glm_conflicts_Namerica.txt", sep = "\t", quote = FALSE, row.names = FALSE)
 table_Samerica <- etable(Samerica, tex=TRUE)
