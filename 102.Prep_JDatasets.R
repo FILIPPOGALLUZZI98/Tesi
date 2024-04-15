@@ -11,7 +11,7 @@ events <- read.csv("^Data/events.csv")
 migr <- read.csv("^Data/migr.csv")
 
 gw <- gw %>%
-  filter(year > 1954)
+  filter(year > 1945)
 
 ##############################################################################################################################
 ####  GLOBAL JOINT DATASET GW-EVENTS  ########################################################################################
@@ -20,7 +20,7 @@ gw_data <-gw
 events_data <- events %>%
   filter(year<2020)
 
-vettore <- expand.grid(year=1953:2019, type=c("state","Nstate","onesided"))
+vettore <- expand.grid(year=1944:2019, type=c("state","Nstate","onesided"))
 gw_events <- left_join(gw_data, vettore, by=c("year"))
 
 # Merge the datasets
