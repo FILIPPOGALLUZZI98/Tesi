@@ -3,9 +3,9 @@ suppressPackageStartupMessages({
   library(reshape2);library(ggplot2);library(ggrepel);library(lubridate);library(zoo);library(foreign); library(countrycode);
   library(fixest); library(broom);library(knitr)} )
 
-gem <- read.csv("^Data/gws_migr_events_temp.csv")
-ge <- read.csv("^Data/gws_events.csv")
-gm <- read.csv("^Data/gws_migr.csv")
+gem <- read.csv("^Data/joint/gws_migr_events.csv")
+ge <- read.csv("^Data/joint/gws_events.csv")
+gm <- read.csv("^Data/joint/gws_migr.csv")
 
 # Rescale GW data (dividing by 1,000)
 gem$value <- gem$value/1000
@@ -85,6 +85,7 @@ ge <- ge %>%
          count_avg5 = rollmean(count, k = 5, align = "right", fill = NA),
          count_avg10 = rollmean(count, k = 10, align = "right", fill = NA))
 
+write.csv(ge, paste0("^Data/", "gws_events", ".csv"), row.names=FALSE)
 
 #################################################################################################
 ##### GW-EVENTS-MIGR  ###########################################################################
