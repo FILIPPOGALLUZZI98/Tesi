@@ -30,7 +30,7 @@ shp$region <- ifelse(is.na(shp$region), shp$country, shp$region)
 shp <- sf::st_transform(shp, sp::CRS("+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs"))
 
 # Save data
-st_write(shp, "^Data/shp", driver = "ESRI Shapefile")
+st_write(shp, "^Data/separate/shp", driver = "ESRI Shapefile")
 
 #################################################################################################
 ####  GROUNDWATER STORAGE YEAR AVERAGE  #########################################################
@@ -54,6 +54,6 @@ gws <- brick(media_annuale)
 # Save data
 years <- unique(format(as.Date(names(r), format = "X%Y.%m.%d"), "%Y"))
 names(gws) <- paste0("gws", years)
-output_nc <- "^Data/gws.nc"
+output_nc <- "^Data/separate/gws.nc"
 writeRaster(gws, filename = output_nc, format = "CDF", overwrite = TRUE)
 
