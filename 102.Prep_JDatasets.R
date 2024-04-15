@@ -6,9 +6,9 @@ suppressPackageStartupMessages({
   library(sf);library(sp);library(plyr);library(raster);library(ncdf4);library(exactextractr);library(dplyr);library(stringr)
   library(reshape2);library(ggplot2);library(ggrepel);library(lubridate);library(zoo);library(foreign)})
 
-gw <- read.csv("^Data/gws.csv")
-events <- read.csv("^Data/events.csv")
-migr <- read.csv("^Data/migr.csv")
+gw <- read.csv("^Data/separate/gws.csv")
+events <- read.csv("^Data/separate/events.csv")
+migr <- read.csv("^Data/separate/migr.csv")
 
 gw <- gw %>%
   filter(year > 1945)
