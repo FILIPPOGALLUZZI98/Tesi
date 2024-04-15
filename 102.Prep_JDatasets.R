@@ -31,7 +31,7 @@ gw_events <- gw_events[, c("year","country", "region","type","deaths", "conflict
 
 
 # Save data
-write.csv(gw_events, paste0("^Data/", "gws_events", ".csv"), row.names=FALSE)
+write.csv(gw_events, paste0("^Data/joint/", "gws_events", ".csv"), row.names=FALSE)
 
 
 ##############################################################################################################################
@@ -51,7 +51,7 @@ gw_migr <- gw_migr[,c("year", "country", "region", "worldregion", "value", "popu
                       "outflow_rate_annual","year_cat10", "orig")]
 
 # Save data
-write.csv(gw_migr, paste0("^Data/", "gws_migr", ".csv"), row.names=FALSE)
+write.csv(gw_migr, paste0("^Data/joint/", "gws_migr", ".csv"), row.names=FALSE)
 
 
 
@@ -65,7 +65,7 @@ gw_migr_conf <- gw_migr_conf %>%
 gw_migr_conf$country.y=NULL
 
 # Save data
-write.csv(gw_migr_conf, paste0("^Data/", "gws_migr_events_temp", ".csv"), row.names=FALSE)
+write.csv(gw_migr_conf, paste0("^Data/joint/", "gws_migr_events", ".csv"), row.names=FALSE)
 
 
 
