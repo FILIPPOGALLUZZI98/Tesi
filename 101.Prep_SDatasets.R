@@ -11,8 +11,8 @@ suppressPackageStartupMessages({
 # Select the raster (gws, ...)
 rast <- "gws"
 # Select shapefile and raster
-shp <- st_read("^Data/shp/shp.shp")
-r <- raster::brick(paste0("^Data/",rast,".nc"))
+shp <- st_read("^Data/separate/shp/shp.shp")
+r <- raster::brick(paste0("^Data/separate/",rast,".nc"))
 
 
 ##############################################################################################
@@ -36,7 +36,7 @@ gw_g <- gw_g[, c("year","country", "region", "value","orig")]
 
 
 # Save Data
-write.csv(gw_g, paste0("^Data/", "gws", ".csv"), row.names=FALSE)
+write.csv(gw_g, paste0("^Data/separate", "gws", ".csv"), row.names=FALSE)
 
 ##############################################################################################
 ####  GLOBAL CONFLICT UPPSALA (N_DEATHS+CONFLICTS)  ##########################################
@@ -93,7 +93,7 @@ events <- events[order(events$country),]
 events <- events[order(events$year),]
 
 # Save Data
-write.csv(events, paste0("^Data/", "events", ".csv"), row.names=FALSE)
+write.csv(events, paste0("^Data/separate/", "events", ".csv"), row.names=FALSE)
 
 
 #############################################################################################################################
@@ -108,7 +108,7 @@ data_migr <- data_migr %>%
          interval=mig_interval)
 
 # Save data
-write.csv(data_migr, paste0("^Data/", "migr", ".csv"), row.names=FALSE)
+write.csv(data_migr, paste0("^Data/separate/", "migr", ".csv"), row.names=FALSE)
 
 
 
