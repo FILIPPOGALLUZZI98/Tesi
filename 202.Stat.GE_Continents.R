@@ -62,9 +62,9 @@ table_Samerica <- etable(Samerica, tex=TRUE)
 write.table(table_Samerica, file = "^Tables/glm_conflicts_Samerica.txt", sep = "\t", quote = FALSE, row.names = FALSE)
 
 Central_America <- c("Belize", "Costa Rica", "El Salvador", "Guatemala", "Honduras", "Nicaragua", "Panama", "Bahamas", "Barbados", "Cuba", "Dominica", "Giamaica", "Haiti", "Trinidad and Tobago", "Sint Maarten", "Saint Vincent and the Grenadines", "Saint Lucia", "Saint Kitts and Nevis", "Puerto Rico", "Dominican Republic", "Grenada", "Martinique", "Saint Martin", "Virgin Islands", "Turks and Caicos Islands", "Cayman Islands", "British Virgin Islands", "Guadeloupe", "Antigua and Barbuda", "Bonaire", "Curacao", "Saint Barthelemy", "Saba", "Saint Eustatius", "Saint Pierre and Miquelon", "British West Indies")
-C_A <- events_sum[events_sum$country %in% South_America, ]
-Camerica <- fixest::feglm(data = S_A, count ~ sw(value,gws_avg1,gws_avg5,gws_avg10,gws_anomalies,gws_std1,gws_std5,gws_std10,gws_growth1,gws_growth5,gws_growth10) | region + year, family = quasipoisson)
-table_Samerica <- etable(Camerica, tex=TRUE)
+C_A <- events_sum[events_sum$country %in% Central_America, ]
+Camerica <- fixest::feglm(data = C_A, count ~ sw(value,gws_avg1,gws_avg5,gws_avg10,gws_anomalies,gws_std1,gws_std5,gws_std10,gws_growth1,gws_growth5,gws_growth10) | region + year, family = quasipoisson)
+table_Camerica <- etable(Camerica, tex=TRUE)
 write.table(table_Camerica, file = "^Tables/glm_conflicts_Camerica.txt", sep = "\t", quote = FALSE, row.names = FALSE)
 
 
