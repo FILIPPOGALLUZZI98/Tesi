@@ -3,9 +3,9 @@ suppressPackageStartupMessages({
   library(reshape2);library(ggplot2);library(ggrepel);library(lubridate);library(zoo);library(foreign); library(countrycode);
   library(fixest); library(broom);library(knitr)} )
 
-gem <- read.csv("^Data/separate/gws_migr_events_temp.csv")
-ge <- read.csv("^Data/separate/gws_events.csv")
-gm <- read.csv("^Data/separate/gws_migr.csv")
+gem <- read.csv("^Data/gws_migr_events_temp.csv")
+ge <- read.csv("^Data/gws_events.csv")
+gm <- read.csv("^Data/gws_migr.csv")
 
 # Rescale GW data (dividing by 1,000)
 gem$value <- gem$value/1000
@@ -35,7 +35,7 @@ ge <- ge %>%
 ge <- ge %>%
   arrange(year, country, region, type) %>%
   group_by(country, region, type) %>%
-  mutate(gws_std1= rollapply(value, width = 1, FUN = sd, align = "right", fill = NA), 
+  mutate(gws_std1= rollapply(value, width = 2, FUN = sd, align = "right", fill = NA), 
          gws_std5= rollapply(value, width = 5, FUN = sd, align = "right", fill = NA),
          gws_std10= rollapply(value, width = 10, FUN = sd, align = "right", fill = NA))
 
