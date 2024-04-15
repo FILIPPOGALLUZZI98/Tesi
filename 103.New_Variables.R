@@ -65,15 +65,15 @@ ge <- left_join(ge,std_t,by=c("country","region"))
 ge <- ge %>%
   arrange(year, country, region, type) %>%
   group_by(country, region, type) %>%
-  mutate(anomalies = (value-mean_region)/std)
+  mutate(gws_anomalies = (value-mean_region)/std)
 
 # CONFLICTS AVERAGES 1-5-10 YEARS
 ge <- ge %>%
   arrange(year, country, region, type) %>%
   group_by(country, region, type) %>%
-  mutate(mconfl1 = (lag(conflicts) + conflicts) / 2,
-         mconflict5 = rollmean(conflicts, k = 5, align = "right", fill = NA),
-         mconflict10 = rollmean(conflicts, k = 10, align = "right", fill = NA))
+  mutate(confl_avg1 = (lag(conflicts) + conflicts) / 2,
+         confl_avg5 = rollmean(conflicts, k = 5, align = "right", fill = NA),
+         confl_avg10 = rollmean(conflicts, k = 10, align = "right", fill = NA))
 
 ge <- ge %>% 
   group_by(year, country, region) %>% 
@@ -81,9 +81,9 @@ ge <- ge %>%
 ge <- ge %>%
   arrange(year, country, region, type) %>%
   group_by(country, region, type) %>%
-  mutate(mcount1 = (lag(count) + count) / 2,
-         mcount5 = rollmean(count, k = 5, align = "right", fill = NA),
-         mcount10 = rollmean(count, k = 10, align = "right", fill = NA))
+  mutate(count_avg1 = (lag(count) + count) / 2,
+         count_avg5 = rollmean(count, k = 5, align = "right", fill = NA),
+         count_avg10 = rollmean(count, k = 10, align = "right", fill = NA))
 
 
 #################################################################################################
