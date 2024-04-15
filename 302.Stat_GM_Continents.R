@@ -23,7 +23,7 @@ data_continent <- data_1 %>%
   filter(get_continent(country) == continent)
 Africa <- fixest::feols(data=data_continent, log(migrants)~sw(value,gws_avg1,gws_avg5,gws_avg10, gws_anomalies, gws_std1, gws_std5,gws_std10, gws_growth1, gws_growth5, gws_growth10)|region + year)
 table<- xtable(etable(Africa), tex=TRUE)
-print(table, caption = "Total Conflicts", caption.placement = "top", file = "^Tables/glm_migration_africa_1.tex", include.rownames = FALSE)
+print(table, caption = "Total Conflicts", caption.placement = "top", file = "^Tables/glm_migration_africa_1.txt", include.rownames = FALSE)
 
 continent <- "Asia"
 get_continent <- function(countries) {
@@ -32,7 +32,7 @@ data_continent <- data_1 %>%
   filter(get_continent(country) == continent)
 Asia <- fixest::feols(data=data_continent, log(migrants)~sw(value,gws_avg1,gws_avg5,gws_avg10, gws_anomalies, gws_std1, gws_std5,gws_std10, gws_growth1, gws_growth5, gws_growth10)|region + year)
 table<- xtable(etable(Asia), tex=TRUE)
-print(table, caption = "Total Conflicts", caption.placement = "top", file = "^Tables/glm_migration_asia_1.tex", include.rownames = FALSE)
+print(table, caption = "Total Conflicts", caption.placement = "top", file = "^Tables/glm_migration_asia_1.txt", include.rownames = FALSE)
 
 continent <- "Oceania"
 get_continent <- function(countries) {
@@ -41,7 +41,7 @@ data_continent <- data_1 %>%
   filter(get_continent(country) == continent)
 Oceania <- fixest::feols(data=data_continent, log(migrants)~sw(value,gws_avg1,gws_avg5,gws_avg10, gws_anomalies, gws_std1, gws_std5,gws_std10, gws_growth1, gws_growth5, gws_growth10)|region + year)
 table<- xtable(etable(Oceania), tex=TRUE)
-print(table, caption = "Total Conflicts", caption.placement = "top", file = "^Tables/glm_migration_oceania_1.tex", include.rownames = FALSE)
+print(table, caption = "Total Conflicts", caption.placement = "top", file = "^Tables/glm_migration_oceania_1.txt", include.rownames = FALSE)
 
 continent <- "Europe"
 get_continent <- function(countries) {
@@ -50,25 +50,25 @@ data_continent <- data_1 %>%
   filter(get_continent(country) == continent)
 Europe <- fixest::feols(data=data_continent, log(migrants)~sw(value,gws_avg1,gws_avg5,gws_avg10, gws_anomalies, gws_std1, gws_std5,gws_std10, gws_growth1, gws_growth5, gws_growth10)|region + year)
 table<- xtable(etable(Europe), tex=TRUE)
-print(table, caption = "Total Conflicts", caption.placement = "top", file = "^Tables/glm_migration_europe_1.tex", include.rownames = FALSE)
+print(table, caption = "Total Conflicts", caption.placement = "top", file = "^Tables/glm_migration_europe_1.txt", include.rownames = FALSE)
 
 North_America <- c("United States", "Canada", "Mexico")
 N_A <- data_1[data_1$country %in% North_America, ]
 Namerica <- fixest::feols(data=N_A, log(migrants)~sw(value,gws_avg1,gws_avg5,gws_avg10, gws_anomalies, gws_std1, gws_std5,gws_std10, gws_growth1, gws_growth5, gws_growth10)|region + year)
 table<- xtable(etable(Namerica), tex=TRUE)
-print(table, caption = "Total Conflicts", caption.placement = "top", file = "^Tables/glm_migration_Namerica_1.tex", include.rownames = FALSE)
+print(table, caption = "Total Conflicts", caption.placement = "top", file = "^Tables/glm_migration_Namerica_1.txt", include.rownames = FALSE)
 
 South_America <- c("Argentina", "Bolivia", "Brasile", "Cile", "Colombia", "Ecuador", "Guyana", "Paraguay", "Perù", "Suriname", "Uruguay", "Venezuela", "Aruba", "Falkland Islands", "French Guiana", "South Georgia and the South Sandwich Islands")
 S_A <- data_1[data_1$country %in% South_America, ]
 Samerica <- fixest::feols(data=S_A, log(migrants)~sw(value,gws_avg1,gws_avg5,gws_avg10, gws_anomalies, gws_std1, gws_std5,gws_std10, gws_growth1, gws_growth5, gws_growth10)|region + year)
 table<- xtable(etable(Samerica), tex=TRUE)
-print(table, caption = "Total Conflicts", caption.placement = "top", file = "^Tables/glm_migration_Samerica_1.tex", include.rownames = FALSE)
+print(table, caption = "Total Conflicts", caption.placement = "top", file = "^Tables/glm_migration_Samerica_1.txt", include.rownames = FALSE)
 
 Central_America <- c("Belize", "Costa Rica", "El Salvador", "Guatemala", "Honduras", "Nicaragua", "Panama", "Bahamas", "Barbados", "Cuba", "Dominica", "Giamaica", "Haiti", "Trinidad and Tobago", "Sint Maarten", "Saint Vincent and the Grenadines", "Saint Lucia", "Saint Kitts and Nevis", "Puerto Rico", "Dominican Republic", "Grenada", "Martinique", "Saint Martin", "Virgin Islands", "Turks and Caicos Islands", "Cayman Islands", "British Virgin Islands", "Guadeloupe", "Antigua and Barbuda", "Bonaire", "Curacao", "Saint Barthelemy", "Saba", "Saint Eustatius", "Saint Pierre and Miquelon", "British West Indies")
 C_A <- data_1[data_1$country %in% Central_America, ]
 Camerica <- fixest::feols(data=C_A, log(migrants)~sw(value,gws_avg1,gws_avg5,gws_avg10, gws_anomalies, gws_std1, gws_std5,gws_std10, gws_growth1, gws_growth5, gws_growth10)|region + year)
 table<- xtable(etable(Camerica), tex=TRUE)
-print(table, caption = "Total Conflicts", caption.placement = "top", file = "^Tables/glm_migration_Camerica_1.tex", include.rownames = FALSE)
+print(table, caption = "Total Conflicts", caption.placement = "top", file = "^Tables/glm_migration_Camerica_1.txt", include.rownames = FALSE)
 
 
 #################################################################################################
@@ -83,7 +83,7 @@ data_continent <- data_5 %>%
   filter(get_continent(country) == continent)
 Africa <- fixest::feols(data=data_continent, log(migrants)~sw(value,gws_avg1,gws_avg5,gws_avg10, gws_anomalies, gws_std1, gws_std5,gws_std10, gws_growth1, gws_growth5, gws_growth10)|region + year)
 table<- xtable(etable(Africa), tex=TRUE)
-print(table, caption = "Total Conflicts", caption.placement = "top", file = "^Tables/glm_migration_africa_5.tex", include.rownames = FALSE)
+print(table, caption = "Total Conflicts", caption.placement = "top", file = "^Tables/glm_migration_africa_5.txt", include.rownames = FALSE)
 
 continent <- "Asia"
 get_continent <- function(countries) {
@@ -92,7 +92,7 @@ data_continent <- data_5 %>%
   filter(get_continent(country) == continent)
 Asia <- fixest::feols(data=data_continent, log(migrants)~sw(value,gws_avg1,gws_avg5,gws_avg10, gws_anomalies, gws_std1, gws_std5,gws_std10, gws_growth1, gws_growth5, gws_growth10)|region + year)
 table<- xtable(etable(Asia), tex=TRUE)
-print(table, caption = "Total Conflicts", caption.placement = "top", file = "^Tables/glm_migration_asia_5.tex", include.rownames = FALSE)
+print(table, caption = "Total Conflicts", caption.placement = "top", file = "^Tables/glm_migration_asia_5.txt", include.rownames = FALSE)
 
 continent <- "Oceania"
 get_continent <- function(countries) {
@@ -101,7 +101,7 @@ data_continent <- data_5 %>%
   filter(get_continent(country) == continent)
 Oceania <- fixest::feols(data=data_continent, log(migrants)~sw(value,gws_avg1,gws_avg5,gws_avg10, gws_anomalies, gws_std1, gws_std5,gws_std10, gws_growth1, gws_growth5, gws_growth10)|region + year)
 table<- xtable(etable(Oceania), tex=TRUE)
-print(table, caption = "Total Conflicts", caption.placement = "top", file = "^Tables/glm_migration_oceania_5.tex", include.rownames = FALSE)
+print(table, caption = "Total Conflicts", caption.placement = "top", file = "^Tables/glm_migration_oceania_5.txt", include.rownames = FALSE)
 
 continent <- "Europe"
 get_continent <- function(countries) {
@@ -110,25 +110,25 @@ data_continent <- data_5 %>%
   filter(get_continent(country) == continent)
 Europe <- fixest::feols(data=data_continent, log(migrants)~sw(value,gws_avg1,gws_avg5,gws_avg10, gws_anomalies, gws_std1, gws_std5,gws_std10, gws_growth1, gws_growth5, gws_growth10)|region + year)
 table<- xtable(etable(Europe), tex=TRUE)
-print(table, caption = "Total Conflicts", caption.placement = "top", file = "^Tables/glm_migration_europe_5.tex", include.rownames = FALSE)
+print(table, caption = "Total Conflicts", caption.placement = "top", file = "^Tables/glm_migration_europe_5.txt", include.rownames = FALSE)
 
 North_America <- c("United States", "Canada", "Mexico")
 N_A <- data_5[data_5$country %in% North_America, ]
 Namerica <- fixest::feols(data=N_A, log(migrants)~sw(value,gws_avg1,gws_avg5,gws_avg10, gws_anomalies, gws_std1, gws_std5,gws_std10, gws_growth1, gws_growth5, gws_growth10)|region + year)
 table<- xtable(etable(Namerica), tex=TRUE)
-print(table, caption = "Total Conflicts", caption.placement = "top", file = "^Tables/glm_migration_Namerica_5.tex", include.rownames = FALSE)
+print(table, caption = "Total Conflicts", caption.placement = "top", file = "^Tables/glm_migration_Namerica_5.txt", include.rownames = FALSE)
 
 South_America <- c("Argentina", "Bolivia", "Brasile", "Cile", "Colombia", "Ecuador", "Guyana", "Paraguay", "Perù", "Suriname", "Uruguay", "Venezuela", "Aruba", "Falkland Islands", "French Guiana", "South Georgia and the South Sandwich Islands")
 S_A <- data_5[data_5$country %in% South_America, ]
 Samerica <- fixest::feols(data=S_A, log(migrants)~sw(value,gws_avg1,gws_avg5,gws_avg10, gws_anomalies, gws_std1, gws_std5,gws_std10, gws_growth1, gws_growth5, gws_growth10)|region + year)
 table<- xtable(etable(Samerica), tex=TRUE)
-print(table, caption = "Total Conflicts", caption.placement = "top", file = "^Tables/glm_migration_Samerica_5.tex", include.rownames = FALSE)
+print(table, caption = "Total Conflicts", caption.placement = "top", file = "^Tables/glm_migration_Samerica_5.txt", include.rownames = FALSE)
 
 Central_America <- c("Belize", "Costa Rica", "El Salvador", "Guatemala", "Honduras", "Nicaragua", "Panama", "Bahamas", "Barbados", "Cuba", "Dominica", "Giamaica", "Haiti", "Trinidad and Tobago", "Sint Maarten", "Saint Vincent and the Grenadines", "Saint Lucia", "Saint Kitts and Nevis", "Puerto Rico", "Dominican Republic", "Grenada", "Martinique", "Saint Martin", "Virgin Islands", "Turks and Caicos Islands", "Cayman Islands", "British Virgin Islands", "Guadeloupe", "Antigua and Barbuda", "Bonaire", "Curacao", "Saint Barthelemy", "Saba", "Saint Eustatius", "Saint Pierre and Miquelon", "British West Indies")
 C_A <- data_5[data_5$country %in% Central_America, ]
 Camerica <- fixest::feols(data=C_A, log(migrants)~sw(value,gws_avg1,gws_avg5,gws_avg10, gws_anomalies, gws_std1, gws_std5,gws_std10, gws_growth1, gws_growth5, gws_growth10)|region + year)
 table<- xtable(etable(Camerica), tex=TRUE)
-print(table, caption = "Total Conflicts", caption.placement = "top", file = "^Tables/glm_migration_Camerica_5.tex", include.rownames = FALSE)
+print(table, caption = "Total Conflicts", caption.placement = "top", file = "^Tables/glm_migration_Camerica_5.txt", include.rownames = FALSE)
 
 
 
