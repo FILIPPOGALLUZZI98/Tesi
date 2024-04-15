@@ -72,7 +72,7 @@ ge <- ge %>%
   group_by(year, country, region) %>% 
   mutate(count = sum(conflicts))
 
-write.csv(ge, paste0("^Data/", "gws_migr", ".csv"), row.names=FALSE)
+write.csv(ge, paste0("^Data/", "gws_events", ".csv"), row.names=FALSE)
 
 #################################################################################################
 ##### GW-MIGR  ###################################################################################
