@@ -67,25 +67,39 @@ ge <- ge %>%
   group_by(country, region, type) %>%
   mutate(gws_anomalies = (value-mean_region)/std)
 
+# TOTAL NUMBER OF CONFLICTS PER YEAR
+ge <- ge %>% 
+  group_by(year, country, region) %>% 
+  mutate(count = sum(conflicts))
+
+
+#################################################################################################
+##### GW-MIGR  ###################################################################################
+# DA CONTINUARE
+
+
+# TOTAL NUMBER OF CONFLICTS PER YEAR
+gm <- gm %>% 
+  group_by(year, country, region) %>% 
+  mutate(count = sum(conflicts))
+
 # CONFLICTS AVERAGES 1-5-10 YEARS
-ge <- ge %>%
+gm <- gm %>%
   arrange(year, country, region, type) %>%
   group_by(country, region, type) %>%
   mutate(confl_avg1 = (lag(conflicts) + conflicts) / 2,
          confl_avg5 = rollmean(conflicts, k = 5, align = "right", fill = NA),
          confl_avg10 = rollmean(conflicts, k = 10, align = "right", fill = NA))
 
-ge <- ge %>% 
-  group_by(year, country, region) %>% 
-  mutate(count = sum(conflicts))
-ge <- ge %>%
+
+gm <- gm %>%
   arrange(year, country, region, type) %>%
   group_by(country, region, type) %>%
   mutate(count_avg1 = (lag(count) + count) / 2,
          count_avg5 = rollmean(count, k = 5, align = "right", fill = NA),
          count_avg10 = rollmean(count, k = 10, align = "right", fill = NA))
 
-write.csv(ge, paste0("^Data/", "gws_events", ".csv"), row.names=FALSE)
+write.csv(gm, paste0("^Data/", "gws_migr", ".csv"), row.names=FALSE)
 
 #################################################################################################
 ##### GW-EVENTS-MIGR  ###########################################################################
