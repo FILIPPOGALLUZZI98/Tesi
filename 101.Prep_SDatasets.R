@@ -36,7 +36,7 @@ gw_g <- gw_g[, c("year","country", "region", "value","orig")]
 
 
 # Save Data
-write.csv(gw_g, paste0("^Data/separate", "gws", ".csv"), row.names=FALSE)
+write.csv(gw_g, paste0("^Data/separate/", "gws", ".csv"), row.names=FALSE)
 
 ##############################################################################################
 ####  GLOBAL CONFLICT UPPSALA (N_DEATHS+CONFLICTS)  ##########################################
