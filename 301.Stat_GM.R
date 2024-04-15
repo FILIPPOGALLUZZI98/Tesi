@@ -15,12 +15,12 @@ setFixest_dict(c(migrants="number of migrants/pop in interval", value="gws [g/m^
 data_1 <- subset(gm, interval==1)
 model <- fixest::feols(data=data_1, log(migrants)~sw(value,gws_avg1,gws_avg5,gws_avg10, gws_anomalies, gws_std1, gws_std5,gws_std10, gws_growth1, gws_growth5, gws_growth10)|region + year)
 table<- xtable(etable(model), tex=TRUE)
-print(table, caption = "Total Conflicts", caption.placement = "top", file = "^Tables/glm_migration_1.tex", include.rownames = FALSE)
+print(table, caption = "Total Conflicts", caption.placement = "top", file = "^Tables/glm_migration_1.txt", include.rownames = FALSE)
 
 data_5 <- subset(gm, interval==5)
 model <- fixest::feols(data=data_1, log(migrants)~sw(value,gws_avg1,gws_avg5,gws_avg10, gws_anomalies, gws_std1, gws_std5,gws_std10, gws_growth1, gws_growth5, gws_growth10)|region + year)
 table<- xtable(etable(model), tex=TRUE)
-print(table, caption = "Total Conflicts", caption.placement = "top", file = "^Tables/glm_migration_5.tex", include.rownames = FALSE)
+print(table, caption = "Total Conflicts", caption.placement = "top", file = "^Tables/glm_migration_5.txt", include.rownames = FALSE)
 
 
 
