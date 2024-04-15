@@ -129,6 +129,7 @@ gm <- gm %>%
   group_by(country, region) %>%
   mutate(gws_anomalies = (value-mean_region)/std)
 
+# NUMBER OF MIGRANTS LEAVING A REGION IN THE CONSIDERED INTERVAL DIVIDED BY THE POPULATION
 gm <- gm %>%
   mutate(migrants=flow/population)
 
