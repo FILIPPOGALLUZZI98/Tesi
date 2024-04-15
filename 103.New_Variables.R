@@ -76,6 +76,66 @@ write.csv(ge, paste0("^Data/", "gws_events", ".csv"), row.names=FALSE)
 
 #################################################################################################
 ##### GW-MIGR  ###################################################################################
+
+# GWS AVERAGES 1-5-10 YEARS
+gm <- gm %>%
+  arrange(year, country, region) %>%
+  group_by(country, region) %>%
+  mutate(gws_avg1 = (lag(value) + value)/2, 
+         gws_avg5 = rollmean(value, k = 5, align = "right", fill = NA),
+         gws_avg10 = rollmean(value, k = 10, align = "right", fill = NA))
+
+# GWS GROWTH RATE % 1-5-10 YEARS
+gm <- gm %>%
+  arrange(year, country, region) %>%
+  group_by(country, region) %>%
+  mutate(gws_growth1=((value-lag(value))/lag(value))*100, 
+         gws_growth5=((value-lag(value, n=5))/lag(value, n=5))*100,
+         gws_growth10=((value-lag(value, n=10))/lag(value, n=10))*100)
+
+# GWS STANDARD DEVIATION 1-5-10 YEARS
+gm <- gm %>%
+  arrange(year, country, region) %>%
+  group_by(country, region) %>%
+  mutate(gws_std1= rollapply(value, width = 2, FUN = sd, align = "right", fill = NA), 
+         gws_std5= rollapply(value, width = 5, FUN = sd, align = "right", fill = NA),
+         gws_std10= rollapply(value, width = 10, FUN = sd, align = "right", fill = NA))
+
+# GWS ANOMALIES
+medie <- gm %>%
+  select(year, country, region, value)
+medie <- medie %>%
+  filter(year >= 1980 & year <= 2010) %>%
+  arrange(year, country, region) %>%
+  group_by(country, region) %>%
+  mutate(mean_region = mean(value))
+medie$year <- NULL; medie$value <- NULL
+medie <- medie %>%
+  distinct(country, region, .keep_all = TRUE)
+gm <- left_join(gm,medie,by=c("country","region"))
+std_t <- gm %>%
+  select(year, country, region, value)
+std_t <- std_t %>%
+  filter(year >= 1980 & year <= 2010) %>%
+  arrange(year, country, region) %>%
+  group_by(country, region) %>%
+  mutate(std = sd(value))
+std_t$year <- NULL; std_t$value <- NULL
+std_t <- std_t %>%
+  distinct(country, region, .keep_all = TRUE)
+gm <- left_join(gm,std_t,by=c("country","region"))
+gm <- gm %>%
+  arrange(year, country, region) %>%
+  group_by(country, region) %>%
+  mutate(gws_anomalies = (value-mean_region)/std)
+
+gm <- gm %>%
+  mutate(migrants=flow/population)
+
+write.csv(gm, paste0("^Data/", "gws_migr", ".csv"), row.names=FALSE)
+
+#################################################################################################
+##### GW-EVENTS-MIGR  ###########################################################################
 # DA CONTINUARE
 
 
@@ -99,79 +159,6 @@ gm <- gm %>%
   mutate(count_avg1 = (lag(count) + count) / 2,
          count_avg5 = rollmean(count, k = 5, align = "right", fill = NA),
          count_avg10 = rollmean(count, k = 10, align = "right", fill = NA))
-
-write.csv(gm, paste0("^Data/", "gws_migr", ".csv"), row.names=FALSE)
-
-#################################################################################################
-##### GW-EVENTS-MIGR  ###########################################################################
-
-# Mean value 1-year
-gem <- gem %>%
-  arrange(year, country, region, type) %>%
-  group_by(country, region, type) %>%
-  mutate(mvalue1 = (lag(value) + value)/2)
-
-# Variation value 1-year
-gem <- gem %>%
-  arrange(year, country, region, type) %>%
-  group_by(country, region, type) %>%
-  mutate(vvalue1 = value - lag(value))
-
-# Growth rate value 1-year
-gem <- gem %>%
-  arrange(year, country, region, type) %>%
-  group_by(country, region, type) %>%
-  mutate(growth_value1=((value-lag(value))/lag(value))*100)
-
-
-# Mean value 5-years
-gem <- gem %>%
-  arrange(year, country, region, type) %>%
-  group_by(country, region, type) %>%
-  mutate(mvalue5 = rollmean(value, k = 5, align = "right", fill = NA))
-
-# Standard Deviation value 5-year
-gem <- gem %>%
-  arrange(year, country, region, type) %>%
-  group_by(country, region, type) %>%
-  mutate(sdvalue5 = rollapply(value, width = 5, FUN = sd, align = "right", fill = NA))
-
-# Growth rate value 5-year
-gem <- gem %>%
-  arrange(year, country, region, type) %>%
-  group_by(country, region, type) %>%
-  mutate(growth_value5=((value-lag(value, n=5))/lag(value, n=5))*100)
-
-
-# Anomalies 
-medie <- gem %>%
-  select(year, country, region, type, value)
-medie <- medie %>%
-  filter(year >= 1980 & year <= 2010) %>%
-  arrange(year, country, region, type) %>%
-  group_by(country, region, type) %>%
-  mutate(mean_region = mean(value))
-medie$year <- NULL; medie$type <- NULL; medie$value <- NULL
-medie <- medie %>%
-  distinct(country, region, .keep_all = TRUE)
-gem <- left_join(gem,medie,by=c("country","region"))
-std_t <- gem %>%
-  select(year, country, region, type, value)
-std_t <- std_t %>%
-  filter(year >= 1980 & year <= 2010) %>%
-  arrange(year, country, region, type) %>%
-  group_by(country, region, type) %>%
-  mutate(std = sd(value))
-std_t$year <- NULL; std_t$type <- NULL; std_t$value <- NULL
-std_t <- std_t %>%
-  distinct(country, region, .keep_all = TRUE)
-gem <- left_join(gem,std_t,by=c("country","region"))
-gem <- gem %>%
-  arrange(year, country, region, type) %>%
-  group_by(country, region, type) %>%
-  mutate(anomaly_it = (value-mean_region)/std)
-
-
 
 # Create a new variable with the sum of the conflicts for the same year, country, region for the three types
 gem <- gem %>% 
