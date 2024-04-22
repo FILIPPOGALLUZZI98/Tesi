@@ -5,7 +5,7 @@ suppressPackageStartupMessages({
 
 ge <- read.csv("^Data/gws_events.csv")
 
-setFixest_dict(c(conflicts="N° conflicts by type", value="gws [g/m^3]",
+setFixest_dict(c(conflicts="Type conflicts", value="gws [g/m^3]",
                  gws_avg1="gws 1-y", gws_avg5="gws 5-y", gws_avg10="gws 10-y",
                  gws_growth1="gws growth rate 1-y", gws_growth5="gws growth rate 5-y", gws_growth10="gws growth rate 10-y",
                  gws_std1="gws st dev 1-y", gws_std5="gws st dev 5-y", gws_std10="gws st dev 10-y",
