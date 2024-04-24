@@ -18,7 +18,7 @@ table<- xtable(etable(model), tex=TRUE)
 print(table, caption = "Total Conflicts", caption.placement = "top", file = "^Tables/glm_migration_1.tex", include.rownames = FALSE)
 
 data_5 <- subset(gm, interval==5)
-model <- fixest::feglm(data=data_1, log(migrants)~sw(value,gws_avg1,gws_avg5,gws_avg10, gws_anomalies, gws_std1, gws_std5,gws_std10, gws_growth1, gws_growth5, gws_growth10)|region + year, family=gaussian)
+model <- fixest::feglm(data=data_5, log(migrants)~sw(value,gws_avg1,gws_avg5,gws_avg10, gws_anomalies, gws_std1, gws_std5,gws_std10, gws_growth1, gws_growth5, gws_growth10)|region + year, family=gaussian)
 table<- xtable(etable(model), tex=TRUE)
 print(table, caption = "Total Conflicts", caption.placement = "top", file = "^Tables/glm_migration_5.tex", include.rownames = FALSE)
 
