@@ -3,12 +3,12 @@ suppressPackageStartupMessages({
   library(reshape2);library(ggplot2);library(ggrepel);library(lubridate);library(zoo);library(foreign); library(countrycode);
   library(fixest); library(broom);library(knitr)} )
 
-gem <- read.csv("^Data/joint/gws_migr_events.csv")
+em <- read.csv("^Data/joint/gws_migr_events.csv")
 ge <- read.csv("^Data/joint/gws_events.csv")
 gm <- read.csv("^Data/joint/gws_migr.csv")
 
 # Rescale GW data (dividing by 1,000)
-gem$value <- gem$value/1000
+em$value <- em$value/1000
 ge$value <- ge$value/1000
 gm$value <- gm$value/1000
 
@@ -144,78 +144,50 @@ gm <- gm %>%
 write.csv(gm, paste0("^Data/", "gws_migr", ".csv"), row.names=FALSE)
 
 #################################################################################################
-##### GW-EVENTS-MIGR  ###########################################################################
-# DA CONTINUARE
+##### EVENTS-MIGR  ###########################################################################
 
+em$value <- NULL
+# NUMBER OF MIGRANTS LEAVING A REGION IN THE CONSIDERED INTERVAL DIVIDED BY THE POPULATION
+em <- em %>%
+  mutate(migrants=flow/population)
 
 # TOTAL NUMBER OF CONFLICTS PER YEAR
-gm <- gm %>% 
+em <- em %>% 
   group_by(year, country, region) %>% 
   mutate(count = sum(conflicts))
 
-# CONFLICTS AVERAGES 1-5-10 YEARS
-gm <- gm %>%
+# TYPE CONFLICTS AVERAGES 1-5-10 YEARS
+em <- em %>%
   arrange(year, country, region, type) %>%
   group_by(country, region, type) %>%
   mutate(confl_avg1 = (lag(conflicts) + conflicts) / 2,
-         confl_avg5 = rollmean(conflicts, k = 5, align = "right", fill = NA),
-         confl_avg10 = rollmean(conflicts, k = 10, align = "right", fill = NA))
+         confl_avg5 = rollmean(conflicts, k = 5, align = "right", fill = NA))
 
-
-gm <- gm %>%
+# TOTAL CONFLICTS AVERAGES 1-5-10 YEARS
+em <- em %>%
   arrange(year, country, region, type) %>%
   group_by(country, region, type) %>%
   mutate(count_avg1 = (lag(count) + count) / 2,
-         count_avg5 = rollmean(count, k = 5, align = "right", fill = NA),
-         count_avg10 = rollmean(count, k = 10, align = "right", fill = NA))
+         count_avg5 = rollmean(count, k = 5, align = "right", fill = NA))
 
-# Create a new variable with the sum of the conflicts for the same year, country, region for the three types
-gem <- gem %>% 
+# TOTAL DEATHS 
+em <- em %>% 
   group_by(year, country, region) %>% 
   mutate(count = sum(conflicts))
-gem <- gem %>% 
+em <- em %>% 
   group_by(year, country, region) %>% 
   mutate(all_deaths = sum(deaths))
 
-# Mean conflicts 1-year
-gem <- gem %>%
+# Growth rate conflicts 1-5 years
+em <- em %>%
   arrange(year, country, region, type) %>%
   group_by(country, region, type) %>%
-  mutate(mconfl1 = (lag(conflicts) + conflicts) / 2)
-
-# Mean deaths 1-year
-gem <- gem %>%
-  arrange(year, country, region, type) %>%
-  group_by(country, region, type) %>%
-  mutate(mdeaths1 = (lag(deaths) + deaths) / 2)
-
-# Growth rate conflicts 1-year
-gem <- gem %>%
-  arrange(year, country, region, type) %>%
-  group_by(country, region, type) %>%
-  mutate(growth_confl1=((conflicts-lag(conflicts))/lag(conflicts))*100)
-
-# Mean conflicts 5-years
-gem <- gem %>%
-  arrange(year, country, region, type) %>%
-  group_by(country, region, type) %>%
-  mutate(mconflict5 = rollmean(conflicts, k = 5, align = "right", fill = NA))
-
-# Growth rate conflicts 5-year
-gem <- gem %>%
-  arrange(year, country, region, type) %>%
-  group_by(country, region, type) %>%
-  mutate(growth_confl5=((all_confl-lag(all_confl, n=5))/lag(all_confl, n=5))*100)
-
-# Standard deviation conflicts 5-year
-gem <- gem %>%
-  arrange(year, country, region, type) %>%
-  group_by(country, region, type) %>%
-  mutate(sconflicts5 = rollapply(conflicts, width = 5, FUN = sd, align = "right", fill = NA))
+  mutate(growth_confl1=((conflicts-lag(conflicts))/lag(conflicts))*100,
+         growth_confl5=((count-lag(count, n=5))/lag(count, n=5))*100)
 
 
 # Save data
-write.csv(gem, paste0("^Data/", "gws_migr_events", ".csv"), row.names=FALSE)
+write.csv(em, paste0("^Data/", "migr_events", ".csv"), row.names=FALSE)
 
 
 
