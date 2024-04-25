@@ -10,7 +10,7 @@ setFixest_dict(c(migrants="number of migrants/pop in interval", value="gws [g/m^
                  gws_growth1="gws growth rate 1-y", gws_growth5="gws growth rate 5-y", gws_growth10="gws growth rate 10-y",
                  gws_std1="gws st dev 1-y", gws_std5="gws st dev 5-y", gws_std10="gws st dev 10-y",
                  gws_anomalies="gws anomalies 1y (1980-2010)", gws_anomalies="gws anomalies 5y (1980-2010)",
-                 , gws_anomalies="gws anomalies 10y (1980-2010)"))
+                 gws_anomalies="gws anomalies 10y (1980-2010)"))
 
 #################################################################################################
 ##### 1-YEAR  ####################################################################################
