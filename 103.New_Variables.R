@@ -105,7 +105,8 @@ gm <- gm %>%
          gws_std5= rollapply(value, width = 5, FUN = sd, align = "right", fill = NA),
          gws_std10= rollapply(value, width = 10, FUN = sd, align = "right", fill = NA))
 
-# GWS ANOMALIES
+# ANOMALIES
+# Create two new variables: mean and std over 1980-2010
 medie <- gm %>%
   select(year, country, region, value)
 medie <- medie %>%
@@ -128,10 +129,13 @@ std_t$year <- NULL; std_t$value <- NULL
 std_t <- std_t %>%
   distinct(country, region, .keep_all = TRUE)
 gm <- left_join(gm,std_t,by=c("country","region"))
+# Create anomalies for 1, 5, 10 years (averages)
 gm <- gm %>%
   arrange(year, country, region) %>%
   group_by(country, region) %>%
-  mutate(gws_anomalies = (value-mean_region)/std)
+  mutate(gws_anomalies = (value-mean_region)/std,
+         gws_anomalies5 = (gws_avg5-mean_region)/std,
+         gws_anomalies10 = (gws_avg10-mean_region)/std)
 
 # NUMBER OF MIGRANTS LEAVING A REGION IN THE CONSIDERED INTERVAL DIVIDED BY THE POPULATION
 gm <- gm %>%
