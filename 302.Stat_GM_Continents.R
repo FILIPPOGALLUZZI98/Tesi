@@ -34,14 +34,14 @@ Asia <- fixest::feglm(data=data_continent, log(migrants)~sw(gws_avg1,gws_avg5,gw
 table<- xtable(etable(Asia), tex=TRUE)
 print(table, caption = "Total Conflicts", caption.placement = "top", file = "^Tables/glm_migration_asia_1.tex", include.rownames = FALSE)
 
-continent <- "Oceania"
-get_continent <- function(countries) {
-  countrycode(countries, "country.name", "continent")}
-data_continent <- data_1 %>%
-  filter(get_continent(country) == continent)
-Oceania <- fixest::feglm(data=data_continent, log(migrants)~sw(gws_avg1,gws_avg5,gws_avg10, gws_anomalies, gws_anomalies5, gws_anomalies10, gws_std1, gws_std5,gws_std10, gws_growth1, gws_growth5, gws_growth10)|region + year, family=gaussian)
-table<- xtable(etable(Oceania), tex=TRUE)
-print(table, caption = "Total Conflicts", caption.placement = "top", file = "^Tables/glm_migration_oceania_1.tex", include.rownames = FALSE)
+#continent <- "Oceania"
+#get_continent <- function(countries) {
+#  countrycode(countries, "country.name", "continent")}
+#data_continent <- data_1 %>%
+#  filter(get_continent(country) == continent)
+#Oceania <- fixest::feglm(data=data_continent, log(migrants)~sw(gws_avg1,gws_avg5,gws_avg10, gws_anomalies, gws_anomalies5, gws_anomalies10, gws_std1, gws_std5,gws_std10, gws_growth1, gws_growth5, gws_growth10)|region + year, family=gaussian)
+#table<- xtable(etable(Oceania), tex=TRUE)
+#print(table, caption = "Total Conflicts", caption.placement = "top", file = "^Tables/glm_migration_oceania_1.tex", include.rownames = FALSE)
 
 continent <- "Europe"
 get_continent <- function(countries) {
@@ -94,14 +94,14 @@ Asia <- fixest::feglm(data=data_continent, log(migrants)~sw(gws_avg1,gws_avg5,gw
 table<- xtable(etable(Asia), tex=TRUE)
 print(table, caption = "Total Conflicts", caption.placement = "top", file = "^Tables/glm_migration_asia_5.tex", include.rownames = FALSE)
 
-continent <- "Oceania"
-get_continent <- function(countries) {
-  countrycode(countries, "country.name", "continent")}
-data_continent <- data_5 %>%
-  filter(get_continent(country) == continent)
-Oceania <- fixest::feglm(data=data_continent, log(migrants)~sw(gws_avg1,gws_avg5,gws_avg10, gws_anomalies, gws_anomalies5, gws_anomalies10, gws_std1, gws_std5,gws_std10, gws_growth1, gws_growth5, gws_growth10)|region + year, family=gaussian)
-table<- xtable(etable(Oceania), tex=TRUE)
-print(table, caption = "Total Conflicts", caption.placement = "top", file = "^Tables/glm_migration_oceania_5.tex", include.rownames = FALSE)
+#continent <- "Oceania"
+#get_continent <- function(countries) {
+#  countrycode(countries, "country.name", "continent")}
+#data_continent <- data_5 %>%
+#  filter(get_continent(country) == continent)
+#Oceania <- fixest::feglm(data=data_continent, log(migrants)~sw(gws_avg1,gws_avg5,gws_avg10, gws_anomalies, gws_anomalies5, gws_anomalies10, gws_std1, gws_std5,gws_std10, gws_growth1, gws_growth5, gws_growth10)|region + year, family=gaussian)
+#table<- xtable(etable(Oceania), tex=TRUE)
+#print(table, caption = "Total Conflicts", caption.placement = "top", file = "^Tables/glm_migration_oceania_5.tex", include.rownames = FALSE)
 
 continent <- "Europe"
 get_continent <- function(countries) {
