@@ -7,14 +7,22 @@ em <-read.csv("^Data/migr_events.csv")
 
 
 setFixest_dict(c(conflicts="Type conflicts",count="Total Conflicts",confl_avg1="Avg Type Confl 1",confl_avg5="Avg Type Confl 5",count_avg1="Avg Total Confl 1",
-                 count_avg5="Avg Total Confl 5", growth_count1="Growth % Total Confl 1", growth_count5="Growth % Total Confl 5"))
+                 count_avg5="Avg Total Confl 5", growth_count1="Growth % Total Confl 1", growth_count5="Growth % Total Confl 5",
+                 growth_confl1="Growth % Type Confl 1", growth_confl5="Growth % Type Confl 5"))
 
 
-events_sum <- subset(ge, type=="state")
+data_1 <- subset(em, interval==1)
+model <- fixest::feglm(data=data_1, log(migrants)~sw(count,count_avg1,count_avg5,growth_count1)|region + year, family=gaussian)
+table<- xtable(etable(model), tex=TRUE)
+print(table, caption = "Total Conflicts", caption.placement = "top", file = "^Tables/glm_migr_confl1.tex", include.rownames = FALSE)
 
-model <- fixest::feglm(data=events_sum, count~sw(gws_avg1,gws_avg5,gws_avg10, gws_anomalies, gws_anomalies5, gws_anomalies10, gws_std1, gws_std5,gws_std10, gws_growth1, gws_growth5, gws_growth10)|region + year, family=quasipoisson)
-table <- xtable(etable(model), tex=TRUE)
-print(table, caption = "Total Conflicts", caption.placement = "top", file = "^Tables/glm_conflicts.tex", include.rownames = FALSE)
+data_5 <- subset(em, interval==5)
+model <- fixest::feglm(data=data_5, log(migrants)~sw(count,count_avg1,count_avg5,growth_count1,growth_count5)|region + year, family=gaussian)
+table<- xtable(etable(model), tex=TRUE)
+print(table, caption = "Total Conflicts", caption.placement = "top", file = "^Tables/glm_migr_confl5.tex", include.rownames = FALSE)
+
+
+
 
 
 
