@@ -8,7 +8,6 @@ ge <- read.csv("^Data/joint/gws_events.csv")
 gm <- read.csv("^Data/joint/gws_migr.csv")
 
 # Rescale GW data (dividing by 1,000)
-em$value <- em$value/1000
 ge$value <- ge$value/1000
 gm$value <- gm$value/1000
 
@@ -173,7 +172,7 @@ em <- em %>%
 # TOTAL DEATHS 
 em <- em %>% 
   group_by(year, country, region) %>% 
-  mutate(deaths = sum(deaths))
+  mutate(all_deaths = sum(deaths))
 
 # Growth rate conflicts 1-5 years
 em <- em %>%
