@@ -156,14 +156,14 @@ em <- em %>%
   group_by(year, country, region) %>% 
   mutate(count = sum(conflicts))
 
-# TYPE CONFLICTS AVERAGES 1-5-10 YEARS
+# TYPE CONFLICTS AVERAGES 1-5 YEARS
 em <- em %>%
   arrange(year, country, region, type) %>%
   group_by(country, region, type) %>%
   mutate(confl_avg1 = (lag(conflicts) + conflicts) / 2,
          confl_avg5 = rollmean(conflicts, k = 5, align = "right", fill = NA))
 
-# TOTAL CONFLICTS AVERAGES 1-5-10 YEARS
+# TOTAL CONFLICTS AVERAGES 1-5 YEARS
 em <- em %>%
   arrange(year, country, region, type) %>%
   group_by(country, region, type) %>%
@@ -173,17 +173,21 @@ em <- em %>%
 # TOTAL DEATHS 
 em <- em %>% 
   group_by(year, country, region) %>% 
-  mutate(count = sum(conflicts))
-em <- em %>% 
-  group_by(year, country, region) %>% 
-  mutate(all_deaths = sum(deaths))
+  mutate(deaths = sum(deaths))
 
 # Growth rate conflicts 1-5 years
 em <- em %>%
   arrange(year, country, region, type) %>%
   group_by(country, region, type) %>%
   mutate(growth_confl1=((conflicts-lag(conflicts))/lag(conflicts))*100,
-         growth_confl5=((count-lag(count, n=5))/lag(count, n=5))*100)
+         growth_confl5=((conflicts-lag(conflicts, n=5))/lag(conflicts, n=5))*100)
+
+# Growth rate conflicts 1-5 years
+em <- em %>%
+  arrange(year, country, region, type) %>%
+  group_by(country, region, type) %>%
+  mutate(growth_count1=((count-lag(count))/lag(count))*100,
+         growth_count5=((count-lag(count, n=5))/lag(count, n=5))*100)
 
 
 # Save data
