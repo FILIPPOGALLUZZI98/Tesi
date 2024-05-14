@@ -71,6 +71,53 @@ writeRaster(gws, filename = output_nc, format = "CDF", overwrite = TRUE)
 
 #################################################################################################
 #################################################################################################
+######  INITIAL OPERATIONS FOR CONFLICT DATASET
+
+# Select the raw conflict data and the shapefile
+events <- read.csv("^Data_Raw/Conflict_Data/Global.csv")
+shp <- st_read("^Data/separate/shp/shp.shp")
+
+# Select the variables of interest
+events <- events[, c("country" ,"year", "type_of_violence","latitude" ,"longitude", "best")]
+
+# Rename the variables
+events <- events %>%
+  rename(type = type_of_violence,
+         number_deaths = best)
+events <- mutate(events,
+                 type = case_when(
+                   type == 1 ~ "state",
+                   type == 2 ~ "Nstate",
+                   type == 3 ~ "onesided"
+                 ))
+
+# Set the coordinate system
+events <- st_as_sf(events, coords = c("longitude", "latitude"), crs = st_crs(shp))
+events <- st_transform(events, st_crs(shp))
+
+# Save Dataset
+write.csv(events, paste0("^Data/separate/", "events_coordinates", ".csv"), row.names=FALSE)
+# This dataset contains the coordinate for the conflicts
+
+
+#################################################################################################
+#################################################################################################
+######  INITIAL OPERATIONS FOR MIGRATION DATASET
+
+data_migr <-read.csv("^Data_Raw/Global_migr_raw.csv")
+# Sort the order of the variables
+data_migr <- data_migr[,c("year", "country_name", "worldregion", "population","mig_interval","year_cat10","flow","flow_annual", "outflow_rate_annual", "orig")]
+# Rename some variables
+data_migr <- data_migr %>%
+  rename(country = country_name, 
+         interval=mig_interval)
+
+# Save data
+write.csv(data_migr, paste0("^Data/separate/", "migr", ".csv"), row.names=FALSE)
+
+
+#################################################################################################
+#################################################################################################
 ######  MERGING THE GWS VALUES IN THE REGIONS OF THE SHAPEFILE
 
 # Open shapefile and raster
@@ -104,40 +151,9 @@ write.csv(gw, paste0("^Data/separate/", "gws", ".csv"), row.names=FALSE)
 
 #################################################################################################
 #################################################################################################
-######  INITIAL OPERATIONS FOR CONFLICT DATASET
-
-# Select the raw conflict data and the shapefile
-events <- read.csv("^Data_Raw/Conflict_Data/Global.csv")
-shp <- st_read("^Data/separate/shp/shp.shp")
-
-# Select the variables of interest
-events <- events[, c("country" ,"year", "type_of_violence","latitude" ,"longitude", "best")]
-
-# Rename the variables
-events <- events %>%
-  rename(type = type_of_violence,
-         number_deaths = best)
-events <- mutate(events,
-                 type = case_when(
-                   type == 1 ~ "state",
-                   type == 2 ~ "Nstate",
-                   type == 3 ~ "onesided"
-                 ))
-
-# Set the coordinate system
-events <- st_as_sf(events, coords = c("longitude", "latitude"), crs = st_crs(shp))
-events <- st_transform(events, st_crs(shp))
-
-# Save Dataset
-write.csv(events, paste0("^Data/separate/", "events_coordinates", ".csv"), row.names=FALSE)
-# This dataset contains the coordinate for the conflicts
-
-
-#################################################################################################
-#################################################################################################
 ######  MERGING THE CONFLICT EVENTS IN THE REGIONS OF THE SHAPEFILE
 
-events <- read.csv("^Data/separate/events.csv")
+events <- read.csv("^Data/separate/events_coordinates.csv")
 shp <- sf::read_sf("^Data/separate/shp.shp")
 
 # Intersection shapefile-events and aggregate data 
@@ -168,22 +184,6 @@ events <- events[order(events$year),]
 
 # Save Data
 write.csv(events, paste0("^Data/separate/", "events", ".csv"), row.names=FALSE)
-
-
-#################################################################################################
-#################################################################################################
-######  INITIAL OPERATIONS FOR MIGRATION DATASET
-
-data_migr <-read.csv("^Data_Raw/Global_migr_raw.csv")
-# Sort the order of the variables
-data_migr <- data_migr[,c("year", "country_name", "worldregion", "population","mig_interval","year_cat10","flow","flow_annual", "outflow_rate_annual", "orig")]
-# Rename some variables
-data_migr <- data_migr %>%
-  rename(country = country_name, 
-         interval=mig_interval)
-
-# Save data
-write.csv(data_migr, paste0("^Data/separate/", "migr", ".csv"), row.names=FALSE)
 
 
 #################################################################################################
