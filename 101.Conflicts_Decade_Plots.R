@@ -1,4 +1,5 @@
 events <- st_read("^Data/separate/events_coordinates/events_coordinates.shp")
+shp <- st_read("^Data/separate/shp/shp.shp")
 
 events1 <- subset(events, year >= 1989 & year <= 1999)
 events2 <- subset(events, year >= 2000 & year <= 2009)
