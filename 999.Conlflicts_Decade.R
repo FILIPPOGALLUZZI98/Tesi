@@ -22,21 +22,22 @@ shp <- shp[st_is_valid(shp), ]
 
 events1 <- subset(events, year >= 1989 & year <= 1999)
 events2 <- subset(events, year >= 2000 & year <= 2009)
-events3 <- subset(events, yera >= 2019 & yera <= 2019)
+events3 <- subset(events, year >= 2010 & year <= 2019)
 
 plot_final <- ggplot() +
   geom_sf(data = shp) +
-  geom_sf(data = events1, color = "red")
+  geom_sf(data = events1, color = "red", size=0.5)
 print(plot_final)
 
-ggplot() +
+plot_final <- ggplot() +
   geom_sf(data = shp) +
-  geom_sf(data = events2, color = "red")
+  geom_sf(data = events2, color = "red", size=0.5)
+print(plot_final)
 
-ggplot() +
+plot_final <- ggplot() +
   geom_sf(data = shp) +
-  geom_sf(data = events3, color = "red")
-
+  geom_sf(data = events3, color = "red", size=0.5)
+print(plot_final)
 
 
 
