@@ -7,9 +7,6 @@ em <- read.csv("^Data/joint/gws_migr_events.csv")
 ge <- read.csv("^Data/joint/gws_events.csv")
 gm <- read.csv("^Data/joint/gws_migr.csv")
 
-# Rescale GW data (dividing by 1,000)
-ge$value <- ge$value/1000
-gm$value <- gm$value/1000
 
 #################################################################################################
 ####  GW-EVENTS #################################################################################
