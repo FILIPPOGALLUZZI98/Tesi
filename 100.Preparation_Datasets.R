@@ -189,10 +189,10 @@ events_joined$country.x=NULL
 events1 <- events_joined %>%
   group_by(year, country, region, type, GEOLEVEL1) %>%
   summarise(deaths = sum(number_deaths, na.rm = TRUE))
-
 events2 <- events_joined %>%
   group_by(year, country, region, type, GEOLEVEL1) %>%
   summarise(conflicts = n())
+
 events <- left_join(events1, events2, by=c("year", "country","region","type","GEOLEVEL1"))
 events <- events[, c("year","country", "region","type","deaths", "conflicts","GEOLEVEL1")]
 
