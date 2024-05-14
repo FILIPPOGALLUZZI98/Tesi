@@ -143,6 +143,9 @@ gw <- gw[, c("year","country", "region", "value","orig")]
 gw <- gw %>%
   filter(year > 1945)
 
+# Rescale GW data (dividing by 1,000)
+gw$value <- gw$value/1000
+
 # Save Dataset
 write.csv(gw, paste0("^Data/separate/", "gws", ".csv"), row.names=FALSE)
 # I obtained a dataset called 'gws' with the value of groundwater storage ine each region of the 
