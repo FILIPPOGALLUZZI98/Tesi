@@ -1,6 +1,9 @@
 # This code is used to prepare and reshape the datasets used for the statistical analysis
+
+
 #################################################################################################
-# Packages
+#################################################################################################
+###### PACKAGES
 
 suppressPackageStartupMessages({
   library(sf);library(sp);library(plyr);library(raster);library(ncdf4);library(exactextractr);library(dplyr);library(stringr)
