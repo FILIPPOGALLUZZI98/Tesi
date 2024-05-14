@@ -157,7 +157,7 @@ write.csv(gw, paste0("^Data/separate/", "gws", ".csv"), row.names=FALSE)
 ######  MERGING THE CONFLICT EVENTS IN THE REGIONS OF THE SHAPEFILE
 
 events <- read.csv("^Data/separate/events_coordinates.csv")
-shp <- sf::read_sf("^Data/separate/shp.shp")
+shp <- sf::read_sf("^Data/separate/shp/shp.shp")
 
 # Intersection shapefile-events and aggregate data 
 events_joined <- st_join(events, shp)
