@@ -1,4 +1,4 @@
-# In this code statistical analysis is performed
+# In this code statistical analysis is performed for GWS and Conflicts data
 
 # Fixed effects: year and region; Family: Quasipoisson
 # Independent variables: gws (average 1-5-10 y), gws anomalies (average 1-5-10 y), gws standard deviations (1-5-10 y)
