@@ -36,7 +36,7 @@ setFixest_dict(c(conflicts="Type conflicts", value="gws [g/m^2]",
 ####  GENERALIZED LINEAR REGRESSION FOR GLOBAL DATA
 
 gdp_data <- WDI(indicator = "NY.GDP.MKTP.PP.KD", start = 1988, end = 2022, extra = TRUE)
-gdp_data <- subset(gdp_data, year== 2020)
+gdp_data <- subset(gdp_data, year== 2019)
 
 gdp_high <- subset(gdp_data, income == "High income"); name_high <- unique(gdp_high$country)
 gdp_low <- subset(gdp_data, income == "Low income"); name_low <- unique(gdp_low$country)
