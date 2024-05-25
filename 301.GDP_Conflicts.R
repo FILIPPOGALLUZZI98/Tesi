@@ -49,22 +49,21 @@ ge_highmid <- subset(ge, country %in% name_highmid)
 ge_lowmid <- subset(ge, country %in% name_lowmid)
 
 
-
 high <- fixest::feglm(data=ge_high, conflicts~sw(gws_avg1,gws_avg5,gws_avg10,gws_anomalies,gws_anomalies5,gws_anomalies10,gws_std1,gws_std5,gws_std10,gws_growth1,gws_growth5,gws_growth10)|region + year, family=quasipoisson)
 table_state<- xtable(etable(high), tex=TRUE)
-print(table_state, caption = "Total Conflicts", caption.placement = "top", file = "^Tables/GDPhigh.tex", include.rownames = FALSE)
+print(table_state, caption = "Total Conflicts", caption.placement = "top", file = "^Tables/GDPhigh_confl.tex", include.rownames = FALSE)
 
 low <- fixest::feglm(data=ge_low, conflicts~sw(gws_avg1,gws_avg5,gws_avg10,gws_anomalies,gws_anomalies5,gws_anomalies10,gws_std1,gws_std5,gws_std10,gws_growth1,gws_growth5,gws_growth10)|region + year, family=quasipoisson)
 table_state<- xtable(etable(low), tex=TRUE)
-print(table_state, caption = "Total Conflicts", caption.placement = "top", file = "^Tables/GDPlow.tex", include.rownames = FALSE)
+print(table_state, caption = "Total Conflicts", caption.placement = "top", file = "^Tables/GDPlow_confl.tex", include.rownames = FALSE)
 
 midhigh <- fixest::feglm(data=ge_highmid, conflicts~sw(gws_avg1,gws_avg5,gws_avg10,gws_anomalies,gws_anomalies5,gws_anomalies10,gws_std1,gws_std5,gws_std10,gws_growth1,gws_growth5,gws_growth10)|region + year, family=quasipoisson)
 table_state<- xtable(etable(midhigh), tex=TRUE)
-print(table_state, caption = "Total Conflicts", caption.placement = "top", file = "^Tables/GDPhighmid.tex", include.rownames = FALSE)
+print(table_state, caption = "Total Conflicts", caption.placement = "top", file = "^Tables/GDPhighmid_confl.tex", include.rownames = FALSE)
 
 lowmid <- fixest::feglm(data=ge_lowmid, conflicts~sw(gws_avg1,gws_avg5,gws_avg10,gws_anomalies,gws_anomalies5,gws_anomalies10,gws_std1,gws_std5,gws_std10,gws_growth1,gws_growth5,gws_growth10)|region + year, family=quasipoisson)
 table_state<- xtable(etable(lowmid), tex=TRUE)
-print(table_state, caption = "Total Conflicts", caption.placement = "top", file = "^Tables/GDPlowmid.tex", include.rownames = FALSE)
+print(table_state, caption = "Total Conflicts", caption.placement = "top", file = "^Tables/GDPlowmid_confl.tex", include.rownames = FALSE)
 
 
 
