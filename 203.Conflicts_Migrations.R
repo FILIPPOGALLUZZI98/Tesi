@@ -2,7 +2,7 @@
 
 # Fixed effects: year and region; Family: Gaussian
 # Independent variables: 
-# Dependent variable: migrants (????)
+# Dependent variable: migrants (number of migrants/population in the time interval considered)
 
 
 #################################################################################################
