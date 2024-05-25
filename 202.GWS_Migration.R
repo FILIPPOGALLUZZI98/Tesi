@@ -3,7 +3,7 @@
 # Fixed effects: year and region; Family: Gaussian
 # Independent variables: gws (average 1-5-10 y), gws anomalies (average 1-5-10 y), gws standard deviations (1-5-10 y)
 # gws growth rate percentage (1-5-10 y)
-# Dependent variable: migrants (????)
+# Dependent variable: migrants (number of migrants/population in the time interval considered)
 
 
 #################################################################################################
