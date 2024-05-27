@@ -43,7 +43,8 @@ gdp_low <- subset(gdp_data, income == "Low income"); name_low <- unique(gdp_low$
 gdp_lowmid <- subset(gdp_data, income == "Lower middle income"); name_lowmid <- unique(gdp_lowmid$country)
 gdp_highmid <- subset(gdp_data, income == "Upper middle income"); name_highmid <- unique(gdp_highmid$country)
 
-ge <- subset(ge, year>1988, type=="state")
+ge <- subset(ge, type=="state")
+ge <- subset(ge, year>1988)
 
 ge_high <- subset(ge, country %in% name_high)
 ge_low <- subset(ge, country %in% name_low)
