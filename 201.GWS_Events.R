@@ -47,9 +47,6 @@ print(table, caption = "Total Conflicts", caption.placement = "top", file = "^Ta
 #################################################################################################
 ####  GENERALIZED LINEAR REGRESSION FOR CONTINENTS DATA
 
-# Create a subset of the dataset (because the variables are counted thrice (one for each type of conflict)
-events_sum <- subset(ge, type=="state"& year>1988)
-
 continent <- "Africa"
 get_continent <- function(countries) {
   countrycode(countries, "country.name", "continent")}
