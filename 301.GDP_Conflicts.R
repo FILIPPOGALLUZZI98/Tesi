@@ -23,12 +23,12 @@ suppressPackageStartupMessages({
 ge <- read.csv("^Data/gws_events.csv")
 
 # Setting of the dictionary for the tables
-setFixest_dict(c(conflicts="Type conflicts", value="gws [g/m^2]",
+setFixest_dict(c(conflicts="# Conflicts", value="gws [g/m^2]",
                  gws_avg1="gws 1-y", gws_avg5="gws 5-y", gws_avg10="gws 10-y",
                  gws_growth1="gws growth rate 1-y", gws_growth5="gws growth rate 5-y", gws_growth10="gws growth rate 10-y",
                  gws_std1="gws st dev 1-y", gws_std5="gws st dev 5-y", gws_std10="gws st dev 10-y",
                  gws_anomalies="gws anomalies 1y (1980-2010)", gws_anomalies5="gws anomalies 5y (1980-2010)",
-                 gws_anomalies10="gws anomalies 10y (1980-2010)",count="total conflict"))
+                 gws_anomalies10="gws anomalies 10y (1980-2010)",count="# conflicts"))
 
 
 #################################################################################################
@@ -42,6 +42,9 @@ gdp_high <- subset(gdp_data, income == "High income"); name_high <- unique(gdp_h
 gdp_low <- subset(gdp_data, income == "Low income"); name_low <- unique(gdp_low$country)
 gdp_lowmid <- subset(gdp_data, income == "Lower middle income"); name_lowmid <- unique(gdp_lowmid$country)
 gdp_highmid <- subset(gdp_data, income == "Upper middle income"); name_highmid <- unique(gdp_highmid$country)
+
+ge <- subset(ge, year>1988)
+ge <- subset(ge, type=="state")
 
 ge_high <- subset(ge, country %in% name_high)
 ge_low <- subset(ge, country %in% name_low)
