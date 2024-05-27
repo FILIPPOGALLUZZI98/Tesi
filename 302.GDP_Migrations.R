@@ -23,7 +23,7 @@ suppressPackageStartupMessages({
 gm <- read.csv("^Data/gws_migr.csv")
 
 # Setting of the dictionary for the tables
-setFixest_dict(c(migrants="number of migrants/pop in interval", value="gws [g/m^3]",
+setFixest_dict(c(migrants="# migrants/pop", value="gws [g/m^3]",
                  gws_avg1="gws 1-y", gws_avg5="gws 5-y", gws_avg10="gws 10-y",
                  gws_growth1="gws growth rate 1-y", gws_growth5="gws growth rate 5-y", gws_growth10="gws growth rate 10-y",
                  gws_std1="gws st dev 1-y", gws_std5="gws st dev 5-y", gws_std10="gws st dev 10-y",
@@ -42,6 +42,7 @@ gdp_low <- subset(gdp_data, income == "Low income"); name_low <- unique(gdp_low$
 gdp_lowmid <- subset(gdp_data, income == "Lower middle income"); name_lowmid <- unique(gdp_lowmid$country)
 gdp_highmid <- subset(gdp_data, income == "Upper middle income"); name_highmid <- unique(gdp_highmid$country)
 
+gm <- subset(gm, year>1959)
 
 ####  INTERVAL 1-Y
 gm_1 <- subset(gm, interval==1)
