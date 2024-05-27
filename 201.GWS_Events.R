@@ -36,7 +36,7 @@ setFixest_dict(c(conflicts="Type conflicts", value="gws [g/m^2]",
 ####  GENERALIZED LINEAR REGRESSION FOR GLOBAL DATA
 
 # Create a subset of the dataset (because the variables are counted thrice (one for each type of conflict)
-events_sum <- subset(ge, type=="state")
+events_sum <- subset(ge, type=="state", year>1988)
 
 model <- fixest::feglm(data=events_sum, count~sw(gws_avg1,gws_avg5,gws_avg10, gws_anomalies, gws_anomalies5, gws_anomalies10, gws_std1, gws_std5,gws_std10, gws_growth1, gws_growth5, gws_growth10)|region + year, family=quasipoisson)
 table <- xtable(etable(model), tex=TRUE)
@@ -48,7 +48,7 @@ print(table, caption = "Total Conflicts", caption.placement = "top", file = "^Ta
 ####  GENERALIZED LINEAR REGRESSION FOR CONTINENTS DATA
 
 # Create a subset of the dataset (because the variables are counted thrice (one for each type of conflict)
-events_sum <- subset(ge, type=="state")
+events_sum <- subset(ge, type=="state", year>1988)
 
 continent <- "Africa"
 get_continent <- function(countries) {
@@ -109,17 +109,17 @@ print(table_Camerica, caption = "Total Conflicts", caption.placement = "top", fi
 #################################################################################################
 ####  GENERALIZED LINEAR REGRESSION FOR TYPE OF CONFLICTS DATA
 
-state <- subset(ge, type=="state")
+state <- subset(ge, type=="state", year>1988)
 state <- fixest::feglm(data=state, conflicts~sw(gws_avg1,gws_avg5,gws_avg10,gws_anomalies,gws_anomalies5,gws_anomalies10,gws_std1,gws_std5,gws_std10,gws_growth1,gws_growth5,gws_growth10)|region + year, family=quasipoisson)
 table_state<- xtable(etable(state), tex=TRUE)
 print(table_state, caption = "Total Conflicts", caption.placement = "top", file = "^Tables/glm_conflicts_state.tex", include.rownames = FALSE)
 
-Nstate <- subset(ge, type=="Nstate")
+Nstate <- subset(ge, type=="Nstate", year>1988)
 Nstate <- fixest::feglm(data=Nstate, conflicts~sw(gws_avg1,gws_avg5,gws_avg10,gws_anomalies,gws_anomalies5,gws_anomalies10,gws_std1,gws_std5,gws_std10,gws_growth1,gws_growth5,gws_growth10)|region + year, family=quasipoisson)
 table_Nstate<- xtable(etable(Nstate), tex=TRUE)
 print(table_Nstate, caption = "Total Conflicts", caption.placement = "top", file = "^Tables/glm_conflicts_Nstate.tex", include.rownames = FALSE)
 
-onesided <- subset(ge, type=="onesided")
+onesided <- subset(ge, type=="onesided", year>1988)
 onesided <- fixest::feglm(data=onesided, conflicts~sw(gws_avg1,gws_avg5,gws_avg10,gws_anomalies,gws_anomalies5,gws_anomalies10,gws_std1,gws_std5,gws_std10,gws_growth1,gws_growth5,gws_growth10)|region + year, family=quasipoisson)
 table_onesided<- xtable(etable(onesided), tex=TRUE)
 print(table_onesided, caption = "Total Conflicts", caption.placement = "top", file = "^Tables/glm_conflicts_onesided.tex", include.rownames = FALSE)
