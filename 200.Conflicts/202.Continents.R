@@ -1,7 +1,5 @@
 # In this code statistical analysis is performed for GWS and Conflicts data divided by CONTINENT
 
-###### PACKAGES
-
 suppressPackageStartupMessages({
   library(sf);library(sp);library(plyr);library(raster);library(ncdf4);library(exactextractr);library(dplyr);library(stringr)
   library(reshape2);library(ggplot2);library(ggrepel);library(lubridate);library(zoo);library(foreign); library(countrycode);
