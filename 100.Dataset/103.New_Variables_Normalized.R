@@ -1,4 +1,14 @@
-######  DEFINE NEW VARIABLES FOR GW - EVENTS
+###### PACKAGES
+
+suppressPackageStartupMessages({
+  library(sf);library(sp);library(plyr);library(raster);library(ncdf4);library(exactextractr);library(dplyr);library(stringr)
+  library(reshape2);library(ggplot2);library(ggrepel);library(lubridate);library(zoo);library(foreign); library(countrycode);
+  library(fixest); library(broom);library(knitr); library(stargazer); library(xtable)} )
+
+
+#################################################################################################
+#################################################################################################
+######  DEFINE NEW NORMALIZED VARIABLES FOR GW - EVENTS
 
 # Open the dataset
 gws_events <- read.csv("^Data/joint/gws_events.csv")
