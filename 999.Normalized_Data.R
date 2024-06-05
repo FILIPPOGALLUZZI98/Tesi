@@ -8,30 +8,33 @@ gws_events <- gws_events %>%
 
 # TOTAL NUMBER OF CONFLICTS PER YEAR
 gws_events <- gws_events %>% 
+  arrange(year, country, region, type) %>%
   group_by(year, country, region) %>% 
   mutate(count = sum(conflicts))
 
 # NORMALIZATION OF GWS VALUES
 gws_events <- gws_events %>%
+  arrange(year, country, region, type) %>%
   group_by(country,region) %>%
-  mutate(z_value = (value - min(value)) / (max(value) - min(value)))
+  mutate(z_value = (value - min(value)) / (max(value)))
 
 # NORMALIZATION OF EVENTS
 gws_events <- gws_events %>%
+  arrange(year, country, region, type) %>%
   group_by(country,region) %>%
-  mutate(z_count = (count - min(count)) / (max(count) - min(count)))
+  mutate(z_count = (count - min(count)) / (max(count)))
 
 # NORMALIZATION OF CONLFLITCS
 gws_events <- gws_events %>%
+  arrange(year, country, region, type) %>%
   group_by(country,region) %>%
-  mutate(z_confl = (conflicts - min(conflicts)) / (max(conflicts) - min(conflicts)))
+  mutate(z_confl = (conflicts - min(conflicts)) / (max(conflicts)))
 
 
 # CHANGE NAMES
 gws_events$value <- gws_events$z_value; gws_events$z_value=NULL
 gws_events$count <- gws_events$z_count; gws_events$z_count=NULL
 gws_events$conflicts <- gws_events$z_confl; gws_events$z_confl=NULL
-
 
 
 # AVERAGES FOR 1-5-10 YEARS 
