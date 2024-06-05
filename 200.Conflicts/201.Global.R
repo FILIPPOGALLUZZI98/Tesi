@@ -1,4 +1,4 @@
-# In this code statistical analysis is performed for GWS and Conflicts data
+# In this code statistical analysis is performed for GLOBAL GWS and Conflicts data
 
 ###### PACKAGES
 
