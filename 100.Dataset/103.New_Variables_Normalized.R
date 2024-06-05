@@ -1,3 +1,5 @@
+# In this code the new variables are prepared and normalized
+
 ###### PACKAGES
 
 suppressPackageStartupMessages({
