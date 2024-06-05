@@ -16,19 +16,19 @@ gws_events <- gws_events %>%
 gws_events <- gws_events %>%
   arrange(year, country, region, type) %>%
   group_by(country,region) %>%
-  mutate(z_value = (value - min(value)) / (max(value)))
+  mutate(z_value = (value - min(value)) / (max(value)-min(value) ))
 
 # NORMALIZATION OF EVENTS
 gws_events <- gws_events %>%
   arrange(year, country, region, type) %>%
   group_by(country,region) %>%
-  mutate(z_count = (count - min(count)) / (max(count)))
+  mutate(z_count = (count - min(count)) / (max(count)-min(count)))
 
 # NORMALIZATION OF CONLFLITCS
 gws_events <- gws_events %>%
   arrange(year, country, region, type) %>%
   group_by(country,region) %>%
-  mutate(z_confl = (conflicts - min(conflicts)) / (max(conflicts)))
+  mutate(z_confl = (conflicts - min(conflicts)) / (max(conflicts)-min(conflicts)))
 
 
 # CHANGE NAMES
@@ -120,6 +120,14 @@ setFixest_dict(c(conflicts="# conflicts", value="gws [Kg/m^2]",
 events_sum <- subset(ge, type=="state" & year>1988)
 
 model <- fixest::feglm(data=events_sum, count~sw(gws_avg1,gws_avg5,gws_avg10, gws_anomalies, gws_anomalies5, gws_anomalies10, gws_std1, gws_std5,gws_std10, gws_growth1, gws_growth5, gws_growth10)|region + year, family=quasipoisson)
+etable(Asia)
+
+continent <- "Asia"
+get_continent <- function(countries) {
+  countrycode(countries, "country.name", "continent")}
+data_continent <- events_sum %>%
+  filter(get_continent(country) == continent)
+Asia <- fixest::feglm(data = data_continent, count ~ sw(gws_avg1,gws_avg5,gws_avg10,gws_anomalies,gws_anomalies5,gws_anomalies10, gws_std1,gws_std5,gws_std10,gws_growth1,gws_growth5,gws_growth10) | region + year, family = quasipoisson)
 
 
 
@@ -129,13 +137,7 @@ model <- fixest::feglm(data=events_sum, count~sw(gws_avg1,gws_avg5,gws_avg10, gw
 
 
 
-
-
-
-
-
-
-
+plot(data_continent$gws_std10,data_continent$count,cex=0.2,phc=19)
 
 
 
