@@ -122,6 +122,7 @@ gws_migr$value <- gws_migr$value*1000
 gws_migr <- gws_migr %>%
   mutate(migrants=flow/population)
 
+
 # NORMALIZATION OF GWS VALUES
 gws_migr <- subset(gws_migr, !is.na(value))
 gws_migr <- gws_migr %>%
@@ -130,6 +131,7 @@ gws_migr <- gws_migr %>%
   mutate(z_value = (value - min(value)) / (max(value)-min(value) ))
 gws_migr$z_value[is.nan(gws_migr$z_value)] <- 0
 gws_migr$value <- gws_migr$z_value; gws_migr$z_value=NULL
+
 
 # AVERAGES FOR 1-5-10 YEARS 
 gws_migr <- gws_migr %>%
@@ -185,6 +187,7 @@ gws_migr <- gws_migr %>%
   mutate(gws_anomalies = (value-mean_region)/std,
          gws_anomalies5 = (gws_avg5-mean_region)/std,
          gws_anomalies10 = (gws_avg10-mean_region)/std)
+
 
 write.csv(gws_migr, paste0("^Data/", "gws_migr_normalized", ".csv"), row.names=FALSE)
 
