@@ -38,20 +38,16 @@ ge_lowmid <- subset(ge, country %in% name_lowmid)
 
 
 high <- fixest::feglm(data=ge_high, count~sw(gws_avg1,gws_avg5,gws_avg10,gws_anomalies,gws_anomalies5,gws_anomalies10,gws_std1,gws_std5,gws_std10,gws_growth1,gws_growth5,gws_growth10)|region + year, family=quasipoisson)
-table_state<- xtable(etable(high), tex=TRUE)
-print(table_state, caption = "Total Conflicts", caption.placement = "top", file = "^Tables/GDPhigh_confl.tex", include.rownames = FALSE)
+etable(high)
 
 low <- fixest::feglm(data=ge_low, count~sw(gws_avg1,gws_avg5,gws_avg10,gws_anomalies,gws_anomalies5,gws_anomalies10,gws_std1,gws_std5,gws_std10,gws_growth1,gws_growth5,gws_growth10)|region + year, family=quasipoisson)
-table_state<- xtable(etable(low), tex=TRUE)
-print(table_state, caption = "Total Conflicts", caption.placement = "top", file = "^Tables/GDPlow_confl.tex", include.rownames = FALSE)
+etable(low)
 
 midhigh <- fixest::feglm(data=ge_highmid, count~sw(gws_avg1,gws_avg5,gws_avg10,gws_anomalies,gws_anomalies5,gws_anomalies10,gws_std1,gws_std5,gws_std10,gws_growth1,gws_growth5,gws_growth10)|region + year, family=quasipoisson)
-table_state<- xtable(etable(midhigh), tex=TRUE)
-print(table_state, caption = "Total Conflicts", caption.placement = "top", file = "^Tables/GDPhighmid_confl.tex", include.rownames = FALSE)
+etable(midhigh)
 
 lowmid <- fixest::feglm(data=ge_lowmid, count~sw(gws_avg1,gws_avg5,gws_avg10,gws_anomalies,gws_anomalies5,gws_anomalies10,gws_std1,gws_std5,gws_std10,gws_growth1,gws_growth5,gws_growth10)|region + year, family=quasipoisson)
-table_state<- xtable(etable(lowmid), tex=TRUE)
-print(table_state, caption = "Total Conflicts", caption.placement = "top", file = "^Tables/GDPlowmid_confl.tex", include.rownames = FALSE)
+etable(lowmid)
 
 
 #################################################################################################
@@ -86,22 +82,16 @@ ge_lowmid <- subset(ge, country %in% name_lowmid)
 
 
 high <- fixest::feglm(data=ge_high, count~sw(gws_avg1,gws_avg5,gws_avg10,gws_anomalies,gws_anomalies5,gws_anomalies10,gws_std1,gws_std5,gws_std10,gws_growth1,gws_growth5,gws_growth10)|region + year, family=quasipoisson)
-table_state<- xtable(etable(high), tex=TRUE)
-print(table_state, caption = "Total Conflicts", caption.placement = "top", file = "^Tables/GDPhigh_confl.tex", include.rownames = FALSE)
+etable(high)
 
 low <- fixest::feglm(data=ge_low, count~sw(gws_avg1,gws_avg5,gws_avg10,gws_anomalies,gws_anomalies5,gws_anomalies10,gws_std1,gws_std5,gws_std10,gws_growth1,gws_growth5,gws_growth10)|region + year, family=quasipoisson)
-table_state<- xtable(etable(low), tex=TRUE)
-print(table_state, caption = "Total Conflicts", caption.placement = "top", file = "^Tables/GDPlow_confl.tex", include.rownames = FALSE)
+etable(low)
 
 midhigh <- fixest::feglm(data=ge_highmid, count~sw(gws_avg1,gws_avg5,gws_avg10,gws_anomalies,gws_anomalies5,gws_anomalies10,gws_std1,gws_std5,gws_std10,gws_growth1,gws_growth5,gws_growth10)|region + year, family=quasipoisson)
-table_state<- xtable(etable(midhigh), tex=TRUE)
-print(table_state, caption = "Total Conflicts", caption.placement = "top", file = "^Tables/GDPhighmid_confl.tex", include.rownames = FALSE)
+etable(midhigh)
 
 lowmid <- fixest::feglm(data=ge_lowmid, count~sw(gws_avg1,gws_avg5,gws_avg10,gws_anomalies,gws_anomalies5,gws_anomalies10,gws_std1,gws_std5,gws_std10,gws_growth1,gws_growth5,gws_growth10)|region + year, family=quasipoisson)
-table_state<- xtable(etable(lowmid), tex=TRUE)
-print(table_state, caption = "Total Conflicts", caption.placement = "top", file = "^Tables/GDPlowmid_confl.tex", include.rownames = FALSE)
-
-
+etable(lowmid)
 
 
 
