@@ -12,6 +12,10 @@ suppressPackageStartupMessages({
 
 # Open the dataset
 gws_events <- read.csv("^Data/joint/gws_events.csv")
+gws_events$value <- gws_events$value*1000
+gws_events <- gws_events %>%
+  filter(year>1978)
+
 
 # AVERAGES FOR 1-5-10 YEARS 
 gws_events <- gws_events %>%
@@ -82,6 +86,8 @@ write.csv(gws_events, paste0("^Data/", "gws_events", ".csv"), row.names=FALSE)
 
 # Open the dataset
 gws_migr <- read.csv("^Data/joint/gws_migr.csv")
+gws_migr$value <- gws_migr$value*1000
+
 
 # GWS AVERAGES 1-5-10 YEARS
 gws_migr <- gws_migr %>%
