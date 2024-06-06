@@ -12,7 +12,6 @@ suppressPackageStartupMessages({
 
 # Upload of the groundwater-events dataset
 ge <- read.csv("^Data/gws_events.csv")
-# ge <- read.csv("^Data/gws_events_normalized.csv")
 
 # Setting of the dictionary for the tables
 setFixest_dict(c(conflicts="# conflicts", value="gws [Kg/m^2]",
