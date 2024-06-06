@@ -27,13 +27,13 @@ gws_events <- gws_events %>%
   group_by(year, country, region) %>% 
   mutate(count = sum(conflicts))
 
+
 # NORMALIZATION OF CONLFLITCS
 gws_events <- gws_events %>%
   arrange(year, country, region, type) %>%
   group_by(country,region) %>%
   mutate(n_confl = (conflicts - min(conflicts)) / (max(conflicts)-min(conflicts)))
 gws_events$n_confl[is.nan(gws_events$n_confl)] <- 0
-
 
 # NORMALIZATION OF COUNT
 gws_events <- gws_events %>%
@@ -49,6 +49,7 @@ gws_events <- gws_events %>%
   mutate(n_value = (value - min(value)) / (max(value)-min(value) ))
 gws_events$n_value[is.nan(gws_events$n_value)] <- 0
 
+
 # AVERAGES FOR 1-5-10 YEARS 
 gws_events <- gws_events %>%
   arrange(year, country, region, type) %>%
@@ -57,7 +58,7 @@ gws_events <- gws_events %>%
          gws_avg5 = rollmean(value, k = 5, align = "right", fill = NA),
          gws_avg10 = rollmean(value, k = 10, align = "right", fill = NA))
 
-# AVERAGES FOR 1-5-10 YEARS 
+# AVERAGES FOR 1-5-10 YEARS (NORMALIZED)
 gws_events <- gws_events %>%
   arrange(year, country, region, type) %>%
   group_by(country, region, type) %>%
@@ -130,7 +131,21 @@ write.csv(gws_events, paste0("^Data/", "gws_events", ".csv"), row.names=FALSE)
 # Open the dataset
 gws_migr <- read.csv("^Data/joint/gws_migr.csv")
 gws_migr$value <- gws_migr$value*1000
+gws_migr$orig=NULL
+gws_migr <- gws_migr %>%
+  filter(!is.na(value))
 
+# NUMBER OF MIGRANTS LEAVING A REGION IN THE CONSIDERED INTERVAL DIVIDED BY THE POPULATION
+# PERCENTAGE OF TOTAL POPULATION
+gws_migr <- gws_migr %>%
+  mutate(migrants=(flow/population)*100)
+
+# NORMALIZATION OF VALUE
+gws_migr <- gws_migr %>%
+  arrange(year, country, region) %>%
+  group_by(country,region) %>%
+  mutate(n_value = (value - min(value)) / (max(value)-min(value) ))
+gws_migr$n_value[is.nan(gws_migr$n_value)] <- 0
 
 # GWS AVERAGES 1-5-10 YEARS
 gws_migr <- gws_migr %>%
@@ -139,6 +154,19 @@ gws_migr <- gws_migr %>%
   mutate(gws_avg1 = (lag(value) + value)/2, 
          gws_avg5 = rollmean(value, k = 5, align = "right", fill = NA),
          gws_avg10 = rollmean(value, k = 10, align = "right", fill = NA))
+
+# AVERAGES FOR 1-5-10 YEARS (NORMALIZED)
+gws_migr <- gws_migr %>%
+  arrange(year, country, region) %>%
+  group_by(country, region) %>%
+  mutate(n_gws_avg1 = (lag(n_value) + n_value)/2, 
+         n_gws_avg5 = rollmean(n_value, k = 5, align = "right", fill = NA),
+         n_gws_avg10 = rollmean(n_value, k = 10, align = "right", fill = NA))
+
+
+
+
+
 
 # GWS GROWTH RATE % 1-5-10 YEARS
 gws_migr <- gws_migr %>%
@@ -187,11 +215,6 @@ gws_migr <- gws_migr %>%
   mutate(gws_anomalies = (value-mean_region)/std,
          gws_anomalies5 = (gws_avg5-mean_region)/std,
          gws_anomalies10 = (gws_avg10-mean_region)/std)
-
-# NUMBER OF MIGRANTS LEAVING A REGION IN THE CONSIDERED INTERVAL DIVIDED BY THE POPULATION
-# PERCENTAGE OF TOTAL POPULATION
-gws_migr <- gws_migr %>%
-  mutate(migrants=(flow/population)*100)
 
 # Coefficiente di variazione (%)
 gws_migr <- gws_migr %>%
