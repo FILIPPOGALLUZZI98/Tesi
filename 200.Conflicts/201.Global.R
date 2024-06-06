@@ -23,7 +23,7 @@ setFixest_dict(c(conflicts="# conflicts", value="gws [Kg/m^2]",
 
 
 # Create a subset of the dataset (because the variables are counted thrice (one for each type of conflict)
-events_sum <- subset(ge, type=="state" & year>1988)
+events_sum <- subset(ge, type=="state")
 
 model <- fixest::feglm(data=events_sum, count~sw(gws_avg1,gws_avg5,gws_avg10, gws_anomalies, gws_anomalies5, gws_anomalies10, gws_std1, gws_std5,gws_std10, gws_growth1, gws_growth5, gws_growth10)|region + year, family=quasipoisson)
 etable(model)
