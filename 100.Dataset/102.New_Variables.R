@@ -12,7 +12,9 @@ suppressPackageStartupMessages({
 
 # Open the dataset
 gws_events <- read.csv("^Data/joint/gws_events.csv")
-gws_events$value <- gws_events$value*1000
+gws_events$value <- gws_events$value*1000  ## Original values of GWS
+
+# Since the conflict datasets start from 1989 i just need data from 1979
 gws_events <- gws_events %>%
   filter(year>1978)
 
@@ -71,6 +73,15 @@ gws_events <- gws_events %>%
   mutate(gws_anomalies = (value-mean_region)/std,
          gws_anomalies5 = (gws_avg5-mean_region)/std,
          gws_anomalies10 = (gws_avg10-mean_region)/std)
+
+# Coefficiente di variazione (%)
+gws_events <- gws_events %>%
+  arrange(year, country, region, type) %>%
+  group_by(country, region, type) %>%
+  mutate(CV1=(gws_std1/mean_region)*100,
+         CV5=(gws_std5/mean_region)*100,
+         CV10=(gws_std10/mean_region)*100) 
+
 
 # TOTAL NUMBER OF CONFLICTS PER YEAR
 gws_events <- gws_events %>% 
@@ -148,6 +159,14 @@ gws_migr <- gws_migr %>%
 # NUMBER OF MIGRANTS LEAVING A REGION IN THE CONSIDERED INTERVAL DIVIDED BY THE POPULATION
 gws_migr <- gws_migr %>%
   mutate(migrants=flow/population)
+
+# Coefficiente di variazione (%)
+gws_migr <- gws_migr %>%
+  arrange(year, country, region, type) %>%
+  group_by(country, region) %>%
+  mutate(CV1=(gws_std1/mean_region)*100,
+         CV5=(gws_std5/mean_region)*100,
+         CV10=(gws_std10/mean_region)*100) 
 
 write.csv(gws_migr, paste0("^Data/", "gws_migr", ".csv"), row.names=FALSE)
 
