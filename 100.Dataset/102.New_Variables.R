@@ -121,6 +121,9 @@ gws_events <- gws_events %>%
          CV5=(gws_std5/mean_region)*100,
          CV10=(gws_std10/mean_region)*100) 
 
+gws_events <- gws_events %>%
+  filter(year>1988)
+
 write.csv(gws_events, paste0("^Data/", "gws_events", ".csv"), row.names=FALSE)
 
 
