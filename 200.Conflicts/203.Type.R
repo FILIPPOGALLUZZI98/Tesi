@@ -8,7 +8,7 @@ suppressPackageStartupMessages({
 
 #################################################################################################
 #################################################################################################
-####  GENERALIZED LINEAR REGRESSION FOR TYPE (NOT NORMALIZED)
+####  GENERALIZED LINEAR REGRESSION FOR TYPE 
 
 # Upload of the groundwater-events dataset
 ge <- read.csv("^Data/gws_events.csv")
