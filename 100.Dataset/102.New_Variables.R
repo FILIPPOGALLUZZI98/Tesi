@@ -166,11 +166,6 @@ gws_migr <- gws_migr %>%
          n_gws_avg5 = rollmean(n_value, k = 5, align = "right", fill = NA),
          n_gws_avg10 = rollmean(n_value, k = 10, align = "right", fill = NA))
 
-
-
-
-
-
 # GWS GROWTH RATE % 1-5-10 YEARS
 gws_migr <- gws_migr %>%
   arrange(year, country, region) %>%
