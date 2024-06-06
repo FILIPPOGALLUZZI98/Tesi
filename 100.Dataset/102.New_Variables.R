@@ -162,11 +162,14 @@ gws_migr <- gws_migr %>%
 
 # Coefficiente di variazione (%)
 gws_migr <- gws_migr %>%
-  arrange(year, country, region, type) %>%
+  arrange(year, country, region) %>%
   group_by(country, region) %>%
   mutate(CV1=(gws_std1/mean_region)*100,
          CV5=(gws_std5/mean_region)*100,
          CV10=(gws_std10/mean_region)*100) 
+
+gws_migr <- gws_migr %>%
+  filter(!is.na(interval))
 
 write.csv(gws_migr, paste0("^Data/", "gws_migr", ".csv"), row.names=FALSE)
 
