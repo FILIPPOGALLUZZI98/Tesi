@@ -1,4 +1,10 @@
-# This code is used to prepare and reshape the datasets used for the statistical analysis
+# This code is used to prepare and reshape the raw datasets:
+# 1) Operations on the shapefile
+# 2) Operations on the raster data (groundwater storage)
+# 3) Operations on the conflict data (to have a file that contains the coordinates)
+# 4) Operations on the migration dataset
+# 5) Operations to merge and to join the separate datasets
+
 
 suppressPackageStartupMessages({
   library(sf);library(sp);library(plyr);library(raster);library(ncdf4);library(exactextractr);library(dplyr);library(stringr)
@@ -68,6 +74,9 @@ writeRaster(gws, filename = output_nc, format = "CDF", overwrite = TRUE)
 #################################################################################################
 #################################################################################################
 ######  INITIAL OPERATIONS FOR CONFLICT DATASET
+
+# This code is used to create a dataset just for plotting the coordinates of the conflicts
+# The same code is copied below (because the saving of this file was continuing to give me errors)
 
 # Select the raw conflict data and the shapefile
 events <- read.csv("^Data_Raw/Conflict_Data/Global.csv")
@@ -144,7 +153,7 @@ gw$value <- gw$value/1000
 
 # Save Dataset
 write.csv(gw, paste0("^Data/separate/", "gws", ".csv"), row.names=FALSE)
-# I obtained a dataset called 'gws' with the value of groundwater storage ine each region of the 
+# I obtained a dataset called 'gws' with the value of groundwater storage in each region of the 
 # shapefile and for each year
 
 
