@@ -1,35 +1,42 @@
 # In this code statistical analysis is performed for GLOBAL GWS and Migration data
+# Generalized linear regression with fixed effects (region and year)
+# Family: gaussian
 
 suppressPackageStartupMessages({
   library(sf);library(sp);library(plyr);library(raster);library(ncdf4);library(exactextractr);library(dplyr);library(stringr)
   library(reshape2);library(ggplot2);library(ggrepel);library(lubridate);library(zoo);library(foreign); library(countrycode);
-  library(fixest); library(broom);library(knitr); library(stargazer); library(xtable)} )
+  library(fixest);library(xtable); library(data.table)} )
 
 
 #################################################################################################
 #################################################################################################
-####  GENERALIZED LINEAR REGRESSION FOR GLOBAL DATA (NOT NORMALIZED)
 
 # Upload of the groundwater-migrations dataset
 gm <- read.csv("^Data/gws_migr.csv")
-# gm <- read.csv("^Data/gws_migr_normalized.csv")
 
 # Setting of the dictionary for the tables
-setFixest_dict(c(migrants="# migrants/pop", value="gws [g/m^2]",
-                 gws_avg1="gws 1-y", gws_avg5="gws 5-y", gws_avg10="gws 10-y",
-                 gws_growth1="gws growth rate 1-y", gws_growth5="gws growth rate 5-y", gws_growth10="gws growth rate 10-y",
-                 gws_std1="gws st dev 1-y", gws_std5="gws st dev 5-y", gws_std10="gws st dev 10-y",
-                 gws_anomalies="gws anomalies 1y (1980-2010)", gws_anomalies5="gws anomalies 5y (1980-2010)",
-                 gws_anomalies10="gws anomalies 10y (1980-2010)"))
+setFixest_dict(c(migrants="# migrants/pop", value="gws [Kg/m^2]",
+                 gws_avg1="average 1-y", gws_avg5="average 5-y", gws_avg10="average 10-y",
+                 gws_growth1="growth rate (%) 1-y", gws_growth5="growth rate (%) 5-y", gws_growth10="growth rate (%) 10-y",
+                 gws_std1="STD 1-y", gws_std5="STD 5-y", gws_std10="STD 10-y",
+                 gws_anomalies="anomalies 1y", gws_anomalies5="gws anomalies 5y",
+                 gws_anomalies10="gws anomalies 10y", n_value="normalized gws",
+                 n_gws_avg1="normalized average 1-y", n_gws_avg5="normalized average 5-y,n_gws_avg10="normalized average 10-y,
+                 CV1="Coefficient of variation 1-y", CV5="Coefficient of variation 5-y",CV10="Coefficient of variation 10-y"))
+
+
+# Statistical model and tables
 
 # 1-y Migration data
 data_1 <- subset(gm, interval==1)
-model <- fixest::feglm(data=data_1, log(migrants)~sw(gws_avg1,gws_avg5,gws_avg10, gws_anomalies, gws_anomalies5, gws_anomalies10, gws_std1, gws_std5,gws_std10, gws_growth1, gws_growth5, gws_growth10)|region + year, family=gaussian)
-etable(model)
+model <- fixest::feglm(data=data_1, log(migrants)~sw(value, n_value,gws_avg1,gws_avg5,gws_avg10, n_gws_avg1,n_gws_avg5,n_gws_avg10, gws_anomalies, gws_anomalies5, gws_anomalies10, gws_std1, gws_std5,gws_std10, CV1, CV5, CV10, gws_growth1, gws_growth5, gws_growth10)|region + year, family=gaussian)
+tabella <- etable(model); df <- as.data.frame(tabella)
+write.csv(tabella, "^Tabelle/migration_global_1.csv", row.names = FALSE)
 
 # 5-y Migration data
 data_5 <- subset(gm, interval==5)
-model <- fixest::feglm(data=data_5, log(migrants)~sw(gws_avg1,gws_avg5,gws_avg10, gws_anomalies, gws_anomalies5, gws_anomalies10, gws_std1, gws_std5,gws_std10, gws_growth1, gws_growth5, gws_growth10)|region + year, family=gaussian)
-etable(model)
+model <- fixest::feglm(data=data_5, log(migrants)~sw(value, n_value,gws_avg1,gws_avg5,gws_avg10, n_gws_avg1,n_gws_avg5,n_gws_avg10, gws_anomalies, gws_anomalies5, gws_anomalies10, gws_std1, gws_std5,gws_std10, CV1, CV5, CV10, gws_growth1, gws_growth5, gws_growth10)|region + year, family=gaussian)
+tabella <- etable(model); df <- as.data.frame(tabella)
+write.csv(tabella, "^Tabelle/migration_global_5.csv", row.names = FALSE)
 
 
