@@ -21,7 +21,7 @@ setFixest_dict(c(migrants="# migrants/pop", value="gws [Kg/m^2]",
                  gws_std1="STD 1-y", gws_std5="STD 5-y", gws_std10="STD 10-y",
                  gws_anomalies="anomalies 1y", gws_anomalies5="gws anomalies 5y",
                  gws_anomalies10="gws anomalies 10y", n_value="normalized gws",
-                 n_gws_avg1="normalized average 1-y", n_gws_avg5="normalized average 5-y,n_gws_avg10="normalized average 10-y,
+                 n_gws_avg1="normalized average 1-y", n_gws_avg5="normalized average 5-y",n_gws_avg10="normalized average 10-y",
                  CV1="Coefficient of variation 1-y", CV5="Coefficient of variation 5-y",CV10="Coefficient of variation 10-y"))
 
 
