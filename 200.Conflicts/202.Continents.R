@@ -50,7 +50,7 @@ data_continent <- events_sum %>%
 Asia <- fixest::feglm(data = data_continent, count~sw(value, n_value,gws_avg1,gws_avg5,gws_avg10, n_gws_avg1,n_gws_avg5,n_gws_avg10, gws_anomalies, gws_anomalies5, gws_anomalies10, gws_std1, gws_std5,gws_std10, CV1, CV5, CV10, gws_growth1, gws_growth5, gws_growth10)|region + year, family=quasipoisson)
 n_Asia <- fixest::feglm(data = data_continent, n_count~sw(value, n_value,gws_avg1,gws_avg5,gws_avg10, n_gws_avg1,n_gws_avg5,n_gws_avg10, gws_anomalies, gws_anomalies5, gws_anomalies10, gws_std1, gws_std5,gws_std10, CV1, CV5, CV10, gws_growth1, gws_growth5, gws_growth10)|region + year, family=quasipoisson)
 tabella <- etable(Asia); write.csv(tabella, "^Tabelle/conflicts_Asia.csv", row.names = FALSE)
-n_tabella <- etable(n_Asia); write.csv(n_Asia, "^Tabelle/conflicts_Asia_n.csv", row.names = FALSE)
+n_tabella <- etable(n_Asia); write.csv(n_tabella, "^Tabelle/conflicts_Asia_n.csv", row.names = FALSE)
 
 continent <- "Oceania"
 get_continent <- function(countries) {
