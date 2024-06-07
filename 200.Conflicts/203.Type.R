@@ -29,22 +29,22 @@ setFixest_dict(c(conflicts="# conflicts", value="gws [Kg/m^2]",
 # Statistical model and tables
 
 state <- subset(ge, type=="state")
-state <- fixest::feglm(data=state, conflicts~sw(value, n_value,gws_avg1,gws_avg5,gws_avg10, n_gws_avg1,n_gws_avg5,n_gws_avg10, gws_anomalies, gws_anomalies5, gws_anomalies10, gws_std1, gws_std5,gws_std10, CV1, CV5, CV10, gws_growth1, gws_growth5, gws_growth10)|region + year, family=quasipoisson)
-n_state <- fixest::feglm(data=state, n_conflicts~sw(value, n_value,gws_avg1,gws_avg5,gws_avg10, n_gws_avg1,n_gws_avg5,n_gws_avg10, gws_anomalies, gws_anomalies5, gws_anomalies10, gws_std1, gws_std5,gws_std10, CV1, CV5, CV10, gws_growth1, gws_growth5, gws_growth10)|region + year, family=quasipoisson)
-tabella <- etable(state); write.csv(tabella, "^Tabelle/conflicts_state.csv", row.names = FALSE)
-n_tabella <- etable(n_state); write.csv(n_tabella, "^Tabelle/conflicts_state_n.csv", row.names = FALSE)
+model <- fixest::feglm(data=state, conflicts~sw(value, n_value,gws_avg1,gws_avg5,gws_avg10, n_gws_avg1,n_gws_avg5,n_gws_avg10, gws_anomalies, gws_anomalies5, gws_anomalies10, gws_std1, gws_std5,gws_std10, CV1, CV5, CV10, gws_growth1, gws_growth5, gws_growth10)|region + year, family=quasipoisson)
+n_model <- fixest::feglm(data=state, n_conflicts~sw(value, n_value,gws_avg1,gws_avg5,gws_avg10, n_gws_avg1,n_gws_avg5,n_gws_avg10, gws_anomalies, gws_anomalies5, gws_anomalies10, gws_std1, gws_std5,gws_std10, CV1, CV5, CV10, gws_growth1, gws_growth5, gws_growth10)|region + year, family=quasipoisson)
+tabella <- etable(model); write.csv(tabella, "^Tabelle/conflicts_state.csv", row.names = FALSE)
+n_tabella <- etable(n_model); write.csv(n_tabella, "^Tabelle/conflicts_state_n.csv", row.names = FALSE)
 
 Nstate <- subset(ge, type=="Nstate")
-Nstate <- fixest::feglm(data=Nstate, conflicts~sw(value, n_value,gws_avg1,gws_avg5,gws_avg10, n_gws_avg1,n_gws_avg5,n_gws_avg10, gws_anomalies, gws_anomalies5, gws_anomalies10, gws_std1, gws_std5,gws_std10, CV1, CV5, CV10, gws_growth1, gws_growth5, gws_growth10)|region + year, family=quasipoisson)
-n_Nstate <- fixest::feglm(data=Nstate, n_conflicts~sw(value, n_value,gws_avg1,gws_avg5,gws_avg10, n_gws_avg1,n_gws_avg5,n_gws_avg10, gws_anomalies, gws_anomalies5, gws_anomalies10, gws_std1, gws_std5,gws_std10, CV1, CV5, CV10, gws_growth1, gws_growth5, gws_growth10)|region + year, family=quasipoisson)
-tabella <- etable(Nstate); write.csv(tabella, "^Tabelle/conflicts_Nstate.csv", row.names = FALSE)
-n_tabella <- etable(n_Nstate); write.csv(n_tabella, "^Tabelle/conflicts_Nstate_n.csv", row.names = FALSE)
+model <- fixest::feglm(data=Nstate, conflicts~sw(value, n_value,gws_avg1,gws_avg5,gws_avg10, n_gws_avg1,n_gws_avg5,n_gws_avg10, gws_anomalies, gws_anomalies5, gws_anomalies10, gws_std1, gws_std5,gws_std10, CV1, CV5, CV10, gws_growth1, gws_growth5, gws_growth10)|region + year, family=quasipoisson)
+n_model <- fixest::feglm(data=Nstate, n_conflicts~sw(value, n_value,gws_avg1,gws_avg5,gws_avg10, n_gws_avg1,n_gws_avg5,n_gws_avg10, gws_anomalies, gws_anomalies5, gws_anomalies10, gws_std1, gws_std5,gws_std10, CV1, CV5, CV10, gws_growth1, gws_growth5, gws_growth10)|region + year, family=quasipoisson)
+tabella <- etable(model); write.csv(tabella, "^Tabelle/conflicts_Nstate.csv", row.names = FALSE)
+n_tabella <- etable(n_model); write.csv(n_tabella, "^Tabelle/conflicts_Nstate_n.csv", row.names = FALSE)
 
 onesided <- subset(ge, type=="onesided")
-onesided <- fixest::feglm(data=onesided, conflicts~sw(value, n_value,gws_avg1,gws_avg5,gws_avg10, n_gws_avg1,n_gws_avg5,n_gws_avg10, gws_anomalies, gws_anomalies5, gws_anomalies10, gws_std1, gws_std5,gws_std10, CV1, CV5, CV10, gws_growth1, gws_growth5, gws_growth10)|region + year, family=quasipoisson)
-n_onesided <- fixest::feglm(data=onesided, n_conflicts~sw(value, n_value,gws_avg1,gws_avg5,gws_avg10, n_gws_avg1,n_gws_avg5,n_gws_avg10, gws_anomalies, gws_anomalies5, gws_anomalies10, gws_std1, gws_std5,gws_std10, CV1, CV5, CV10, gws_growth1, gws_growth5, gws_growth10)|region + year, family=quasipoisson)
-tabella <- etable(onesided); write.csv(tabella, "^Tabelle/conflicts_onesided.csv", row.names = FALSE)
-n_tabella <- etable(n_onesided); write.csv(n_tabella, "^Tabelle/conflicts_onesided_n.csv", row.names = FALSE)
+model <- fixest::feglm(data=onesided, conflicts~sw(value, n_value,gws_avg1,gws_avg5,gws_avg10, n_gws_avg1,n_gws_avg5,n_gws_avg10, gws_anomalies, gws_anomalies5, gws_anomalies10, gws_std1, gws_std5,gws_std10, CV1, CV5, CV10, gws_growth1, gws_growth5, gws_growth10)|region + year, family=quasipoisson)
+n_model <- fixest::feglm(data=onesided, n_conflicts~sw(value, n_value,gws_avg1,gws_avg5,gws_avg10, n_gws_avg1,n_gws_avg5,n_gws_avg10, gws_anomalies, gws_anomalies5, gws_anomalies10, gws_std1, gws_std5,gws_std10, CV1, CV5, CV10, gws_growth1, gws_growth5, gws_growth10)|region + year, family=quasipoisson)
+tabella <- etable(model); write.csv(tabella, "^Tabelle/conflicts_onesided.csv", row.names = FALSE)
+n_tabella <- etable(n_model); write.csv(n_tabella, "^Tabelle/conflicts_onesided_n.csv", row.names = FALSE)
 
 
 
