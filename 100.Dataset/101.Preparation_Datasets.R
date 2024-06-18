@@ -279,11 +279,36 @@ gws_migr_events$country.y=NULL
 write.csv(gws_migr_events, paste0("^Data/joint/", "gws_migr_events", ".csv"), row.names=FALSE)
 
 
+#################################################################################################
+#################################################################################################
+######  PET DATASET
 
+shp <- st_read("^Data/separate/shp/shp.shp")
+pet_t <- raster::brick("^Data_Raw/Global-AI_ET0_v3_annual/et0_v3_yr.tif")
+proj4string(pet_t) <- raster::crs(shp)
 
+# Reduce the resolution
+factor <- 0.25 / res(pet_t)[1]
+pet_t <- aggregate(pet_t, fact=factor, fun=mean, expand=TRUE)
 
+# Merging data
+pet <- exactextractr::exact_extract(pet_t, shp, fun="mean")
 
+# Create a new dataset
+country <- shp$country
+pet <- data.frame(country=country,pet = pet)
 
+# Media per ogni country
+pet <- pet %>%
+  group_by(country) %>%
+  summarize(pet = mean(pet))
+
+# Ordinare il dataset in base al valore di PET
+pet <- pet %>%
+  arrange(pet)
+
+# Save data
+write.csv(pet, paste0("^Data/separate/", "pet", ".csv"), row.names=FALSE)
 
 
 
