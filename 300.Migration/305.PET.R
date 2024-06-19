@@ -25,9 +25,6 @@ setFixest_dict(c(migrants="# migrants/pop", value="gws [Kg/m^2]",
                  n_gws_avg1="normalized average 1-y", n_gws_avg5="normalized average 5-y",n_gws_avg10="normalized average 10-y",
                  CV1="Coefficient of variation 1-y", CV5="Coefficient of variation 5-y",CV10="Coefficient of variation 10-y"))
 
-# Create a subset of the dataset (because the variables are counted thrice (one for each type of conflict)
-gm <- subset(gm, type=="state")
-
 # Create 2 classes for high and low PET
 pet_l <- pet[1:140, ]; name_pet_l <- unique(pet_l$country)  ## low
 pet_h <- pet[141:280, ]; name_pet_h <- unique(pet_h$country)  ## high
