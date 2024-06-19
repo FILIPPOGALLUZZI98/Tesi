@@ -11,7 +11,7 @@ suppressPackageStartupMessages({
 #################################################################################################
 #################################################################################################
 
-# Upload of the groundwater-migration dataset
+# Upload of the groundwater-events dataset
 gm <- read.csv("^Data/gws_migr.csv")
 pet <- read.csv("^Data/Separate/pet.csv")
 
@@ -37,10 +37,10 @@ gm_1 <- subset(gm, interval==1)
 
 pet_H <- subset(gm_1, country %in% name_pet_h)
 pet_high  <- fixest::feglm(data=pet_H, log(migrants)~sw(value, n_value,gws_avg1,gws_avg5,gws_avg10, n_gws_avg1,n_gws_avg5,n_gws_avg10, gws_anomalies, gws_anomalies5, gws_anomalies10, gws_std1, gws_std5,gws_std10, CV1, CV5, CV10, gws_growth1, gws_growth5, gws_growth10)|region + year, family=gaussian)
-tabella <- etable(gov1); write.csv(tabella, "^Tabelle/migration_pet_high_1.csv", row.names = FALSE)
+tabella <- etable(pet_high); write.csv(tabella, "^Tabelle/migration_pet_high_1.csv", row.names = FALSE)
 
 pet_L <- subset(gm_1, country %in% name_pet_l)
-pet_low <- fixest::feglm(data=per_L, log(migrants)~sw(value, n_value,gws_avg1,gws_avg5,gws_avg10, n_gws_avg1,n_gws_avg5,n_gws_avg10, gws_anomalies, gws_anomalies5, gws_anomalies10, gws_std1, gws_std5,gws_std10, CV1, CV5, CV10, gws_growth1, gws_growth5, gws_growth10)|region + year, family=gaussian)
+pet_low <- fixest::feglm(data=pet_L, log(migrants)~sw(value, n_value,gws_avg1,gws_avg5,gws_avg10, n_gws_avg1,n_gws_avg5,n_gws_avg10, gws_anomalies, gws_anomalies5, gws_anomalies10, gws_std1, gws_std5,gws_std10, CV1, CV5, CV10, gws_growth1, gws_growth5, gws_growth10)|region + year, family=gaussian)
 tabella <- etable(pet_low); write.csv(tabella, "^Tabelle/migration_pet_low_1.csv", row.names = FALSE)
 
 
@@ -49,10 +49,10 @@ gm_5 <- subset(gm, interval==5)
 
 pet_H <- subset(gm_5, country %in% name_pet_h)
 pet_high  <- fixest::feglm(data=pet_H, log(migrants)~sw(value, n_value,gws_avg1,gws_avg5,gws_avg10, n_gws_avg1,n_gws_avg5,n_gws_avg10, gws_anomalies, gws_anomalies5, gws_anomalies10, gws_std1, gws_std5,gws_std10, CV1, CV5, CV10, gws_growth1, gws_growth5, gws_growth10)|region + year, family=gaussian)
-tabella <- etable(gov1); write.csv(tabella, "^Tabelle/migration_pet_high_5.csv", row.names = FALSE)
+tabella <- etable(pet_high); write.csv(tabella, "^Tabelle/migration_pet_high_5.csv", row.names = FALSE)
 
 pet_L <- subset(gm_5, country %in% name_pet_l)
-pet_low <- fixest::feglm(data=per_L, log(migrants)~sw(value, n_value,gws_avg1,gws_avg5,gws_avg10, n_gws_avg1,n_gws_avg5,n_gws_avg10, gws_anomalies, gws_anomalies5, gws_anomalies10, gws_std1, gws_std5,gws_std10, CV1, CV5, CV10, gws_growth1, gws_growth5, gws_growth10)|region + year, family=gaussian)
+pet_low <- fixest::feglm(data=pet_L, log(migrants)~sw(value, n_value,gws_avg1,gws_avg5,gws_avg10, n_gws_avg1,n_gws_avg5,n_gws_avg10, gws_anomalies, gws_anomalies5, gws_anomalies10, gws_std1, gws_std5,gws_std10, CV1, CV5, CV10, gws_growth1, gws_growth5, gws_growth10)|region + year, family=gaussian)
 tabella <- etable(pet_low); write.csv(tabella, "^Tabelle/migration_pet_low_5.csv", row.names = FALSE)
 
 
