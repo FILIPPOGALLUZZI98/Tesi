@@ -11,7 +11,7 @@ suppressPackageStartupMessages({
 #################################################################################################
 #################################################################################################
 
-# Upload of the groundwater-events dataset
+# Upload of the groundwater-migration dataset
 gm <- read.csv("^Data/gws_migr.csv")
 pet <- read.csv("^Data/Separate/pet.csv")
 
