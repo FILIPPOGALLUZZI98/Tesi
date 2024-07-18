@@ -1,19 +1,23 @@
-library(readr)
+if (!require(gridExtra)) install.packages("gridExtra", dependencies = TRUE)
+if (!require(grid)) install.packages("grid", dependencies = TRUE)
+
+# Carica i pacchetti
 library(gridExtra)
-library(ggplot2)
+library(grid)
 
+# Leggi il file CSV
+df <- read.csv("^Tabelle/Conflict_Governance/conflicts_gov3.csv")
 
+# Funzione per creare una tabella da un data frame
+create_table <- function(df) {
+  table <- tableGrob(df)
+  return(table)
+}
 
-csv_file <- "^Tabelle/conflicts_Africa.csv"
-df <- read_csv(csv_file)
-
-# Crea una tabella utilizzando ggplot2
-table_plot <- tableGrob(df)
+# Crea la tabella
+table <- create_table(df)
 
 # Salva la tabella in un file PDF
-pdf_file <- "output2.pdf"
-pdf(pdf_file, width =38, height = 13) 
-grid.draw(table_plot)
+pdf("output.pdf", width = 40, height = 15) # specifica le dimensioni della pagina
+grid.draw(table)
 dev.off()
-
-cat("Tabella salvata in", pdf_file, "\n")
