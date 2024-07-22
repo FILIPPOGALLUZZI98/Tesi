@@ -29,11 +29,9 @@ setFixest_dict(c(conflicts="# conflicts", value="gws [Kg/m^2]",
 # Create a subset of the dataset (because the variables are counted thrice (one for each type of conflict)
 events_sum <- subset(ge, type=="state")
 
-# Statistical model and table
-model <- fixest::feglm(data=events_sum, count~sw(value, n_value,gws_avg1,gws_avg5,gws_avg10, n_gws_avg1,n_gws_avg5,n_gws_avg10, gws_anomalies, gws_anomalies5, gws_anomalies10, gws_std1, gws_std5,gws_std10, CV1, CV5, CV10, gws_growth1, gws_growth5, gws_growth10)|region + year, family=quasipoisson)
-n_model <- fixest::feglm(data=events_sum, n_count~sw(value, n_value,gws_avg1,gws_avg5,gws_avg10, n_gws_avg1,n_gws_avg5,n_gws_avg10, gws_anomalies, gws_anomalies5, gws_anomalies10, gws_std1, gws_std5,gws_std10, CV1, CV5, CV10, gws_growth1, gws_growth5, gws_growth10)|region + year, family=quasipoisson)
+# Statistical model and table (for normalized variables)
+model <- fixest::feglm(data=events_sum, n_count~sw(n_value,n_gws_avg5,n_gws_avg10, gws_anomalies5, gws_anomalies10, CV5, CV10, gws_growth10)|region + year, family=quasipoisson)
 tabella <- etable(model); write.csv(tabella, "^Tabelle/conflicts_global.csv", row.names = FALSE)
-n_tabella <- etable(n_model); write.csv(n_tabella, "^Tabelle/conflicts_global_n.csv", row.names = FALSE)
 
 
 
