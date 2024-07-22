@@ -37,61 +37,47 @@ get_continent <- function(countries) {
   countrycode(countries, "country.name", "continent")}
 data_continent <- events_sum %>%
   filter(get_continent(country) == continent)
-Africa <- fixest::feglm(data = data_continent, count~sw(value, n_value,gws_avg1,gws_avg5,gws_avg10, n_gws_avg1,n_gws_avg5,n_gws_avg10, gws_anomalies, gws_anomalies5, gws_anomalies10, gws_std1, gws_std5,gws_std10, CV1, CV5, CV10, gws_growth1, gws_growth5, gws_growth10)|region + year, family=quasipoisson)
-n_Africa <- fixest::feglm(data = data_continent, n_count~sw(value, n_value,gws_avg1,gws_avg5,gws_avg10, n_gws_avg1,n_gws_avg5,n_gws_avg10, gws_anomalies, gws_anomalies5, gws_anomalies10, gws_std1, gws_std5,gws_std10, CV1, CV5, CV10, gws_growth1, gws_growth5, gws_growth10)|region + year, family=quasipoisson)
+Africa <- fixest::feglm(data = data_continent, n_count~sw(n_value,n_gws_avg5,n_gws_avg10, gws_anomalies5, gws_anomalies10, CV5, CV10, gws_growth10)|region + year, family=quasipoisson)
 tabella <- etable(Africa); write.csv(tabella, "^Tabelle/conflicts_Africa.csv", row.names = FALSE)
-n_tabella <- etable(n_Africa); write.csv(n_tabella, "^Tabelle/conflicts_Africa_n.csv", row.names = FALSE)
 
 continent <- "Asia"
 get_continent <- function(countries) {
   countrycode(countries, "country.name", "continent")}
 data_continent <- events_sum %>%
   filter(get_continent(country) == continent)
-Asia <- fixest::feglm(data = data_continent, count~sw(value, n_value,gws_avg1,gws_avg5,gws_avg10, n_gws_avg1,n_gws_avg5,n_gws_avg10, gws_anomalies, gws_anomalies5, gws_anomalies10, gws_std1, gws_std5,gws_std10, CV1, CV5, CV10, gws_growth1, gws_growth5, gws_growth10)|region + year, family=quasipoisson)
-n_Asia <- fixest::feglm(data = data_continent, n_count~sw(value, n_value,gws_avg1,gws_avg5,gws_avg10, n_gws_avg1,n_gws_avg5,n_gws_avg10, gws_anomalies, gws_anomalies5, gws_anomalies10, gws_std1, gws_std5,gws_std10, CV1, CV5, CV10, gws_growth1, gws_growth5, gws_growth10)|region + year, family=quasipoisson)
+Asia <- fixest::feglm(data = data_continent, n_count~sw(n_value,n_gws_avg5,n_gws_avg10, gws_anomalies5, gws_anomalies10, CV5, CV10, gws_growth10)|region + year, family=quasipoisson)
 tabella <- etable(Asia); write.csv(tabella, "^Tabelle/conflicts_Asia.csv", row.names = FALSE)
-n_tabella <- etable(n_Asia); write.csv(n_tabella, "^Tabelle/conflicts_Asia_n.csv", row.names = FALSE)
 
 continent <- "Oceania"
 get_continent <- function(countries) {
   countrycode(countries, "country.name", "continent")}
 data_continent <- events_sum %>%
   filter(get_continent(country) == continent)
-Oceania <- fixest::feglm(data = data_continent, count~sw(value, n_value,gws_avg1,gws_avg5,gws_avg10, n_gws_avg1,n_gws_avg5,n_gws_avg10, gws_anomalies, gws_anomalies5, gws_anomalies10, gws_std1, gws_std5,gws_std10, CV1, CV5, CV10, gws_growth1, gws_growth5, gws_growth10)|region + year, family=quasipoisson)
-n_Oceania <- fixest::feglm(data = data_continent, n_count~sw(value, n_value,gws_avg1,gws_avg5,gws_avg10, n_gws_avg1,n_gws_avg5,n_gws_avg10, gws_anomalies, gws_anomalies5, gws_anomalies10, gws_std1, gws_std5,gws_std10, CV1, CV5, CV10, gws_growth1, gws_growth5, gws_growth10)|region + year, family=quasipoisson)
+Oceania <- fixest::feglm(data = data_continent, n_count~sw(n_value,n_gws_avg5,n_gws_avg10, gws_anomalies5, gws_anomalies10, CV5, CV10, gws_growth10)|region + year, family=quasipoisson)
 tabella <- etable(Oceania); write.csv(tabella, "^Tabelle/conflicts_Oceania.csv", row.names = FALSE)
-n_tabella <- etable(n_Oceania); write.csv(n_tabella, "^Tabelle/conflicts_Oceania_n.csv", row.names = FALSE)
 
 continent <- "Europe"
 get_continent <- function(countries) {
   countrycode(countries, "country.name", "continent")}
 data_continent <- events_sum %>%
   filter(get_continent(country) == continent)
-Europe <- fixest::feglm(data = data_continent, count~sw(value, n_value,gws_avg1,gws_avg5,gws_avg10, n_gws_avg1,n_gws_avg5,n_gws_avg10, gws_anomalies, gws_anomalies5, gws_anomalies10, gws_std1, gws_std5,gws_std10, CV1, CV5, CV10, gws_growth1, gws_growth5, gws_growth10)|region + year, family=quasipoisson)
-n_Europe <- fixest::feglm(data = data_continent, n_count~sw(value, n_value,gws_avg1,gws_avg5,gws_avg10, n_gws_avg1,n_gws_avg5,n_gws_avg10, gws_anomalies, gws_anomalies5, gws_anomalies10, gws_std1, gws_std5,gws_std10, CV1, CV5, CV10, gws_growth1, gws_growth5, gws_growth10)|region + year, family=quasipoisson)
+Europe <- fixest::feglm(data = data_continent, n_count~sw(n_value,n_gws_avg5,n_gws_avg10, gws_anomalies5, gws_anomalies10, CV5, CV10, gws_growth10)|region + year, family=quasipoisson)
 tabella <- etable(Europe); write.csv(tabella, "^Tabelle/conflicts_Europe.csv", row.names = FALSE)
-n_tabella <- etable(n_Europe); write.csv(n_tabella, "^Tabelle/conflicts_Europe_n.csv", row.names = FALSE)
 
 North_America <- c("United States", "Canada", "Mexico")
 N_A <- events_sum[events_sum$country %in% North_America, ]
-Namerica <- fixest::feglm(data = N_A, count~sw(value, n_value,gws_avg1,gws_avg5,gws_avg10, n_gws_avg1,n_gws_avg5,n_gws_avg10, gws_anomalies, gws_anomalies5, gws_anomalies10, gws_std1, gws_std5,gws_std10, CV1, CV5, CV10, gws_growth1, gws_growth5, gws_growth10)|region + year, family=quasipoisson)
-n_Namerica <- fixest::feglm(data = N_A, n_count~sw(value, n_value,gws_avg1,gws_avg5,gws_avg10, n_gws_avg1,n_gws_avg5,n_gws_avg10, gws_anomalies, gws_anomalies5, gws_anomalies10, gws_std1, gws_std5,gws_std10, CV1, CV5, CV10, gws_growth1, gws_growth5, gws_growth10)|region + year, family=quasipoisson)
+Namerica <- fixest::feglm(data = N_A, n_count~sw(n_value,n_gws_avg5,n_gws_avg10, gws_anomalies5, gws_anomalies10, CV5, CV10, gws_growth10)|region + year, family=quasipoisson)
 tabella <- etable(Namerica); write.csv(tabella, "^Tabelle/conflicts_Namerica.csv", row.names = FALSE)
-n_tabella <- etable(n_Namerica); write.csv(n_tabella, "^Tabelle/conflicts_Namerica_n.csv", row.names = FALSE)
 
 South_America <- c("Argentina", "Bolivia", "Brasile", "Cile", "Colombia", "Ecuador", "Guyana", "Paraguay", "Perù", "Suriname", "Uruguay", "Venezuela", "Aruba", "Falkland Islands", "French Guiana", "South Georgia and the South Sandwich Islands")
 S_A <- events_sum[events_sum$country %in% South_America, ]
-Samerica <- fixest::feglm(data = S_A, count~sw(value, n_value,gws_avg1,gws_avg5,gws_avg10, n_gws_avg1,n_gws_avg5,n_gws_avg10, gws_anomalies, gws_anomalies5, gws_anomalies10, gws_std1, gws_std5,gws_std10, CV1, CV5, CV10, gws_growth1, gws_growth5, gws_growth10)|region + year, family=quasipoisson)
-n_Samerica <- fixest::feglm(data = S_A, n_count~sw(value, n_value,gws_avg1,gws_avg5,gws_avg10, n_gws_avg1,n_gws_avg5,n_gws_avg10, gws_anomalies, gws_anomalies5, gws_anomalies10, gws_std1, gws_std5,gws_std10, CV1, CV5, CV10, gws_growth1, gws_growth5, gws_growth10)|region + year, family=quasipoisson)
+Samerica <- fixest::feglm(data = S_A, n_count~sw(n_value,n_gws_avg5,n_gws_avg10, gws_anomalies5, gws_anomalies10, CV5, CV10, gws_growth10)|region + year, family=quasipoisson)
 tabella <- etable(Samerica); write.csv(tabella, "^Tabelle/conflicts_Samerica.csv", row.names = FALSE)
-n_tabella <- etable(n_Samerica); write.csv(n_tabella, "^Tabelle/conflicts_Samerica_n.csv", row.names = FALSE)
 
 Central_America <- c("Belize", "Costa Rica", "El Salvador", "Guatemala", "Honduras", "Nicaragua", "Panama", "Bahamas", "Barbados", "Cuba", "Dominica", "Giamaica", "Haiti", "Trinidad and Tobago", "Sint Maarten", "Saint Vincent and the Grenadines", "Saint Lucia", "Saint Kitts and Nevis", "Puerto Rico", "Dominican Republic", "Grenada", "Martinique", "Saint Martin", "Virgin Islands", "Turks and Caicos Islands", "Cayman Islands", "British Virgin Islands", "Guadeloupe", "Antigua and Barbuda", "Bonaire", "Curacao", "Saint Barthelemy", "Saba", "Saint Eustatius", "Saint Pierre and Miquelon", "British West Indies")
 C_A <- events_sum[events_sum$country %in% Central_America, ]
-Camerica <- fixest::feglm(data = C_A, count~sw(value, n_value,gws_avg1,gws_avg5,gws_avg10, n_gws_avg1,n_gws_avg5,n_gws_avg10, gws_anomalies, gws_anomalies5, gws_anomalies10, gws_std1, gws_std5,gws_std10, CV1, CV5, CV10, gws_growth1, gws_growth5, gws_growth10)|region + year, family=quasipoisson)
-n_Camerica <- fixest::feglm(data = C_A, n_count~sw(value, n_value,gws_avg1,gws_avg5,gws_avg10, n_gws_avg1,n_gws_avg5,n_gws_avg10, gws_anomalies, gws_anomalies5, gws_anomalies10, gws_std1, gws_std5,gws_std10, CV1, CV5, CV10, gws_growth1, gws_growth5, gws_growth10)|region + year, family=quasipoisson)
+Camerica <- fixest::feglm(data = C_A, n_count~sw(n_value,n_gws_avg5,n_gws_avg10, gws_anomalies5, gws_anomalies10, CV5, CV10, gws_growth10)|region + year, family=quasipoisson)
 tabella <- etable(Camerica); write.csv(tabella, "^Tabelle/conflicts_Camerica.csv", row.names = FALSE)
-n_tabella <- etable(n_Camerica); write.csv(n_tabella, "^Tabelle/conflicts_Camerica_n.csv", row.names = FALSE)
 
 
 
