@@ -62,16 +62,16 @@ data_4 <- events_sum[events_sum$country %in% lista_4, ]
 
 # Statistical model and tables
 
-mena <- fixest::feglm(data = data_1, count~sw(n_value,n_gws_avg5,n_gws_avg10, gws_anomalies5, gws_anomalies10, CV5, CV10, gws_growth10)|region + year, family=quasipoisson)
+mena <- fixest::feglm(data = data_1, count~sw(n_value,n_gws_avg5,n_gws_avg10, gws_anomalies5, gws_anomalies10, CV5, CV10, gws_growth5,gws_growth10)|region + year, family=quasipoisson)
 tabella <- etable(mena); write.csv(tabella, "^Tabelle/conflicts_mena.csv", row.names = FALSE)
 
-sub_sahara <- fixest::feglm(data = data_2, count~sw(n_value,n_gws_avg5,n_gws_avg10, gws_anomalies5, gws_anomalies10, CV5, CV10, gws_growth10)|region + year, family=quasipoisson)
+sub_sahara <- fixest::feglm(data = data_2, count~sw(n_value,n_gws_avg5,n_gws_avg10, gws_anomalies5, gws_anomalies10, CV5, CV10, gws_growth5,gws_growth10)|region + year, family=quasipoisson)
 tabella <- etable(sub_sahara); write.csv(tabella, "^Tabelle/conflicts_sub_sahara.csv", row.names = FALSE)
 
-sud_est_asia <- fixest::feglm(data = data_3, count~sw(n_value,n_gws_avg5,n_gws_avg10, gws_anomalies5, gws_anomalies10, CV5, CV10, gws_growth10)|region + year, family=quasipoisson)
+sud_est_asia <- fixest::feglm(data = data_3, count~sw(n_value,n_gws_avg5,n_gws_avg10, gws_anomalies5, gws_anomalies10, CV5, CV10, gws_growth5,gws_growth10)|region + year, family=quasipoisson)
 tabella <- etable(sud_est_asia); write.csv(tabella, "^Tabelle/conflicts_sud_est_asia.csv", row.names = FALSE)
 
-cs_america <- fixest::feglm(data = data_4, count~sw(n_value,n_gws_avg5,n_gws_avg10, gws_anomalies5, gws_anomalies10, CV5, CV10, gws_growth10)|region + year, family=quasipoisson)
+cs_america <- fixest::feglm(data = data_4, count~sw(n_value,n_gws_avg5,n_gws_avg10, gws_anomalies5, gws_anomalies10, CV5, CV10, gws_growth5,gws_growth10)|region + year, family=quasipoisson)
 tabella <- etable(cs_america); write.csv(tabella, "^Tabelle/conflicts_cs_america.csv", row.names = FALSE)
 
 
