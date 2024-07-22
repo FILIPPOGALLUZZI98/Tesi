@@ -38,16 +38,12 @@ pet_h <- pet[141:280, ]; name_pet_h <- unique(pet_h$country)  ## high
 # Statistical model and tables
 
 pet_H <- subset(ge, country %in% name_pet_h)
-pet_high <- fixest::feglm(data=pet_H, count~sw(value, n_value,gws_avg1,gws_avg5,gws_avg10, n_gws_avg1,n_gws_avg5,n_gws_avg10, gws_anomalies, gws_anomalies5, gws_anomalies10, gws_std1, gws_std5,gws_std10, CV1, CV5, CV10, gws_growth1, gws_growth5, gws_growth10)|region + year, family=quasipoisson)
-n_pet_high <- fixest::feglm(data=pet_H, n_count~sw(value, n_value,gws_avg1,gws_avg5,gws_avg10, n_gws_avg1,n_gws_avg5,n_gws_avg10, gws_anomalies, gws_anomalies5, gws_anomalies10, gws_std1, gws_std5,gws_std10, CV1, CV5, CV10, gws_growth1, gws_growth5, gws_growth10)|region + year, family=quasipoisson)
+pet_high <- fixest::feglm(data=pet_H, n_count~sw(n_value,n_gws_avg5,n_gws_avg10, gws_anomalies5, gws_anomalies10, CV5, CV10, gws_growth5,gws_growth10)|region + year, family=quasipoisson)
 tabella <- etable(pet_high); write.csv(tabella, "^Tabelle/conflicts_pet_high.csv", row.names = FALSE)
-n_tabella <- etable(n_pet_high); write.csv(n_tabella, "^Tabelle/conflicts_pet_high_n.csv", row.names = FALSE)
 
 pet_L <- subset(ge, country %in% name_pet_l)
-pet_low <- fixest::feglm(data=pet_L, count~sw(value, n_value,gws_avg1,gws_avg5,gws_avg10, n_gws_avg1,n_gws_avg5,n_gws_avg10, gws_anomalies, gws_anomalies5, gws_anomalies10, gws_std1, gws_std5,gws_std10, CV1, CV5, CV10, gws_growth1, gws_growth5, gws_growth10)|region + year, family=quasipoisson)
-n_pet_low <- fixest::feglm(data=pet_L, n_count~sw(value, n_value,gws_avg1,gws_avg5,gws_avg10, n_gws_avg1,n_gws_avg5,n_gws_avg10, gws_anomalies, gws_anomalies5, gws_anomalies10, gws_std1, gws_std5,gws_std10, CV1, CV5, CV10, gws_growth1, gws_growth5, gws_growth10)|region + year, family=quasipoisson)
+pet_low <- fixest::feglm(data=pet_L, n_count~sw(n_value,n_gws_avg5,n_gws_avg10, gws_anomalies5, gws_anomalies10, CV5, CV10, gws_growth5,gws_growth10)|region + year, family=quasipoisson)
 tabella <- etable(pet_low); write.csv(tabella, "^Tabelle/conflicts_pet_low.csv", row.names = FALSE)
-n_tabella <- etable(n_pet_low); write.csv(n_tabella, "^Tabelle/conflicts_pet_low_n.csv", row.names = FALSE)
 
 
 
