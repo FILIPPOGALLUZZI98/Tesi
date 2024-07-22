@@ -5,19 +5,16 @@ if (!require(grid)) install.packages("grid", dependencies = TRUE)
 library(gridExtra)
 library(grid)
 
-# Leggi il file CSV
-df <- read.csv("^Tabelle/Conflict_Governance/conflicts_gov3.csv")
+# Mettere nome del file
+nome_file <- ""
 
-# Funzione per creare una tabella da un data frame
+csv_path <- paste0("^Tabelle", nome_file, ".csv")
+df <- read.csv(csv_path)
 create_table <- function(df) {
   table <- tableGrob(df)
-  return(table)
-}
-
-# Crea la tabella
+  return(table)}
 table <- create_table(df)
-
-# Salva la tabella in un file PDF
-pdf("output.pdf", width = 40, height = 15) # specifica le dimensioni della pagina
+pdf_file <- paste0(nome_file, ".pdf")
+pdf(pdf_file, width = 25, height = 7) # specifica le dimensioni della pagina
 grid.draw(table)
 dev.off()
