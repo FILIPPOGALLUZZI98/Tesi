@@ -143,6 +143,10 @@ gws_migr <- gws_migr %>%
 gws_migr <- gws_migr %>%
   mutate(migrants=(flow/population)*100)
 
+# GWS per capita
+gws_migr <- gws_migr %>%
+  mutate(pcv=value/population)
+
 # NORMALIZATION OF VALUE
 gws_migr <- gws_migr %>%
   arrange(year, country, region) %>%
