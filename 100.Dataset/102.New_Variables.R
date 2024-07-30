@@ -227,7 +227,7 @@ gws_migr <- gws_migr %>%
          CV10=(gws_std10/mean_region)*100) 
 
 gws_migr <- gws_migr %>%
-  filter(!is.na(interval))
+  filter(!is.na(outflow_rate_annual))
 
 write.csv(gws_migr, paste0("^Data/", "gws_migr", ".csv"), row.names=FALSE)
 
