@@ -145,7 +145,7 @@ gws_migr <- gws_migr %>%
 
 # GWS per capita
 gws_migr <- gws_migr %>%
-  mutate(pcv=value/population)
+  mutate(value=value/population)
 
 # NORMALIZATION OF VALUE
 gws_migr <- gws_migr %>%
