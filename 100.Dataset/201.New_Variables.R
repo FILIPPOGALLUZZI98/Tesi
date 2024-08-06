@@ -11,7 +11,7 @@ suppressPackageStartupMessages({
 ######  DEFINE NEW VARIABLES FOR GW - EVENTS
 
 # Open the dataset
-gws_events <- read.csv("^Data/joint/gws_events.csv")
+gws_events <- read.csv("^Data/gws_events_j.csv")
 gws_events$value <- gws_events$value*1000  ## Original values of GWS
 
 # Since the conflict datasets start from 1989 i just need data from 1979
@@ -141,7 +141,7 @@ write.csv(gws_events, paste0("^Data/", "gws_events", ".csv"), row.names=FALSE)
 ######  DEFINE NEW VARIABLES FOR GW - MIGR
 
 # Open the dataset
-gws_migr <- read.csv("^Data/joint/gws_migr.csv")
+gws_migr <- read.csv("^Data/gws_migr_j.csv")
 gws_migr$value <- gws_migr$value*1000
 gws_migr$orig=NULL
 gws_migr <- gws_migr %>%
@@ -236,58 +236,5 @@ gws_migr <- gws_migr %>%
 
 write.csv(gws_migr, paste0("^Data/", "gws_migr", ".csv"), row.names=FALSE)
 
-
-#################################################################################################
-#################################################################################################
-######  DEFINE NEW VARIABLES FOR EVENTS - MIGR
-
-# Open the dataset
-events_migr <- read.csv("^Data/joint/gws_migr_events.csv")
-
-events_migr$value <- NULL
-# NUMBER OF MIGRANTS LEAVING A REGION IN THE CONSIDERED INTERVAL DIVIDED BY THE POPULATION
-events_migr <- events_migr %>%
-  mutate(migrants=flow/population)
-
-# TOTAL NUMBER OF CONFLICTS PER YEAR
-events_migr <- events_migr %>% 
-  group_by(year, country, region) %>% 
-  mutate(count = sum(conflicts))
-
-# TYPE CONFLICTS AVERAGES 1-5 YEARS
-events_migr <- events_migr %>%
-  arrange(year, country, region, type) %>%
-  group_by(country, region, type) %>%
-  mutate(confl_avg1 = (lag(conflicts) + conflicts) / 2,
-         confl_avg5 = rollmean(conflicts, k = 5, align = "right", fill = NA))
-
-# TOTAL CONFLICTS AVERAGES 1-5 YEARS
-events_migr <- events_migr %>%
-  arrange(year, country, region, type) %>%
-  group_by(country, region, type) %>%
-  mutate(count_avg1 = (lag(count) + count) / 2,
-         count_avg5 = rollmean(count, k = 5, align = "right", fill = NA))
-
-# TOTAL DEATHS 
-events_migr <- events_migr %>% 
-  group_by(year, country, region) %>% 
-  mutate(all_deaths = sum(deaths))
-
-# Growth rate conflicts 1-5 years
-events_migr <- events_migr %>%
-  arrange(year, country, region, type) %>%
-  group_by(country, region, type) %>%
-  mutate(growth_confl1=((conflicts-lag(conflicts))/lag(conflicts))*100,
-         growth_confl5=((conflicts-lag(conflicts, n=5))/lag(conflicts, n=5))*100)
-
-# Growth rate conflicts 1-5 years
-events_migr <- events_migr %>%
-  arrange(year, country, region, type) %>%
-  group_by(country, region, type) %>%
-  mutate(growth_count1=((count-lag(count))/lag(count))*100,
-         growth_count5=((count-lag(count, n=5))/lag(count, n=5))*100)
-
-# Save data
-write.csv(events_migr, paste0("^Data/", "migr_events", ".csv"), row.names=FALSE)
 
 
