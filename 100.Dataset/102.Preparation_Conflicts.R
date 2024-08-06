@@ -10,8 +10,8 @@ suppressPackageStartupMessages({
 ######  MERGING THE CONFLICT EVENTS IN THE REGIONS OF THE SHAPEFILE
 
 # Select the raw conflict data and the shapefile
-events <- read.csv("^Data_Raw/Conflict_Data/Global.csv")
-shp <- st_read("^Data/separate/shp/shp.shp")
+events <- read.csv("^Data/^Raw_Data/Conflict_Data/Global.csv")
+shp <- st_read("^Data/shp/shp.shp")
 
 # Select the variables of interest
 events <- events[, c("country" ,"year", "type_of_violence","latitude" ,"longitude", "best")]
@@ -24,8 +24,7 @@ events <- mutate(events,
                  type = case_when(
                    type == 1 ~ "state",
                    type == 2 ~ "Nstate",
-                   type == 3 ~ "onesided"
-                 ))
+                   type == 3 ~ "onesided"))
 
 # Set the coordinate system
 events <- st_as_sf(events, coords = c("longitude", "latitude"), crs = st_crs(shp))
@@ -58,7 +57,7 @@ events <- events[order(events$country),]
 events <- events[order(events$year),]
 
 # Save Data
-write.csv(events, paste0("^Data/separate/", "events", ".csv"), row.names=FALSE)
+write.csv(events, paste0("^Data/", "events", ".csv"), row.names=FALSE)
 
 
 #################################################################################################
@@ -66,9 +65,9 @@ write.csv(events, paste0("^Data/separate/", "events", ".csv"), row.names=FALSE)
 ######  JOINT DATASET GWS - EVENTS
 
 # Open the datasets
-gws <- read.csv("^Data/separate/gws.csv")
-events <- read.csv("^Data/separate/events.csv")
-pop <- read.csv("^Data/separate/population.csv")
+gws <- read.csv("^Data/gws.csv")
+events <- read.csv("^Data/events.csv")
+pop <- read.csv("^Data/population.csv")
 
 events_data <- events %>%
   filter(year<2020)
@@ -86,7 +85,7 @@ gws_events <- gws_events[, c("year","country", "region","type","deaths", "confli
 gws_events <- merge(gws_events, pop, by = c("year", "country", "region"), all.x = TRUE)
 
 # Save data
-write.csv(gws_events, paste0("^Data/joint/", "gws_events", ".csv"), row.names=FALSE)
+write.csv(gws_events, paste0("^Data/", "gws_events_j", ".csv"), row.names=FALSE)
 
 
 #################################################################################################
@@ -97,8 +96,8 @@ write.csv(gws_events, paste0("^Data/joint/", "gws_events", ".csv"), row.names=FA
 # The same code is copied below (because the saving of this file was continuing to give me errors)
 
 # Select the raw conflict data and the shapefile
-events <- read.csv("^Data_Raw/Conflict_Data/Global.csv")
-shp <- st_read("^Data/separate/shp/shp.shp")
+events <- read.csv("^Data/^Raw_Data/Conflict_Data/Global.csv")
+shp <- st_read("^Data/shp/shp.shp")
 
 # Select the variables of interest
 events <- events[, c("country" ,"year", "type_of_violence","latitude" ,"longitude", "best")]
@@ -111,15 +110,14 @@ events <- mutate(events,
                  type = case_when(
                    type == 1 ~ "state",
                    type == 2 ~ "Nstate",
-                   type == 3 ~ "onesided"
-                 ))
+                   type == 3 ~ "onesided"))
 
 # Set the coordinate system
 events <- st_as_sf(events, coords = c("longitude", "latitude"), crs = st_crs(shp))
 events <- st_transform(events, st_crs(shp))
 
 # Save Dataset
-st_write(events, "^Data/separate/events_coordinates", driver = "ESRI Shapefile")
+st_write(events, "^Data/events_coordinates", driver = "ESRI Shapefile")
 # This dataset contains the coordinate for the conflicts
 
 
