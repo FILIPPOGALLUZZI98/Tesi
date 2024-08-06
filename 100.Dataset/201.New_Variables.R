@@ -245,7 +245,7 @@ gws_migr <- gws_migr %>%
   filter(!is.na(outflow_rate_annual))
 
 gws_migr <- gws_migr %>%
-  filter(!is.na(gws_growth10))
+  filter(!is.na(CV10))
 
 write.csv(gws_migr, paste0("^Data/", "gws_migr", ".csv"), row.names=FALSE)
 
