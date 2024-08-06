@@ -1,10 +1,4 @@
-# This code is used to prepare and reshape the raw datasets:
-# 1) Operations on the shapefile
-# 2) Operations on the raster data (groundwater storage)
-# 3) Operations on the conflict data (to have a file that contains the coordinates)
-# 4) Operations on the migration dataset
-# 5) Operations to merge and to join the separate datasets
-
+# This code is used to prepare and reshape the raw datasets
 
 suppressPackageStartupMessages({
   library(sf);library(sp);library(plyr);library(raster);library(ncdf4);library(exactextractr);library(dplyr);library(stringr)
@@ -16,13 +10,12 @@ suppressPackageStartupMessages({
 #################################################################################################
 ######  INITIAL OPERATIONS FOR THE SHAPEFILE
 
-# Open the shapefile and remove undesired variables
+# Remove undesired variables
 shp <- sf::read_sf("^Data_Raw/world_geolev1_2021/world_geolev1_2021.shp")
 shp$BPL_CODE=NULL; shp$CNTRY_CODE=NULL
 
-# Remove regions with geometry error
+# Remove regions with geometry error and invalid geometries
 empty <- st_is_empty(shp); shp <- shp[!empty, ]
-# Remove the invalid geometries from shp
 shp <- shp[st_is_valid(shp), ]
 
 # List of empty geometry regions
@@ -32,7 +25,7 @@ nomi_geometrie_vuote_rimosse <- rownames(shp)[empty]; print(nomi_geometrie_vuote
 shp <- shp %>%
   rename(country = CNTRY_NAME,
          region = ADMIN_NAME)
-# Set the country name equal to the region if the country has no subregions
+# Set the country name equal to the region if the country has no regions
 shp$region <- ifelse(is.na(shp$region), shp$country, shp$region)
 
 # Set the CRS
@@ -46,7 +39,7 @@ st_write(shp, "^Data/separate/shp", driver = "ESRI Shapefile")
 #################################################################################################
 ######  INITIAL OPERATIONS FOR THE RASTER OF GWS 
 
-# Open the raster that contains the groundwater storage and the shapefile
+# Open the datasets
 r <- raster::brick("^Data_Raw/ISIMIP3a/cwatm_gswp3-w5e5_obsclim_histsoc_default_groundwstor_global_monthly_1901_2019.nc")
 shp <- st_read("^Data/separate/shp/shp.shp")
 
@@ -58,8 +51,7 @@ media_annuale <- lapply(1:119, function(i) {
   anno_iniziale <- (i - 1) * 12 + 1
   anno_finale <- i * 12
   media <- mean(r[[anno_iniziale:anno_finale]])
-  return(media)
-})
+  return(media)})
 
 # New rasterbrick with annual averaged values
 gws <- brick(media_annuale)
@@ -109,9 +101,12 @@ st_write(events, "^Data/separate/events_coordinates", driver = "ESRI Shapefile")
 #################################################################################################
 ######  INITIAL OPERATIONS FOR MIGRATION DATASET
 
+# Upload data
 data_migr <-read.csv("^Data_Raw/Global_migr_raw.csv")
+
 # Sort the order of the variables
 data_migr <- data_migr[,c("year", "country_name", "worldregion", "population","mig_interval","year_cat10","flow","flow_annual", "outflow_rate_annual", "orig")]
+
 # Rename some variables
 data_migr <- data_migr %>%
   rename(country = country_name, 
@@ -215,108 +210,6 @@ write.csv(events, paste0("^Data/separate/", "events", ".csv"), row.names=FALSE)
 
 #################################################################################################
 #################################################################################################
-######  JOINT DATASET GWS - EVENTS
-
-# Open the datasets
-gws <- read.csv("^Data/separate/gws.csv")
-events <- read.csv("^Data/separate/events.csv")
-pop <- read.csv("^Data/separate/population.csv")
-
-events_data <- events %>%
-  filter(year<2020)
-
-vettore <- expand.grid(year=1944:2019, type=c("state","Nstate","onesided"))
-gws_events <- left_join(gws, vettore, by=c("year"))
-
-# Merge the datasets
-gws_events <- left_join(gws_events,events_data,by=c("country","region","year","type","orig"))
-gws_events$deaths[is.na(gws_events$deaths)] = 0  ## Assign a zero to each month/province where no data is observed
-gws_events$conflicts[is.na(gws_events$conflicts)] = 0  ## Assign a zero to each month/province where no data is observed
-gws_events <- gws_events[, c("year","country", "region","type","deaths", "conflicts","value","orig")]
-
-# Merge with population values
-gws_events <- merge(gws_events, pop, by = c("year", "country", "region"), all.x = TRUE)
-
-# Save data
-write.csv(gws_events, paste0("^Data/joint/", "gws_events", ".csv"), row.names=FALSE)
-
-
-#################################################################################################
-#################################################################################################
-######  JOINT DATASET GWS - MIGR
-
-# Open the datasets
-gws <- read.csv("^Data/separate/gws.csv")
-migr <- read.csv("^Data/separate/migr.csv")
-
-# Convert the values of 'orig' in gws into integers
-gws$orig <- as.integer(gws$orig)
-
-# Merge the datasets
-gws_migr <- left_join(gws, migr, by=c("year", "orig"))
-
-# Sort and rename the variables
-gws_migr <- gws_migr %>%
-  rename(country=country.x)
-gws_migr$country.y=NULL
-gws_migr <- gws_migr[,c("year", "country", "region", "worldregion", "value", "population","interval", "flow","flow_annual",
-                      "outflow_rate_annual","year_cat10", "orig")]
-
-# Save data
-write.csv(gws_migr, paste0("^Data/joint/", "gws_migr", ".csv"), row.names=FALSE)
-
-
-#################################################################################################
-#################################################################################################
-######  JOINT DATASET GWS - EVENTS - MIGR
-
-gws <- read.csv("^Data/separate/gws.csv")
-events <- read.csv("^Data/separate/events.csv")
-migr <- read.csv("^Data/separate/migr.csv")
-
-gws_migr_events <- left_join(gws_events, migr, by=c("year", "orig"))
-gws_migr_events <- gws_migr_events %>%
-  rename(country=country.x)
-gws_migr_events$country.y=NULL
-
-# Save data
-write.csv(gws_migr_events, paste0("^Data/joint/", "gws_migr_events", ".csv"), row.names=FALSE)
-
-
-#################################################################################################
-#################################################################################################
-######  PET DATASET
-
-shp <- st_read("^Data/separate/shp/shp.shp")
-pet_t <- raster::brick("^Data_Raw/Global-AI_ET0_v3_annual/et0_v3_yr.tif")
-proj4string(pet_t) <- raster::crs(shp)
-
-# Reduce the resolution
-factor <- 0.25 / res(pet_t)[1]
-pet_t <- aggregate(pet_t, fact=factor, fun=mean, expand=TRUE)
-
-# Merging data
-pet <- exactextractr::exact_extract(pet_t, shp, fun="mean")
-
-# Create a new dataset
-country <- shp$country
-pet <- data.frame(country=country,pet = pet)
-
-# Media per ogni country
-pet <- pet %>%
-  group_by(country) %>%
-  summarize(pet = mean(pet))
-
-# Ordinare il dataset in base al valore di PET
-pet <- pet %>%
-  arrange(pet)
-
-# Save data
-write.csv(pet, paste0("^Data/separate/", "pet", ".csv"), row.names=FALSE)
-
-
-#################################################################################################
-#################################################################################################
 ######  POPULATION DATASET
 
 file_info <- list(
@@ -374,6 +267,113 @@ pop <- pop %>%
 
 # Save Dataset
 write.csv(pop, paste0("^Data/separate/", "pop", ".csv"), row.names=FALSE)
+
+
+#################################################################################################
+#################################################################################################
+######  JOINT DATASET GWS - EVENTS
+
+# Open the datasets
+gws <- read.csv("^Data/separate/gws.csv")
+events <- read.csv("^Data/separate/events.csv")
+pop <- read.csv("^Data/separate/population.csv")
+
+events_data <- events %>%
+  filter(year<2020)
+
+vettore <- expand.grid(year=1944:2019, type=c("state","Nstate","onesided"))
+gws_events <- left_join(gws, vettore, by=c("year"))
+
+# Merge the datasets
+gws_events <- left_join(gws_events,events_data,by=c("country","region","year","type","orig"))
+gws_events$deaths[is.na(gws_events$deaths)] = 0  ## Assign a zero to each month/province where no data is observed
+gws_events$conflicts[is.na(gws_events$conflicts)] = 0  ## Assign a zero to each month/province where no data is observed
+gws_events <- gws_events[, c("year","country", "region","type","deaths", "conflicts","value","orig")]
+
+# Merge with population values
+gws_events <- merge(gws_events, pop, by = c("year", "country", "region"), all.x = TRUE)
+
+# Save data
+write.csv(gws_events, paste0("^Data/joint/", "gws_events", ".csv"), row.names=FALSE)
+
+
+#################################################################################################
+#################################################################################################
+######  JOINT DATASET GWS - MIGR
+
+# Open the datasets
+gws <- read.csv("^Data/separate/gws.csv")
+migr <- read.csv("^Data/separate/migr.csv")
+pop <- read.csv("^Data/separate/population.csv")
+
+# Convert the values of 'orig' in gws into integers
+gws$orig <- as.integer(gws$orig)
+
+# Merge the datasets
+gws_migr <- left_join(gws, migr, by=c("year", "orig"))
+
+# Sort and rename the variables
+gws_migr <- gws_migr %>%
+  rename(country=country.x)
+gws_migr$country.y=NULL
+gws_migr <- gws_migr[,c("year", "country", "region", "worldregion", "value", "population","interval", "flow","flow_annual",
+                      "outflow_rate_annual","year_cat10", "orig")]
+
+# Merge with population values
+gws_migr <- merge(gws_migr, pop, by = c("year", "country", "region"), all.x = TRUE)
+
+# Save data
+write.csv(gws_migr, paste0("^Data/joint/", "gws_migr", ".csv"), row.names=FALSE)
+
+
+#################################################################################################
+#################################################################################################
+######  JOINT DATASET GWS - EVENTS - MIGR
+
+gws <- read.csv("^Data/separate/gws.csv")
+events <- read.csv("^Data/separate/events.csv")
+migr <- read.csv("^Data/separate/migr.csv")
+
+gws_migr_events <- left_join(gws_events, migr, by=c("year", "orig"))
+gws_migr_events <- gws_migr_events %>%
+  rename(country=country.x)
+gws_migr_events$country.y=NULL
+
+# Save data
+write.csv(gws_migr_events, paste0("^Data/joint/", "gws_migr_events", ".csv"), row.names=FALSE)
+
+
+#################################################################################################
+#################################################################################################
+######  PET DATASET
+
+shp <- st_read("^Data/separate/shp/shp.shp")
+pet_t <- raster::brick("^Data_Raw/Global-AI_ET0_v3_annual/et0_v3_yr.tif")
+proj4string(pet_t) <- raster::crs(shp)
+
+# Reduce the resolution
+factor <- 0.25 / res(pet_t)[1]
+pet_t <- aggregate(pet_t, fact=factor, fun=mean, expand=TRUE)
+
+# Merging data
+pet <- exactextractr::exact_extract(pet_t, shp, fun="mean")
+
+# Create a new dataset
+country <- shp$country
+pet <- data.frame(country=country,pet = pet)
+
+# Media per ogni country
+pet <- pet %>%
+  group_by(country) %>%
+  summarize(pet = mean(pet))
+
+# Ordinare il dataset in base al valore di PET
+pet <- pet %>%
+  arrange(pet)
+
+# Save data
+write.csv(pet, paste0("^Data/separate/", "pet", ".csv"), row.names=FALSE)
+
 
 
 
