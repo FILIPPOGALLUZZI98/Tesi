@@ -220,6 +220,7 @@ write.csv(events, paste0("^Data/separate/", "events", ".csv"), row.names=FALSE)
 # Open the datasets
 gws <- read.csv("^Data/separate/gws.csv")
 events <- read.csv("^Data/separate/events.csv")
+pop <- read.csv("^Data/separate/population.csv")
 
 events_data <- events %>%
   filter(year<2020)
@@ -232,6 +233,9 @@ gws_events <- left_join(gws_events,events_data,by=c("country","region","year","t
 gws_events$deaths[is.na(gws_events$deaths)] = 0  ## Assign a zero to each month/province where no data is observed
 gws_events$conflicts[is.na(gws_events$conflicts)] = 0  ## Assign a zero to each month/province where no data is observed
 gws_events <- gws_events[, c("year","country", "region","type","deaths", "conflicts","value","orig")]
+
+# Merge with population values
+gws_events <- merge(gws_events, pop, by = c("year", "country", "region"), all.x = TRUE)
 
 # Save data
 write.csv(gws_events, paste0("^Data/joint/", "gws_events", ".csv"), row.names=FALSE)
