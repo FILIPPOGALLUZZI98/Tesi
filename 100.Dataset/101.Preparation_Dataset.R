@@ -11,7 +11,7 @@ suppressPackageStartupMessages({
 ######  INITIAL OPERATIONS FOR THE SHAPEFILE
 
 # Remove undesired variables
-shp <- sf::read_sf("^Data_Raw/world_geolev1_2021/world_geolev1_2021.shp")
+shp <- sf::read_sf("^Data/^Raw_Data/world_geolev1_2021/world_geolev1_2021.shp")
 shp$BPL_CODE=NULL; shp$CNTRY_CODE=NULL
 
 # Remove regions with geometry error and invalid geometries
@@ -32,7 +32,7 @@ shp$region <- ifelse(is.na(shp$region), shp$country, shp$region)
 shp <- sf::st_transform(shp, sp::CRS("+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs"))
 
 # Save data
-st_write(shp, "^Data/separate/shp", driver = "ESRI Shapefile")
+st_write(shp, "^Data/shp", driver = "ESRI Shapefile")
 
 
 #################################################################################################
@@ -40,8 +40,8 @@ st_write(shp, "^Data/separate/shp", driver = "ESRI Shapefile")
 ######  INITIAL OPERATIONS FOR THE RASTER OF GWS 
 
 # Open the datasets
-r <- raster::brick("^Data_Raw/ISIMIP3a/cwatm_gswp3-w5e5_obsclim_histsoc_default_groundwstor_global_monthly_1901_2019.nc")
-shp <- st_read("^Data/separate/shp/shp.shp")
+r <- raster::brick("^Data/^Raw_Data/ISIMIP3a/cwatm_gswp3-w5e5_obsclim_histsoc_default_groundwstor_global_monthly_1901_2019.nc")
+shp <- st_read("^Data/shp/shp.shp")
 
 # Set the same CRS of the shapefile
 proj4string(r) <- raster::crs(shp)
@@ -59,7 +59,7 @@ gws <- brick(media_annuale)
 # Save data
 years <- unique(format(as.Date(names(r), format = "X%Y.%m.%d"), "%Y"))
 names(gws) <- paste0("gws", years)
-output_nc <- "^Data/separate/gws.nc"
+output_nc <- "^Data/gws.nc"
 writeRaster(gws, filename = output_nc, format = "CDF", overwrite = TRUE)
 
 
@@ -68,8 +68,8 @@ writeRaster(gws, filename = output_nc, format = "CDF", overwrite = TRUE)
 ######  MERGING THE GWS VALUES IN THE REGIONS OF THE SHAPEFILE
 
 # Open shapefile and raster
-shp <- st_read("^Data/separate/shp/shp.shp")
-r <- raster::brick(paste0("^Data/separate/gws",".nc"))
+shp <- st_read("^Data/shp/shp.shp")
+r <- raster::brick(paste0("^Data/gws",".nc"))
 
 # Merging data
 gw <- exactextractr::exact_extract(r, shp, fun="mean")
@@ -94,7 +94,7 @@ gw <- gw %>%
 gw$value <- gw$value/1000
 
 # Save Dataset
-write.csv(gw, paste0("^Data/separate/", "gws", ".csv"), row.names=FALSE)
+write.csv(gw, paste0("^Data/", "gws", ".csv"), row.names=FALSE)
 # I obtained a dataset called 'gws' with the value of groundwater storage in each region of the 
 # shapefile and for each year
 
@@ -104,18 +104,18 @@ write.csv(gw, paste0("^Data/separate/", "gws", ".csv"), row.names=FALSE)
 ######  POPULATION DATASET
 
 file_info <- list(
-  "1975" = "^Data_Raw/population/GHS_POP_E1975_GLOBE_R2023A_54009_1000_V1_0/GHS_POP_E1975_GLOBE_R2023A_54009_1000_V1_0.tif",
-  "1980" = "^Data_Raw/population/GHS_POP_E1980_GLOBE_R2023A_54009_1000_V1_0/GHS_POP_E1980_GLOBE_R2023A_54009_1000_V1_0.tif",
-  "1985" = "^Data_Raw/population/GHS_POP_E1985_GLOBE_R2023A_54009_1000_V1_0/GHS_POP_E1985_GLOBE_R2023A_54009_1000_V1_0.tif",
-  "1990" = "^Data_Raw/population/GHS_POP_E1990_GLOBE_R2023A_54009_1000_V1_0/GHS_POP_E1990_GLOBE_R2023A_54009_1000_V1_0.tif",
-  "1995" = "^Data_Raw/population/GHS_POP_E1995_GLOBE_R2023A_54009_1000_V1_0/GHS_POP_E1995_GLOBE_R2023A_54009_1000_V1_0.tif",
-  "2000" = "^Data_Raw/population/GHS_POP_E2000_GLOBE_R2023A_54009_1000_V1_0/GHS_POP_E2000_GLOBE_R2023A_54009_1000_V1_0.tif",
-  "2005" = "^Data_Raw/population/GHS_POP_E2005_GLOBE_R2023A_54009_1000_V1_0/GHS_POP_E2005_GLOBE_R2023A_54009_1000_V1_0.tif",
-  "2010" = "^Data_Raw/population/GHS_POP_E2010_GLOBE_R2023A_54009_1000_V1_0/GHS_POP_E2010_GLOBE_R2023A_54009_1000_V1_0.tif",
-  "2015" = "^Data_Raw/population/GHS_POP_E2015_GLOBE_R2023A_54009_1000_V1_0/GHS_POP_E2015_GLOBE_R2023A_54009_1000_V1_0.tif",
-  "2020" = "^Data_Raw/population/GHS_POP_E2020_GLOBE_R2023A_54009_1000_V1_0/GHS_POP_E2020_GLOBE_R2023A_54009_1000_V1_0.tif")
+  "1975" = "^Data/^Raw_Data/population/GHS_POP_E1975_GLOBE_R2023A_54009_1000_V1_0/GHS_POP_E1975_GLOBE_R2023A_54009_1000_V1_0.tif",
+  "1980" = "^Data/^Raw_Data/population/GHS_POP_E1980_GLOBE_R2023A_54009_1000_V1_0/GHS_POP_E1980_GLOBE_R2023A_54009_1000_V1_0.tif",
+  "1985" = "^Data/^Raw_Data/population/GHS_POP_E1985_GLOBE_R2023A_54009_1000_V1_0/GHS_POP_E1985_GLOBE_R2023A_54009_1000_V1_0.tif",
+  "1990" = "^Data/^Raw_Data/population/GHS_POP_E1990_GLOBE_R2023A_54009_1000_V1_0/GHS_POP_E1990_GLOBE_R2023A_54009_1000_V1_0.tif",
+  "1995" = "^Data/^Raw_Data/population/GHS_POP_E1995_GLOBE_R2023A_54009_1000_V1_0/GHS_POP_E1995_GLOBE_R2023A_54009_1000_V1_0.tif",
+  "2000" = "^Data/^Raw_Data/population/GHS_POP_E2000_GLOBE_R2023A_54009_1000_V1_0/GHS_POP_E2000_GLOBE_R2023A_54009_1000_V1_0.tif",
+  "2005" = "^Data/^Raw_Data/population/GHS_POP_E2005_GLOBE_R2023A_54009_1000_V1_0/GHS_POP_E2005_GLOBE_R2023A_54009_1000_V1_0.tif",
+  "2010" = "^Data/^Raw_Data/population/GHS_POP_E2010_GLOBE_R2023A_54009_1000_V1_0/GHS_POP_E2010_GLOBE_R2023A_54009_1000_V1_0.tif",
+  "2015" = "^Data/^Raw_Data/population/GHS_POP_E2015_GLOBE_R2023A_54009_1000_V1_0/GHS_POP_E2015_GLOBE_R2023A_54009_1000_V1_0.tif",
+  "2020" = "^Data/^Raw_Data/population/GHS_POP_E2020_GLOBE_R2023A_54009_1000_V1_0/GHS_POP_E2020_GLOBE_R2023A_54009_1000_V1_0.tif")
 
-shp <- st_read("^Data/separate/shp/shp.shp")
+shp <- st_read("^Data/shp/shp.shp")
 
 for (year in names(file_info)) {
   file_tiff <- file_info[[year]]
@@ -157,15 +157,15 @@ pop <- pop %>%
   select(year, country, region, pop)
 
 # Save Dataset
-write.csv(pop, paste0("^Data/separate/", "pop", ".csv"), row.names=FALSE)
+write.csv(pop, paste0("^Data/", "population", ".csv"), row.names=FALSE)
 
 
 #################################################################################################
 #################################################################################################
 ######  PET DATASET
 
-shp <- st_read("^Data/separate/shp/shp.shp")
-pet_t <- raster::brick("^Data_Raw/Global-AI_ET0_v3_annual/et0_v3_yr.tif")
+shp <- st_read("^Data/shp/shp.shp")
+pet_t <- raster::brick("^Data/^Raw_Data/Global-AI_ET0_v3_annual/et0_v3_yr.tif")
 proj4string(pet_t) <- raster::crs(shp)
 
 # Reduce the resolution
@@ -189,7 +189,7 @@ pet <- pet %>%
   arrange(pet)
 
 # Save data
-write.csv(pet, paste0("^Data/separate/", "pet", ".csv"), row.names=FALSE)
+write.csv(pet, paste0("^Data/", "pet", ".csv"), row.names=FALSE)
 
 
 
