@@ -294,23 +294,6 @@ write.csv(gws_migr, paste0("^Data/joint/", "gws_migr", ".csv"), row.names=FALSE)
 
 #################################################################################################
 #################################################################################################
-######  JOINT DATASET GWS - EVENTS - MIGR
-
-gws <- read.csv("^Data/separate/gws.csv")
-events <- read.csv("^Data/separate/events.csv")
-migr <- read.csv("^Data/separate/migr.csv")
-
-gws_migr_events <- left_join(gws_events, migr, by=c("year", "orig"))
-gws_migr_events <- gws_migr_events %>%
-  rename(country=country.x)
-gws_migr_events$country.y=NULL
-
-# Save data
-write.csv(gws_migr_events, paste0("^Data/joint/", "gws_migr_events", ".csv"), row.names=FALSE)
-
-
-#################################################################################################
-#################################################################################################
 ######  PET DATASET
 
 shp <- st_read("^Data/separate/shp/shp.shp")
@@ -339,6 +322,23 @@ pet <- pet %>%
 
 # Save data
 write.csv(pet, paste0("^Data/separate/", "pet", ".csv"), row.names=FALSE)
+
+
+#################################################################################################
+#################################################################################################
+######  JOINT DATASET GWS - EVENTS - MIGR
+
+gws <- read.csv("^Data/separate/gws.csv")
+events <- read.csv("^Data/separate/events.csv")
+migr <- read.csv("^Data/separate/migr.csv")
+
+gws_migr_events <- left_join(gws_events, migr, by=c("year", "orig"))
+gws_migr_events <- gws_migr_events %>%
+  rename(country=country.x)
+gws_migr_events$country.y=NULL
+
+# Save data
+write.csv(gws_migr_events, paste0("^Data/joint/", "gws_migr_events", ".csv"), row.names=FALSE)
 
 
 #################################################################################################
