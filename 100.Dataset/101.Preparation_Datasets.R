@@ -311,6 +311,68 @@ pet <- pet %>%
 write.csv(pet, paste0("^Data/separate/", "pet", ".csv"), row.names=FALSE)
 
 
+#################################################################################################
+#################################################################################################
+######  POPULATION DATASET
+
+file_info <- list(
+  "1975" = "^Data_Raw/population/GHS_POP_E1975_GLOBE_R2023A_54009_1000_V1_0/GHS_POP_E1975_GLOBE_R2023A_54009_1000_V1_0.tif",
+  "1980" = "^Data_Raw/population/GHS_POP_E1980_GLOBE_R2023A_54009_1000_V1_0/GHS_POP_E1980_GLOBE_R2023A_54009_1000_V1_0.tif",
+  "1985" = "^Data_Raw/population/GHS_POP_E1985_GLOBE_R2023A_54009_1000_V1_0/GHS_POP_E1985_GLOBE_R2023A_54009_1000_V1_0.tif",
+  "1990" = "^Data_Raw/population/GHS_POP_E1990_GLOBE_R2023A_54009_1000_V1_0/GHS_POP_E1990_GLOBE_R2023A_54009_1000_V1_0.tif",
+  "1995" = "^Data_Raw/population/GHS_POP_E1995_GLOBE_R2023A_54009_1000_V1_0/GHS_POP_E1995_GLOBE_R2023A_54009_1000_V1_0.tif",
+  "2000" = "^Data_Raw/population/GHS_POP_E2000_GLOBE_R2023A_54009_1000_V1_0/GHS_POP_E2000_GLOBE_R2023A_54009_1000_V1_0.tif",
+  "2005" = "^Data_Raw/population/GHS_POP_E2005_GLOBE_R2023A_54009_1000_V1_0/GHS_POP_E2005_GLOBE_R2023A_54009_1000_V1_0.tif",
+  "2010" = "^Data_Raw/population/GHS_POP_E2010_GLOBE_R2023A_54009_1000_V1_0/GHS_POP_E2010_GLOBE_R2023A_54009_1000_V1_0.tif",
+  "2015" = "^Data_Raw/population/GHS_POP_E2015_GLOBE_R2023A_54009_1000_V1_0/GHS_POP_E2015_GLOBE_R2023A_54009_1000_V1_0.tif",
+  "2020" = "^Data_Raw/population/GHS_POP_E2020_GLOBE_R2023A_54009_1000_V1_0/GHS_POP_E2020_GLOBE_R2023A_54009_1000_V1_0.tif")
+
+shp <- st_read("^Data/separate/shp/shp.shp")
+
+for (year in names(file_info)) {
+  file_tiff <- file_info[[year]]
+  pop_t <- raster(file_tiff)
+  pop_t2 <- aggregate(pop_t, fact=20, fun=sum)
+  pop <- exactextractr::exact_extract(pop_t2, shp, fun="sum")
+  
+  # Crea un dataframe per l'anno corrente
+  pop_df <- data.frame(pop = pop)
+  pop_df$region <- shp$region
+  pop_df$country <- shp$country
+  pop_df$year <- as.integer(year)
+  assign(paste0("pop", year), pop_df)}
+
+datasets <- list(pop1975, pop1980, pop1985, pop1990, pop1995, pop2000, pop2005, pop2010, pop2015, pop2020)
+pop <- bind_rows(datasets)
+
+# Funzione per copiare i valori di pop sugli anni mancanti
+add_missing_years <- function(data) {
+  years <- seq(1975, 2020, by = 5)
+  new_data <- data.frame()
+  for (year in years) {
+    current_rows <- data %>% filter(year == year)
+    for (offset in 1:4) {
+      new_rows <- current_rows %>%
+        mutate(year = year - offset)
+      new_data <- bind_rows(new_data, new_rows)}}
+  combined_data <- bind_rows(data, new_data) %>%
+    distinct()
+  return(combined_data)}
+
+# Applica la funzione a ciascuna combinazione di country e region
+pop <- pop %>%
+  group_by(country, region) %>%
+  do(add_missing_years(.)) %>%
+  ungroup()
+
+pop <- pop %>%
+  select(year, country, region, pop)
+
+# Save Dataset
+write.csv(pop, paste0("^Data/separate/", "pop", ".csv"), row.names=FALSE)
+
+
+
 
 
 
