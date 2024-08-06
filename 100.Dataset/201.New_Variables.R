@@ -131,6 +131,9 @@ gws_events <- gws_events %>%
 
 gws_events <- gws_events %>%
   filter(year>1988)
+gws_events <- gws_events %>%
+  filter(!is.na(CV10))
+
 
 write.csv(gws_events, paste0("^Data/", "gws_events", ".csv"), row.names=FALSE)
 
