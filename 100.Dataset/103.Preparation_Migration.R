@@ -16,7 +16,7 @@ pop <- read.csv("^Data/population.csv")
 migr <-read.csv("^Data/^Raw_Data/Global_migr_raw.csv")
 
 # Sort the order of the variables ofmigr dataset
-migr <- data_migr[,c("year", "country_name", "worldregion", "population","mig_interval","year_cat10","flow","flow_annual", "outflow_rate_annual", "orig")]
+migr <- migr[,c("year", "country_name", "worldregion", "population","mig_interval","year_cat10","flow","flow_annual", "outflow_rate_annual", "orig")]
 
 # Rename variables
 migr <- migr %>%
