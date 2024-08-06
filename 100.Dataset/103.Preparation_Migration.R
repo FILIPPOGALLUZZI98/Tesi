@@ -11,9 +11,9 @@ suppressPackageStartupMessages({
 ######  JOINT DATASET GWS - MIGR
 
 # Open the datasets
-gws <- read.csv("^Data/separate/gws.csv")
-pop <- read.csv("^Data/separate/population.csv")
-migr <-read.csv("^Data_Raw/Global_migr_raw.csv")
+gws <- read.csv("^Data/gws.csv")
+pop <- read.csv("^Data/population.csv")
+migr <-read.csv("^Data/^Raw_Data/Global_migr_raw.csv")
 
 # Sort the order of the variables ofmigr dataset
 migr <- data_migr[,c("year", "country_name", "worldregion", "population","mig_interval","year_cat10","flow","flow_annual", "outflow_rate_annual", "orig")]
@@ -40,7 +40,7 @@ gws_migr <- gws_migr[,c("year", "country", "region", "worldregion", "value", "po
 gws_migr <- merge(gws_migr, pop, by = c("year", "country", "region"), all.x = TRUE)
 
 # Save data
-write.csv(gws_migr, paste0("^Data/joint/", "gws_migr", ".csv"), row.names=FALSE)
+write.csv(gws_migr, paste0("^Data/", "gws_migr_j", ".csv"), row.names=FALSE)
 
 
 
