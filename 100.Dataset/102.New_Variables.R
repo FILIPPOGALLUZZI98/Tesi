@@ -21,6 +21,15 @@ gws_events$orig=NULL
 gws_events <- gws_events %>%
   filter(!is.na(value))
 
+# GWS PER CAPITA VALUE
+gws_events <- gws_events %>% 
+  mutate(value_t = value)
+gws_events <- gws_events %>% 
+  mutate(value = value/pop)
+gws_events <- gws_events %>%
+  filter(!is.nan(value))
+gws_events <- subset(gws_events, pop >= 500)
+
 # TOTAL NUMBER OF CONFLICTS PER YEAR
 gws_events <- gws_events %>% 
   arrange(year, country, region, type) %>%
