@@ -27,7 +27,7 @@ gws_events <- gws_events %>%
   mutate(value = value/pop)
 gws_events <- gws_events %>%
   filter(!is.nan(value))
-gws_events <- subset(gws_events, pop >= 500)
+gws_events <- subset(gws_events, pop >= 1500)
 
 # TOTAL NUMBER OF CONFLICTS PER YEAR
 gws_events <- gws_events %>% 
@@ -157,7 +157,7 @@ gws_migr <- gws_migr %>%
   mutate(value = value/pop)
 gws_migr <- gws_migr %>%
   filter(!is.nan(value))
-gws_migr <- subset(gws_migr, pop >= 500)
+gws_migr <- subset(gws_migr, pop >= 1500)
 
 # NORMALIZATION OF VALUE
 gws_migr <- gws_migr %>%
