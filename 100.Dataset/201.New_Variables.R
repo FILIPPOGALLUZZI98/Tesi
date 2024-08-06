@@ -12,7 +12,6 @@ suppressPackageStartupMessages({
 
 # Open the dataset
 gws_events <- read.csv("^Data/gws_events_j.csv")
-gws_events$value <- gws_events$value*1000  ## Original values of GWS
 
 # Since the conflict datasets start from 1989 i just need data from 1979
 gws_events <- gws_events %>%
@@ -142,7 +141,6 @@ write.csv(gws_events, paste0("^Data/", "gws_events", ".csv"), row.names=FALSE)
 
 # Open the dataset
 gws_migr <- read.csv("^Data/gws_migr_j.csv")
-gws_migr$value <- gws_migr$value*1000
 gws_migr$orig=NULL
 gws_migr <- gws_migr %>%
   filter(!is.na(value))
@@ -150,7 +148,16 @@ gws_migr <- gws_migr %>%
 # NUMBER OF MIGRANTS LEAVING A REGION IN THE CONSIDERED INTERVAL DIVIDED BY THE POPULATION
 # PERCENTAGE OF TOTAL POPULATION
 gws_migr <- gws_migr %>%
-  mutate(migrants=(flow/population)*100)
+  mutate(migrants=(flow/pop)*100)
+
+# GWS PER CAPITA VALUE
+gws_migr <- gws_migr %>% 
+  mutate(value_t = value)
+gws_migr <- gws_migr %>% 
+  mutate(value = value/pop)
+gws_migr <- gws_migr %>%
+  filter(!is.nan(value))
+gws_migr <- subset(gws_migr, pop >= 500)
 
 # NORMALIZATION OF VALUE
 gws_migr <- gws_migr %>%
@@ -233,6 +240,9 @@ gws_migr <- gws_migr %>%
 
 gws_migr <- gws_migr %>%
   filter(!is.na(outflow_rate_annual))
+
+gws_migr <- gws_migr %>%
+  filter(!is.na(gws_growth10))
 
 write.csv(gws_migr, paste0("^Data/", "gws_migr", ".csv"), row.names=FALSE)
 
