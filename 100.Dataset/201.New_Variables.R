@@ -197,7 +197,7 @@ gws_migr <- gws_migr %>%
 
 # GWS LOGARITHMIC RETURN % 1-5-10 YEARS
 gws_migr <- gws_migr %>%
-  arrange(year, country, region, type) %>%
+  arrange(year, country, region) %>%
   group_by(country, region) %>%
   mutate(gws_logret=(log(n_value/(lag(n_value, n=1)))),
          gws_logret5=(log(n_value/(lag(n_value, n=5)))),
