@@ -117,8 +117,7 @@ shp <- st_read("^Data/shp/shp.shp")
 for (year in names(file_info)) {
   file_tiff <- file_info[[year]]
   pop_t <- raster(file_tiff)
-  pop_t2 <- aggregate(pop_t, fact=20, fun=sum)
-  pop <- exactextractr::exact_extract(pop_t2, shp, fun="sum")
+  pop <- exactextractr::exact_extract(pop_t, shp, fun="sum")
   
   # Crea un dataframe per l'anno corrente
   pop_df <- data.frame(pop = pop)
