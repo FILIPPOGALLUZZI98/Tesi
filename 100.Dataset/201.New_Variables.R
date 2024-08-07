@@ -144,14 +144,16 @@ write.csv(gws_events, paste0("^Data/", "gws_events", ".csv"), row.names=FALSE)
 
 # Open the dataset
 gws_migr <- read.csv("^Data/gws_migr_j.csv")
-gws_migr$orig=NULL
+gws_migr$orig=NULL; gws_migr$flow_annual=NULL; gws_migr$worldregion=NULL
+gws_migr$outflow_rate_annual=NULL; gws_migr$flow_annual=NULL; gws_migr$year_cat10=NULL
 gws_migr <- gws_migr %>%
-  filter(!is.na(value))
+  filter(!is.na(value))  ## Regioni come Antartide in cui non ci sono valori di GWS
 
 # NUMBER OF MIGRANTS LEAVING A REGION IN THE CONSIDERED INTERVAL DIVIDED BY THE POPULATION
 # PERCENTAGE OF TOTAL POPULATION
 gws_migr <- gws_migr %>%
   mutate(migrants=(flow/pop)*100)
+gws_migr <- subset(gws_migr, pop >= 1500)
 
 # GWS PER CAPITA VALUE
 gws_migr <- gws_migr %>% 
@@ -160,7 +162,6 @@ gws_migr <- gws_migr %>%
   mutate(value = value/pop)
 gws_migr <- gws_migr %>%
   filter(!is.nan(value))
-gws_migr <- subset(gws_migr, pop >= 1500)
 
 # NORMALIZATION OF VALUE
 gws_migr <- gws_migr %>%
@@ -241,11 +242,13 @@ gws_migr <- gws_migr %>%
          CV5=(gws_std5/mean_region)*100,
          CV10=(gws_std10/mean_region)*100) 
 
+# Rimozione valori inutili
 gws_migr <- gws_migr %>%
-  filter(!is.na(outflow_rate_annual))
-
+  filter(!is.na(population))
 gws_migr <- gws_migr %>%
   filter(!is.na(CV10))
+# Rimuovere regioni con percentuale di migranti superiore al 50% (sono in tutto 10 valori anomali)
+gws_migr <- subset(gws_migr, migrants<50)
 
 write.csv(gws_migr, paste0("^Data/", "gws_migr", ".csv"), row.names=FALSE)
 
