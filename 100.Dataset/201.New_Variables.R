@@ -72,14 +72,14 @@ gws_events <- gws_events %>%
          n_gws_avg5 = rollmean(n_value, k = 5, align = "right", fill = NA),
          n_gws_avg10 = rollmean(n_value, k = 10, align = "right", fill = NA))
 
-# GWS GROWTH RATE % 1-5-10 YEARS
+# GWS LOGARITHMIC RETURN % 1-5-10 YEARS
 gws_events <- gws_events %>%
   arrange(year, country, region, type) %>%
   group_by(country, region, type) %>%
-  mutate(gws_growth1=((n_value-lag(n_value))/lag(n_value))*100, 
-         gws_growth5=((n_value-lag(n_value, n=5))/lag(n_value, n=5))*100,
-         gws_growth10=((n_value-lag(n_value, n=10))/lag(n_value, n=10))*100)
-
+  mutate(gws_logret=(log(n_value/(lag(n_value, n=1)))),
+         gws_logret5=(log(n_value/(lag(n_value, n=5)))),
+         gws_logret10=(log(n_value/(lag(n_value, n=10)))))
+  
 # GWS STANDARD DEVIATION 1-5-10 YEARS
 gws_events <- gws_events %>%
   arrange(year, country, region, type) %>%
@@ -196,12 +196,13 @@ gws_migr <- gws_migr %>%
          n_gws_avg10 = rollmean(n_value, k = 10, align = "right", fill = NA))
 
 # GWS GROWTH RATE % 1-5-10 YEARS
+# GWS LOGARITHMIC RETURN % 1-5-10 YEARS
 gws_migr <- gws_migr %>%
-  arrange(year, country, region) %>%
-  group_by(country, region) %>%
-  mutate(gws_growth1=((n_value-lag(n_value))/lag(n_value))*100, 
-         gws_growth5=((n_value-lag(n_value, n=5))/lag(n_value, n=5))*100,
-         gws_growth10=((n_value-lag(n_value, n=10))/lag(n_value, n=10))*100)
+  arrange(year, country, region, type) %>%
+  group_by(country, region, type) %>%
+  mutate(gws_logret=(log(n_value/(lag(n_value, n=1)))),
+         gws_logret5=(log(n_value/(lag(n_value, n=5)))),
+         gws_logret10=(log(n_value/(lag(n_value, n=10)))))
 
 # GWS STANDARD DEVIATION 1-5-10 YEARS
 gws_migr <- gws_migr %>%
