@@ -129,9 +129,9 @@ gws_events <- gws_events %>%
 
 gws_events <- gws_events %>%
   filter(year>1988)
-gws_events$gws_growth1[is.nan(gws_events$gws_growth1)] <- 0
-gws_events$gws_growth5[is.nan(gws_events$gws_growth5)] <- 0
-gws_events$gws_growth10[is.nan(gws_events$gws_growth10)] <- 0
+gws_events$gws_growth1[is.nan(gws_events$gws_logret)] <- 0
+gws_events$gws_growth5[is.nan(gws_events$gws_logret5)] <- 0
+gws_events$gws_growth10[is.nan(gws_events$gws_logret10)] <- 0
 gws_events$gws_anomalies[is.nan(gws_events$gws_anomalies)] <- 0
 gws_events$gws_anomalies5[is.nan(gws_events$gws_anomalies5)] <- 0
 gws_events$gws_anomalies10[is.nan(gws_events$gws_anomalies10)] <- 0
