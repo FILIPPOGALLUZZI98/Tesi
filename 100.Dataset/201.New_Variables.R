@@ -129,9 +129,9 @@ gws_events <- gws_events %>%
 
 gws_events <- gws_events %>%
   filter(year>1988)
-gws_events$gws_growth1[is.nan(gws_events$gws_logret)] <- 0
-gws_events$gws_growth5[is.nan(gws_events$gws_logret5)] <- 0
-gws_events$gws_growth10[is.nan(gws_events$gws_logret10)] <- 0
+gws_events$gws_logret[is.nan(gws_events$gws_logret)] <- 0
+gws_events$gws_logret5[is.nan(gws_events$gws_logret5)] <- 0
+gws_events$gws_logret10[is.nan(gws_events$gws_logret10)] <- 0
 gws_events$gws_anomalies[is.nan(gws_events$gws_anomalies)] <- 0
 gws_events$gws_anomalies5[is.nan(gws_events$gws_anomalies5)] <- 0
 gws_events$gws_anomalies10[is.nan(gws_events$gws_anomalies10)] <- 0
@@ -195,11 +195,10 @@ gws_migr <- gws_migr %>%
          n_gws_avg5 = rollmean(n_value, k = 5, align = "right", fill = NA),
          n_gws_avg10 = rollmean(n_value, k = 10, align = "right", fill = NA))
 
-# GWS GROWTH RATE % 1-5-10 YEARS
 # GWS LOGARITHMIC RETURN % 1-5-10 YEARS
 gws_migr <- gws_migr %>%
   arrange(year, country, region, type) %>%
-  group_by(country, region, type) %>%
+  group_by(country, region) %>%
   mutate(gws_logret=(log(n_value/(lag(n_value, n=1)))),
          gws_logret5=(log(n_value/(lag(n_value, n=5)))),
          gws_logret10=(log(n_value/(lag(n_value, n=10)))))
