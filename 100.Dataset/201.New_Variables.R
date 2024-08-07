@@ -129,8 +129,15 @@ gws_events <- gws_events %>%
 
 gws_events <- gws_events %>%
   filter(year>1988)
-gws_events <- gws_events %>%
-  filter(!is.na(CV10))
+gws_events$gws_growth1[is.nan(gws_events$gws_growth1)] <- 0
+gws_events$gws_growth5[is.nan(gws_events$gws_growth5)] <- 0
+gws_events$gws_growth10[is.nan(gws_events$gws_growth10)] <- 0
+gws_events$gws_anomalies[is.nan(gws_events$gws_anomalies)] <- 0
+gws_events$gws_anomalies5[is.nan(gws_events$gws_anomalies5)] <- 0
+gws_events$gws_anomalies10[is.nan(gws_events$gws_anomalies10)] <- 0
+gws_events$CV1[is.nan(gws_events$CV1)] <- 0
+gws_events$CV5[is.nan(gws_events$CV5)] <- 0
+gws_events$CV10[is.nan(gws_events$CV10)] <- 0
 
 
 write.csv(gws_events, paste0("^Data/", "gws_events", ".csv"), row.names=FALSE)
