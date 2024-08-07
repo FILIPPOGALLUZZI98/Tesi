@@ -16,9 +16,10 @@ gws_events <- read.csv("^Data/gws_events_j.csv")
 # Since the conflict datasets start from 1989 i just need data from 1979
 gws_events <- gws_events %>%
   filter(year>1978)
-gws_events$orig=NULL
+gws_events$orig=NULL; gws_events$deaths=NULL
+
 gws_events <- gws_events %>%
-  filter(!is.na(value))
+  filter(!is.na(value))  ## Regioni come Antartide in cui non ci sono valori di GWS
 
 # GWS PER CAPITA VALUE
 gws_events <- gws_events %>% 
@@ -35,26 +36,22 @@ gws_events <- gws_events %>%
   group_by(year, country, region) %>% 
   mutate(count = sum(conflicts))
 
-
 # NORMALIZATION OF CONLFLITCS
+delta <- max(gws_events$conflicts)-min(gws_events$conflicts)
 gws_events <- gws_events %>%
-  arrange(year, country, region, type) %>%
-  group_by(country,region) %>%
-  mutate(n_confl = (conflicts - min(conflicts)) / (max(conflicts)-min(conflicts)))
+  mutate(n_confl = (conflicts/delta))
 gws_events$n_confl[is.nan(gws_events$n_confl)] <- 0
 
 # NORMALIZATION OF COUNT
+delta <- max(gws_events$count)-min(gws_events$count)
 gws_events <- gws_events %>%
-  arrange(year, country, region, type) %>%
-  group_by(country,region) %>%
-  mutate(n_count = (count - min(count)) / (max(count)-min(count)))
+  mutate(n_count = (count / delta))
 gws_events$n_count[is.nan(gws_events$n_count)] <- 0
 
 # NORMALIZATION OF GWS VALUES
+delta <- max(gws_events$value)-min(gws_events$value)
 gws_events <- gws_events %>%
-  arrange(year, country, region, type) %>%
-  group_by(country,region) %>%
-  mutate(n_value = (value - min(value)) / (max(value)-min(value) ))
+  mutate(n_value = (value /  delta))
 gws_events$n_value[is.nan(gws_events$n_value)] <- 0
 
 
@@ -149,34 +146,38 @@ gws_migr$outflow_rate_annual=NULL; gws_migr$flow_annual=NULL; gws_migr$year_cat1
 gws_migr <- gws_migr %>%
   filter(!is.na(value))  ## Regioni come Antartide in cui non ci sono valori di GWS
 
+# Selezioni solo i paesi che contengono valori per migrazioni
+data <- subset(gws_migr, flow>0)
+data <- data %>%
+  filter(!is.na(flow))
+nomi <- unique(data$region)
+gws_migr <- gws_migr %>%
+  filter(region %in% nomi)
+
 # NUMBER OF MIGRANTS LEAVING A REGION IN THE CONSIDERED INTERVAL DIVIDED BY THE POPULATION
 # PERCENTAGE OF TOTAL POPULATION
 gws_migr <- gws_migr %>%
   mutate(migrants=(flow/pop)*100)
-gws_migr <- subset(gws_migr, pop >= 1500)
+gws_migr <- subset(gws_migr, pop >1)
 
 # GWS PER CAPITA VALUE
 gws_migr <- gws_migr %>% 
   mutate(value_t = value)
 gws_migr <- gws_migr %>% 
   mutate(value = value/pop)
-gws_migr <- gws_migr %>%
-  filter(!is.nan(value))
 
 # NORMALIZATION OF VALUE
+delta <- max(gws_migr$value)-min(gws_migr$value)
 gws_migr <- gws_migr %>%
-  arrange(year, country, region) %>%
-  group_by(country,region) %>%
-  mutate(n_value = (value - min(value)) / (max(value)-min(value) ))
-gws_migr$n_value[is.nan(gws_migr$n_value)] <- 0
+  mutate(n_value = (value) / delta )
 
 # GWS AVERAGES 1-5-10 YEARS
-gws_migr <- gws_migr %>%
-  arrange(year, country, region) %>%
-  group_by(country, region) %>%
-  mutate(gws_avg1 = (lag(value) + value)/2, 
-         gws_avg5 = rollmean(value, k = 5, align = "right", fill = NA),
-         gws_avg10 = rollmean(value, k = 10, align = "right", fill = NA))
+#gws_migr <- gws_migr %>%
+#  arrange(year, country, region) %>%
+#  group_by(country, region) %>%
+#  mutate(gws_avg1 = (lag(value) + value)/2, 
+#         gws_avg5 = rollmean(value, k = 5, align = "right", fill = NA),
+#         gws_avg10 = rollmean(value, k = 10, align = "right", fill = NA))
 
 # AVERAGES FOR 1-5-10 YEARS (NORMALIZED)
 gws_migr <- gws_migr %>%
@@ -190,39 +191,39 @@ gws_migr <- gws_migr %>%
 gws_migr <- gws_migr %>%
   arrange(year, country, region) %>%
   group_by(country, region) %>%
-  mutate(gws_growth1=((value-lag(value))/lag(value))*100, 
-         gws_growth5=((value-lag(value, n=5))/lag(value, n=5))*100,
-         gws_growth10=((value-lag(value, n=10))/lag(value, n=10))*100)
+  mutate(gws_growth1=((n_value-lag(n_value))/lag(n_value))*100, 
+         gws_growth5=((n_value-lag(n_value, n=5))/lag(n_value, n=5))*100,
+         gws_growth10=((n_value-lag(n_value, n=10))/lag(n_value, n=10))*100)
 
 # GWS STANDARD DEVIATION 1-5-10 YEARS
 gws_migr <- gws_migr %>%
   arrange(year, country, region) %>%
   group_by(country, region) %>%
-  mutate(gws_std1= rollapply(value, width = 2, FUN = sd, align = "right", fill = NA), 
-         gws_std5= rollapply(value, width = 5, FUN = sd, align = "right", fill = NA),
-         gws_std10= rollapply(value, width = 10, FUN = sd, align = "right", fill = NA))
+  mutate(gws_std1= rollapply(n_value, width = 2, FUN = sd, align = "right", fill = NA), 
+         gws_std5= rollapply(n_value, width = 5, FUN = sd, align = "right", fill = NA),
+         gws_std10= rollapply(n_value, width = 10, FUN = sd, align = "right", fill = NA))
 
 # ANOMALIES
 # Create two new variables: mean and std over 1980-2010
 medie <- gws_migr %>%
-  select(year, country, region, value)
+  select(year, country, region, n_value)
 medie <- medie %>%
   filter(year >= 1980 & year <= 2010) %>%
   arrange(year, country, region) %>%
   group_by(country, region) %>%
-  mutate(mean_region = mean(value))
-medie$year <- NULL; medie$value <- NULL
+  mutate(mean_region = mean(n_value))
+medie$year <- NULL; medie$n_value <- NULL
 medie <- medie %>%
   distinct(country, region, .keep_all = TRUE)
 gws_migr <- left_join(gws_migr,medie,by=c("country","region"))
 std_t <- gws_migr %>%
-  select(year, country, region, value)
+  select(year, country, region, n_value)
 std_t <- std_t %>%
   filter(year >= 1980 & year <= 2010) %>%
   arrange(year, country, region) %>%
   group_by(country, region) %>%
-  mutate(std = sd(value))
-std_t$year <- NULL; std_t$value <- NULL
+  mutate(std = sd(n_value))
+std_t$year <- NULL; std_t$n_value <- NULL
 std_t <- std_t %>%
   distinct(country, region, .keep_all = TRUE)
 gws_migr <- left_join(gws_migr,std_t,by=c("country","region"))
@@ -230,9 +231,9 @@ gws_migr <- left_join(gws_migr,std_t,by=c("country","region"))
 gws_migr <- gws_migr %>%
   arrange(year, country, region) %>%
   group_by(country, region) %>%
-  mutate(gws_anomalies = (value-mean_region)/std,
-         gws_anomalies5 = (gws_avg5-mean_region)/std,
-         gws_anomalies10 = (gws_avg10-mean_region)/std)
+  mutate(gws_anomalies = (n_value-mean_region)/std,
+         gws_anomalies5 = (n_gws_avg5-mean_region)/std,
+         gws_anomalies10 = (n_gws_avg10-mean_region)/std)
 
 # Coefficiente di variazione (%)
 gws_migr <- gws_migr %>%
