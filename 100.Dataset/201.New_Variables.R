@@ -17,18 +17,19 @@ gws_events <- read.csv("^Data/gws_events_j.csv")
 gws_events <- gws_events %>%
   filter(year>1978)
 gws_events$orig=NULL; gws_events$deaths=NULL
-
 gws_events <- gws_events %>%
   filter(!is.na(value))  ## Regioni come Antartide in cui non ci sono valori di GWS
+
+# Eliminare le regioni che hanno almeno un anno con pop<2000
+data <- subset(gws_events, pop<2000)
+nomi <- unique(data$region)
+gws_events <- subset(gws_events, !(region %in% nomi))
 
 # GWS PER CAPITA VALUE
 gws_events <- gws_events %>% 
   mutate(value_t = value)
 gws_events <- gws_events %>% 
   mutate(value = value/pop)
-gws_events <- gws_events %>%
-  filter(!is.nan(value))
-gws_events <- subset(gws_events, pop >= 1500)
 
 # TOTAL NUMBER OF CONFLICTS PER YEAR
 gws_events <- gws_events %>% 
@@ -56,12 +57,12 @@ gws_events$n_value[is.nan(gws_events$n_value)] <- 0
 
 
 # AVERAGES FOR 1-5-10 YEARS 
-gws_events <- gws_events %>%
-  arrange(year, country, region, type) %>%
-  group_by(country, region, type) %>%
-  mutate(gws_avg1 = (lag(value) + value)/2, 
-         gws_avg5 = rollmean(value, k = 5, align = "right", fill = NA),
-         gws_avg10 = rollmean(value, k = 10, align = "right", fill = NA))
+#gws_events <- gws_events %>%
+#  arrange(year, country, region, type) %>%
+#  group_by(country, region, type) %>%
+#  mutate(gws_avg1 = (lag(n_value) + n_value)/2, 
+#         gws_avg5 = rollmean(n_value, k = 5, align = "right", fill = NA),
+#         gws_avg10 = rollmean(n_value, k = 10, align = "right", fill = NA))
 
 # AVERAGES FOR 1-5-10 YEARS (NORMALIZED)
 gws_events <- gws_events %>%
@@ -75,38 +76,38 @@ gws_events <- gws_events %>%
 gws_events <- gws_events %>%
   arrange(year, country, region, type) %>%
   group_by(country, region, type) %>%
-  mutate(gws_growth1=((value-lag(value))/lag(value))*100, 
-         gws_growth5=((value-lag(value, n=5))/lag(value, n=5))*100,
-         gws_growth10=((value-lag(value, n=10))/lag(value, n=10))*100)
+  mutate(gws_growth1=((n_value-lag(n_value))/lag(n_value))*100, 
+         gws_growth5=((n_value-lag(n_value, n=5))/lag(n_value, n=5))*100,
+         gws_growth10=((n_value-lag(n_value, n=10))/lag(n_value, n=10))*100)
 
 # GWS STANDARD DEVIATION 1-5-10 YEARS
 gws_events <- gws_events %>%
   arrange(year, country, region, type) %>%
   group_by(country, region, type) %>%
-  mutate(gws_std1= rollapply(value, width = 2, FUN = sd, align = "right", fill = NA), 
-         gws_std5= rollapply(value, width = 5, FUN = sd, align = "right", fill = NA),
-         gws_std10= rollapply(value, width = 10, FUN = sd, align = "right", fill = NA))
+  mutate(gws_std1= rollapply(n_value, width = 2, FUN = sd, align = "right", fill = NA), 
+         gws_std5= rollapply(n_value, width = 5, FUN = sd, align = "right", fill = NA),
+         gws_std10= rollapply(n_value, width = 10, FUN = sd, align = "right", fill = NA))
 
 # ANOMALIES (1980-2010) 
 medie <- gws_events %>%
-  select(year, country, region, type, value)
+  select(year, country, region, type, n_value)
 medie <- medie %>%
   filter(year >= 1980 & year <= 2010) %>%
   arrange(year, country, region, type) %>%
   group_by(country, region, type) %>%
-  mutate(mean_region = mean(value))
-medie$year <- NULL; medie$type <- NULL; medie$value <- NULL
+  mutate(mean_region = mean(n_value))
+medie$year <- NULL; medie$type <- NULL; medie$n_value <- NULL
 medie <- medie %>%
   distinct(country, region, .keep_all = TRUE)
 gws_events <- left_join(gws_events,medie,by=c("country","region"))
 std_t <- gws_events %>%
-  select(year, country, region, type, value)
+  select(year, country, region, type, n_value)
 std_t <- std_t %>%
   filter(year >= 1980 & year <= 2010) %>%
   arrange(year, country, region, type) %>%
   group_by(country, region, type) %>%
-  mutate(std = sd(value))
-std_t$year <- NULL; std_t$type <- NULL; std_t$value <- NULL
+  mutate(std = sd(n_value))
+std_t$year <- NULL; std_t$type <- NULL; std_t$n_value <- NULL
 std_t <- std_t %>%
   distinct(country, region, .keep_all = TRUE)
 gws_events <- left_join(gws_events,std_t,by=c("country","region"))
@@ -114,9 +115,9 @@ gws_events <- left_join(gws_events,std_t,by=c("country","region"))
 gws_events <- gws_events %>%
   arrange(year, country, region, type) %>%
   group_by(country, region, type) %>%
-  mutate(gws_anomalies = (value-mean_region)/std,
-         gws_anomalies5 = (gws_avg5-mean_region)/std,
-         gws_anomalies10 = (gws_avg10-mean_region)/std)
+  mutate(gws_anomalies = (n_value-mean_region)/std,
+         gws_anomalies5 = (n_gws_avg5-mean_region)/std,
+         gws_anomalies10 = (n_gws_avg10-mean_region)/std)
 
 # Coefficiente di variazione (%)
 gws_events <- gws_events %>%
