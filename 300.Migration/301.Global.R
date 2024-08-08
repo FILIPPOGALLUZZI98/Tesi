@@ -29,12 +29,12 @@ setFixest_dict(c(n_migr="norm #migrants/pop", value="gws [Kg/m^2]",
 
 # 1-y Migration data
 data_1 <- subset(gm, interval==1)
-model <- fixest::feglm(data=data_1, n_migr~sw(n_value,n_gws_avg5,n_gws_avg10, gws_anomalies5, gws_anomalies10, CV5, CV10, gws_logret5,gws_logret10)|region + year, family=gaussian)
+model <- fixest::feglm(data=data_1, n_migr~sw(n_value,n_gws_avg5,n_gws_avg10,gws_anomalies, gws_anomalies5, gws_anomalies10,CV1, CV5, CV10,gws_logret, gws_logret5, gws_logret10)|region + year, family=gaussian)
 tabella <- etable(model); write.csv(tabella, "^Tabelle/migration_global_1.csv", row.names = FALSE)
 
 # 5-y Migration data
 data_5 <- subset(gm, interval==5)
-model <- fixest::feglm(data=data_5, n_migr~sw(n_value,n_gws_avg5,n_gws_avg10, gws_anomalies5, gws_anomalies10, CV5, CV10, gws_logret5,gws_logret10)|region + year, family=gaussian)
+model <- fixest::feglm(data=data_5, n_migr~sw(n_value,n_gws_avg5,n_gws_avg10,gws_anomalies, gws_anomalies5, gws_anomalies10,CV1, CV5, CV10,gws_logret, gws_logret5, gws_logret10)|region + year, family=gaussian)
 tabella <- etable(model); write.csv(tabella, "^Tabelle/migration_global_5.csv", row.names = FALSE)
 
 
