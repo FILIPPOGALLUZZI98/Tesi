@@ -36,7 +36,7 @@ get_continent <- function(countries) {
   countrycode(countries, "country.name", "continent")}
 data_continent <- events_sum %>%
   filter(get_continent(country) == continent)
-Africa <- fixest::feglm(data = data_continent, count~sw(n_value,n_gws_avg5,n_gws_avg10,gws_anomalies, gws_anomalies5, gws_anomalies10,CV1, CV5, CV10,gws_logret, gws_logret5, gws_logret10))|region + year, family=quasipoisson)
+Africa <- fixest::feglm(data = data_continent, count~sw(n_value,n_gws_avg5,n_gws_avg10,gws_anomalies, gws_anomalies5, gws_anomalies10,CV1, CV5, CV10,gws_logret, gws_logret5, gws_logret10)|region + year, family=quasipoisson)
 tabella <- etable(Africa); write.csv(tabella, "^Tabelle/conflicts_Africa.csv", row.names = FALSE)
 
 continent <- "Asia"
@@ -44,7 +44,7 @@ get_continent <- function(countries) {
   countrycode(countries, "country.name", "continent")}
 data_continent <- events_sum %>%
   filter(get_continent(country) == continent)
-Asia <- fixest::feglm(data = data_continent, count~sw(n_value,n_gws_avg5,n_gws_avg10,gws_anomalies, gws_anomalies5, gws_anomalies10,CV1, CV5, CV10,gws_logret, gws_logret5, gws_logret10))|region + year, family=quasipoisson)
+Asia <- fixest::feglm(data = data_continent, count~sw(n_value,n_gws_avg5,n_gws_avg10,gws_anomalies, gws_anomalies5, gws_anomalies10,CV1, CV5, CV10,gws_logret, gws_logret5, gws_logret10)|region + year, family=quasipoisson)
 tabella <- etable(Asia); write.csv(tabella, "^Tabelle/conflicts_Asia.csv", row.names = FALSE)
 
 continent <- "Oceania"
@@ -52,7 +52,7 @@ get_continent <- function(countries) {
   countrycode(countries, "country.name", "continent")}
 data_continent <- events_sum %>%
   filter(get_continent(country) == continent)
-Oceania <- fixest::feglm(data = data_continent, count~sw(n_value,n_gws_avg5,n_gws_avg10,gws_anomalies, gws_anomalies5, gws_anomalies10,CV1, CV5, CV10,gws_logret, gws_logret5, gws_logret10))|region + year, family=quasipoisson)
+Oceania <- fixest::feglm(data = data_continent, count~sw(n_value,n_gws_avg5,n_gws_avg10,gws_anomalies, gws_anomalies5, gws_anomalies10,CV1, CV5, CV10,gws_logret, gws_logret5, gws_logret10)|region + year, family=quasipoisson)
 tabella <- etable(Oceania); write.csv(tabella, "^Tabelle/conflicts_Oceania.csv", row.names = FALSE)
 
 continent <- "Europe"
@@ -60,7 +60,7 @@ get_continent <- function(countries) {
   countrycode(countries, "country.name", "continent")}
 data_continent <- events_sum %>%
   filter(get_continent(country) == continent)
-Europe <- fixest::feglm(data = data_continent, count~sw(n_value,n_gws_avg5,n_gws_avg10,gws_anomalies, gws_anomalies5, gws_anomalies10,CV1, CV5, CV10,gws_logret, gws_logret5, gws_logret10))|region + year, family=quasipoisson)
+Europe <- fixest::feglm(data = data_continent, count~sw(n_value,n_gws_avg5,n_gws_avg10,gws_anomalies, gws_anomalies5, gws_anomalies10,CV1, CV5, CV10,gws_logret, gws_logret5, gws_logret10)|region + year, family=quasipoisson)
 tabella <- etable(Europe); write.csv(tabella, "^Tabelle/conflicts_Europe.csv", row.names = FALSE)
 
 North_America <- c("United States", "Canada", "Mexico")
