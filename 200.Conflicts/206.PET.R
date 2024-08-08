@@ -38,11 +38,11 @@ pet_h <- pet[141:280, ]; name_pet_h <- unique(pet_h$country)  ## high
 # Statistical model and tables
 
 pet_H <- subset(ge, country %in% name_pet_h)
-pet_high <- fixest::feglm(data=pet_H, count~sw(n_value,n_gws_avg5,n_gws_avg10, gws_anomalies5, gws_anomalies10, CV5, CV10, gws_logret5,gws_logret10)|region + year, family=quasipoisson)
+pet_high <- fixest::feglm(data=pet_H, count~sw(n_value,n_gws_avg5,n_gws_avg10,gws_anomalies, gws_anomalies5, gws_anomalies10,CV1, CV5, CV10,gws_logret, gws_logret5, gws_logret10)|region + year, family=quasipoisson)
 tabella <- etable(pet_high); write.csv(tabella, "^Tabelle/conflicts_pet_high.csv", row.names = FALSE)
 
 pet_L <- subset(ge, country %in% name_pet_l)
-pet_low <- fixest::feglm(data=pet_L, count~sw(n_value,n_gws_avg5,n_gws_avg10, gws_anomalies5, gws_anomalies10, CV5, CV10, gws_logret5,gws_logret10)|region + year, family=quasipoisson)
+pet_low <- fixest::feglm(data=pet_L, count~sw(n_value,n_gws_avg5,n_gws_avg10,gws_anomalies, gws_anomalies5, gws_anomalies10,CV1, CV5, CV10,gws_logret, gws_logret5, gws_logret10)|region + year, family=quasipoisson)
 tabella <- etable(pet_low); write.csv(tabella, "^Tabelle/conflicts_pet_low.csv", row.names = FALSE)
 
 
