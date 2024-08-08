@@ -15,9 +15,9 @@ suppressPackageStartupMessages({
 gm <- read.csv("^Data/gws_migr.csv")
 
 # Setting of the dictionary for the tables
-setFixest_dict(c(migrants="# migrants/pop", value="gws [Kg/m^2]",
+setFixest_dict(c(n_migr="norm #migrants/pop", value="gws [Kg/m^2]",
                  gws_avg1="average 1-y", gws_avg5="average 5-y", gws_avg10="average 10-y",
-                 gws_growth1="growth rate (%) 1-y", gws_growth5="growth rate (%) 5-y", gws_growth10="growth rate (%) 10-y",
+                 gws_logret5="log return 5-y", gws_logret10="log return 10-y",
                  gws_std1="STD 1-y", gws_std5="STD 5-y", gws_std10="STD 10-y",
                  gws_anomalies="anomalies 1y", gws_anomalies5="gws anomalies 5y",
                  gws_anomalies10="gws anomalies 10y", n_value="normalized gws",
@@ -29,12 +29,12 @@ setFixest_dict(c(migrants="# migrants/pop", value="gws [Kg/m^2]",
 
 # 1-y Migration data
 data_1 <- subset(gm, interval==1)
-model <- fixest::feglm(data=data_1, log(migrants)~sw(n_value,n_gws_avg5,n_gws_avg10, gws_anomalies5, gws_anomalies10, CV5, CV10, gws_growth5,gws_growth10)|region + year, family=gaussian)
+model <- fixest::feglm(data=data_1, n_migr~sw(n_value,n_gws_avg5,n_gws_avg10, gws_anomalies5, gws_anomalies10, CV5, CV10, gws_logret5,gws_logret10)|region + year, family=gaussian)
 tabella <- etable(model); write.csv(tabella, "^Tabelle/migration_global_1.csv", row.names = FALSE)
 
 # 5-y Migration data
 data_5 <- subset(gm, interval==5)
-model <- fixest::feglm(data=data_5, log(migrants)~sw(n_value,n_gws_avg5,n_gws_avg10, gws_anomalies5, gws_anomalies10, CV5, CV10, gws_growth5,gws_growth10)|region + year, family=gaussian)
+model <- fixest::feglm(data=data_5, n_migr~sw(n_value,n_gws_avg5,n_gws_avg10, gws_anomalies5, gws_anomalies10, CV5, CV10, gws_logret5,gws_logret10)|region + year, family=gaussian)
 tabella <- etable(model); write.csv(tabella, "^Tabelle/migration_global_5.csv", row.names = FALSE)
 
 
