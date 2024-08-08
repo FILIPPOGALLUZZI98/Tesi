@@ -26,7 +26,7 @@ setFixest_dict(c(conflicts="# conflicts", value="gws [Kg/m^2]",
                  CV1="Coefficient of variation 1-y", CV5="Coefficient of variation 5-y",CV10="Coefficient of variation 10-y"))
 
 # Select the GDP list for one year (2019)
-gdp_data <- WDI(indicator = "NY.GDP.MKTP.PP.KD", start = 1988, end = 2022, extra = TRUE)
+gdp_data <- WDI(indicator = "NY.GDP.MKTP.PP.KD", start = 2019, end = 2019, extra = TRUE)
 gdp_data <- subset(gdp_data, year== 2019)
 
 # Divide the countries into four categories
