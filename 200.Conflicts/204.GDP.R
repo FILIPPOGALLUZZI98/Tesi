@@ -42,19 +42,19 @@ ge <- subset(ge, type=="state")
 # Statistical model and tables
 
 ge_high <- subset(ge, country %in% name_high)
-high <- fixest::feglm(data=ge_high, count~sw(n_value,n_gws_avg5,n_gws_avg10, gws_anomalies5, gws_anomalies10, CV5, CV10, gws_logret5,gws_logret10)|region + year, family=quasipoisson)
+high <- fixest::feglm(data=ge_high, count~sw(n_value,n_gws_avg5,n_gws_avg10,gws_anomalies, gws_anomalies5, gws_anomalies10,CV1, CV5, CV10,gws_logret, gws_logret5, gws_logret10)|region + year, family=quasipoisson)
 tabella <- etable(high); write.csv(tabella, "^Tabelle/conflicts_highGDP.csv", row.names = FALSE)
 
 ge_low <- subset(ge, country %in% name_low)
-low <- fixest::feglm(data=ge_low, count~sw(n_value,n_gws_avg5,n_gws_avg10, gws_anomalies5, gws_anomalies10, CV5, CV10, gws_logret5,gws_logret10)|region + year, family=quasipoisson)
+low <- fixest::feglm(data=ge_low, count~sw(n_value,n_gws_avg5,n_gws_avg10,gws_anomalies, gws_anomalies5, gws_anomalies10,CV1, CV5, CV10,gws_logret, gws_logret5, gws_logret10)|region + year, family=quasipoisson)
 tabella <- etable(low); write.csv(tabella, "^Tabelle/conflicts_lowGDP.csv", row.names = FALSE)
 
 ge_highmid <- subset(ge, country %in% name_highmid)
-midhigh <- fixest::feglm(data=ge_highmid, count~sw(n_value,n_gws_avg5,n_gws_avg10, gws_anomalies5, gws_anomalies10, CV5, CV10, gws_logret5,gws_logret10)|region + year, family=quasipoisson)
+midhigh <- fixest::feglm(data=ge_highmid, count~sw(n_value,n_gws_avg5,n_gws_avg10,gws_anomalies, gws_anomalies5, gws_anomalies10,CV1, CV5, CV10,gws_logret, gws_logret5, gws_logret10)|region + year, family=quasipoisson)
 tabella <- etable(midhigh); write.csv(tabella, "^Tabelle/conflicts_midhighGDP.csv", row.names = FALSE)
 
 ge_lowmid <- subset(ge, country %in% name_lowmid)
-lowmid <- fixest::feglm(data=ge_lowmid, count~sw(n_value,n_gws_avg5,n_gws_avg10, gws_anomalies5, gws_anomalies10, CV5, CV10, gws_logret5,gws_logret10)|region + year, family=quasipoisson)
+lowmid <- fixest::feglm(data=ge_lowmid, count~sw(n_value,n_gws_avg5,n_gws_avg10,gws_anomalies, gws_anomalies5, gws_anomalies10,CV1, CV5, CV10,gws_logret, gws_logret5, gws_logret10)|region + year, family=quasipoisson)
 tabella <- etable(lowmid); write.csv(tabella, "^Tabelle/conflicts_lowmidGDP.csv", row.names = FALSE)
 
 
