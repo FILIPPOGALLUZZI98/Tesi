@@ -26,7 +26,7 @@ setFixest_dict(c(n_migr="norm #migrants/pop", value="gws [Kg/m^2]",
 
 
 # Select the GDP list for one year (2019)
-gdp_data <- WDI(indicator = "NY.GDP.MKTP.PP.KD", start = 1988, end = 2022, extra = TRUE)
+gdp_data <- WDI(indicator = "NY.GDP.MKTP.PP.KD", start = 2019, end = 2019, extra = TRUE)
 gdp_data <- subset(gdp_data, year== 2019)
 
 # Divide the countries into four categories
