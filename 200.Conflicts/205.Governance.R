@@ -51,15 +51,15 @@ gov3 <- govern[143:213, ]; name_gov3 <- unique(gov3$country)   ## low
 # Statistical model and tables
 
 ge_gov1 <- subset(ge, country %in% name_gov1)
-gov1 <- fixest::feglm(data=ge_gov1, count~sw(n_value,n_gws_avg5,n_gws_avg10, gws_anomalies5, gws_anomalies10, CV5, CV10, gws_logret5,gws_logret10)|region + year, family=quasipoisson)
+gov1 <- fixest::feglm(data=ge_gov1, count~sw(n_value,n_gws_avg5,n_gws_avg10,gws_anomalies, gws_anomalies5, gws_anomalies10,CV1, CV5, CV10,gws_logret, gws_logret5, gws_logret10)|region + year, family=quasipoisson)
 tabella <- etable(gov1); write.csv(tabella, "^Tabelle/conflicts_gov1.csv", row.names = FALSE)
 
 ge_gov2 <- subset(ge, country %in% name_gov2)
-gov2 <- fixest::feglm(data=ge_gov2, ccount~sw(n_value,n_gws_avg5,n_gws_avg10, gws_anomalies5, gws_anomalies10, CV5, CV10, gws_logret5,gws_logret10)|region + year, family=quasipoisson)
+gov2 <- fixest::feglm(data=ge_gov2, ccount~sw(n_value,n_gws_avg5,n_gws_avg10,gws_anomalies, gws_anomalies5, gws_anomalies10,CV1, CV5, CV10,gws_logret, gws_logret5, gws_logret10)|region + year, family=quasipoisson)
 tabella <- etable(gov2); write.csv(tabella, "^Tabelle/conflicts_gov2.csv", row.names = FALSE)
 
 ge_gov3 <- subset(ge, country %in% name_gov3)
-gov3 <- fixest::feglm(data=ge_gov3, count~sw(n_value,n_gws_avg5,n_gws_avg10, gws_anomalies5, gws_anomalies10, CV5, CV10, gws_logret5,gws_logret10)|region + year, family=quasipoisson)
+gov3 <- fixest::feglm(data=ge_gov3, count~sw(n_value,n_gws_avg5,n_gws_avg10,gws_anomalies, gws_anomalies5, gws_anomalies10,CV1, CV5, CV10,gws_logret, gws_logret5, gws_logret10)|region + year, family=quasipoisson)
 tabella <- etable(gov3); write.csv(tabella, "^Tabelle/conflicts_gov3.csv", row.names = FALSE)
 
 
