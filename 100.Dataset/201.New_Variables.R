@@ -38,23 +38,16 @@ gws_events <- gws_events %>%
   mutate(count = sum(conflicts))
 
 # NORMALIZATION OF CONLFLITCS
-delta <- max(gws_events$conflicts)-min(gws_events$conflicts)
 gws_events <- gws_events %>%
-  mutate(n_confl = (conflicts/delta))
-gws_events$n_confl[is.nan(gws_events$n_confl)] <- 0
+  mutate(n_confl = log(1+conflicts))
 
 # NORMALIZATION OF COUNT
-delta <- max(gws_events$count)-min(gws_events$count)
 gws_events <- gws_events %>%
-  mutate(n_count = (count / delta))
-gws_events$n_count[is.nan(gws_events$n_count)] <- 0
+  mutate(n_count = log(1+count))
 
-# NORMALIZATION OF GWS VALUES
-delta <- max(gws_events$value)-min(gws_events$value)
+# NORMALIZATION OF GWS VALUES (fortemente non simmetrica)
 gws_events <- gws_events %>%
-  mutate(n_value = (value /  delta))
-gws_events$n_value[is.nan(gws_events$n_value)] <- 0
-
+  mutate(n_value = log(1+value))
 
 # AVERAGES FOR 1-5-10 YEARS 
 #gws_events <- gws_events %>%
@@ -72,13 +65,13 @@ gws_events <- gws_events %>%
          n_gws_avg5 = rollmean(n_value, k = 5, align = "right", fill = NA),
          n_gws_avg10 = rollmean(n_value, k = 10, align = "right", fill = NA))
 
-# GWS LOGARITHMIC RETURN % 1-5-10 YEARS
+# GWS LOGARITHMIC RETURN 1-5-10 YEARS
 gws_events <- gws_events %>%
   arrange(year, country, region, type) %>%
   group_by(country, region, type) %>%
-  mutate(gws_logret=(log(n_value/(lag(n_value, n=1)))),
-         gws_logret5=(log(n_value/(lag(n_value, n=5)))),
-         gws_logret10=(log(n_value/(lag(n_value, n=10)))))
+  mutate(gws_logret=(log(value/(lag(value, n=1)))),
+         gws_logret5=(log(value/(lag(value, n=5)))),
+         gws_logret10=(log(value/(lag(value, n=10)))))
   
 # GWS STANDARD DEVIATION 1-5-10 YEARS
 gws_events <- gws_events %>%
@@ -165,8 +158,7 @@ gws_migr <- gws_migr %>%
 # NUMBER OF MIGRANTS LEAVING A REGION IN THE CONSIDERED INTERVAL DIVIDED BY THE POPULATION
 # PERCENTAGE OF TOTAL POPULATION
 gws_migr <- gws_migr %>%
-  mutate(migrants=(flow/pop)*100)
-gws_migr <- subset(gws_migr, pop >1)
+  mutate(migrants=(flow/pop))
 
 # GWS PER CAPITA VALUE
 gws_migr <- gws_migr %>% 
@@ -175,9 +167,13 @@ gws_migr <- gws_migr %>%
   mutate(value = value/pop)
 
 # NORMALIZATION OF VALUE
-delta <- max(gws_migr$value)-min(gws_migr$value)
+# NORMALIZATION OF GWS VALUES (fortemente non simmetrica)
 gws_migr <- gws_migr %>%
-  mutate(n_value = (value) / delta )
+  mutate(n_value = log(1+value))
+
+# NORMALIZATION OF MIGRANTS
+gws_migr <- gws_migr %>%
+  mutate(n_migr = log(1+migrants))
 
 # GWS AVERAGES 1-5-10 YEARS
 #gws_migr <- gws_migr %>%
@@ -199,9 +195,9 @@ gws_migr <- gws_migr %>%
 gws_migr <- gws_migr %>%
   arrange(year, country, region) %>%
   group_by(country, region) %>%
-  mutate(gws_logret=(log(n_value/(lag(n_value, n=1)))),
-         gws_logret5=(log(n_value/(lag(n_value, n=5)))),
-         gws_logret10=(log(n_value/(lag(n_value, n=10)))))
+  mutate(gws_logret=(log(value/(lag(value, n=1)))),
+         gws_logret5=(log(value/(lag(value, n=5)))),
+         gws_logret10=(log(value/(lag(value, n=10)))))
 
 # GWS STANDARD DEVIATION 1-5-10 YEARS
 gws_migr <- gws_migr %>%
@@ -256,8 +252,8 @@ gws_migr <- gws_migr %>%
   filter(!is.na(population))
 gws_migr <- gws_migr %>%
   filter(!is.na(CV10))
-# Rimuovere regioni con percentuale di migranti superiore al 50% (sono in tutto 10 valori anomali)
-gws_migr <- subset(gws_migr, migrants<50)
+# Rimuovere regioni con flow>pop
+gws_migr <- subset(gws_migr, n_migr<0.6)
 
 write.csv(gws_migr, paste0("^Data/", "gws_migr", ".csv"), row.names=FALSE)
 
