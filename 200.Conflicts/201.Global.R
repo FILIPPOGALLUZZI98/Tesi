@@ -17,7 +17,7 @@ ge <- read.csv("^Data/gws_events.csv")
 # Setting of the dictionary for the tables
 setFixest_dict(c(conflicts="# conflicts", value="gws [Kg/m^2]",
                  gws_avg1="average 1-y", gws_avg5="average 5-y", gws_avg10="average 10-y",
-                 gws_logret5="log return 5-y", gws_logret10="log return 10-y",
+                 gws_logret="log return 1-y",gws_logret5="log return 5-y", gws_logret10="log return 10-y",
                  gws_std1="STD 1-y", gws_std5="STD 5-y", gws_std10="STD 10-y",
                  gws_anomalies="anomalies 1y", gws_anomalies5="gws anomalies 5y",
                  gws_anomalies10="gws anomalies 10y",count="# conflicts", 
