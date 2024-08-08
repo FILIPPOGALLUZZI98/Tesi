@@ -36,11 +36,11 @@ pet_h <- pet[141:280, ]; name_pet_h <- unique(pet_h$country)  ## high
 gm_1 <- subset(gm, interval==1)
 
 pet_H <- subset(gm_1, country %in% name_pet_h)
-pet_high  <- fixest::feglm(data=pet_H, n_migr~sw(n_value,n_gws_avg5,n_gws_avg10, gws_anomalies5, gws_anomalies10, CV5, CV10, gws_logret5,gws_logret10)|region + year, family=gaussian)
+pet_high  <- fixest::feglm(data=pet_H, n_migr~sw(n_value,n_gws_avg5,n_gws_avg10,gws_anomalies, gws_anomalies5, gws_anomalies10,CV1, CV5, CV10,gws_logret, gws_logret5, gws_logret10)|region + year, family=gaussian)
 tabella <- etable(pet_high); write.csv(tabella, "^Tabelle/migration_pet_high_1.csv", row.names = FALSE)
 
 pet_L <- subset(gm_1, country %in% name_pet_l)
-pet_low <- fixest::feglm(data=pet_L, n_migr~sw(n_value,n_gws_avg5,n_gws_avg10, gws_anomalies5, gws_anomalies10, CV5, CV10, gws_logret5,gws_logret10)|region + year, family=gaussian)
+pet_low <- fixest::feglm(data=pet_L, n_migr~sw(n_value,n_gws_avg5,n_gws_avg10,gws_anomalies, gws_anomalies5, gws_anomalies10,CV1, CV5, CV10,gws_logret, gws_logret5, gws_logret10)|region + year, family=gaussian)
 tabella <- etable(pet_low); write.csv(tabella, "^Tabelle/migration_pet_low_1.csv", row.names = FALSE)
 
 
@@ -48,11 +48,11 @@ tabella <- etable(pet_low); write.csv(tabella, "^Tabelle/migration_pet_low_1.csv
 gm_5 <- subset(gm, interval==5)
 
 pet_H <- subset(gm_5, country %in% name_pet_h)
-pet_high  <- fixest::feglm(data=pet_H, n_migr~sw(n_value,n_gws_avg5,n_gws_avg10, gws_anomalies5, gws_anomalies10, CV5, CV10, gws_logret5,gws_logret10)|region + year, family=gaussian)
+pet_high  <- fixest::feglm(data=pet_H, n_migr~sw(n_value,n_gws_avg5,n_gws_avg10,gws_anomalies, gws_anomalies5, gws_anomalies10,CV1, CV5, CV10,gws_logret, gws_logret5, gws_logret10)|region + year, family=gaussian)
 tabella <- etable(pet_high); write.csv(tabella, "^Tabelle/migration_pet_high_5.csv", row.names = FALSE)
 
 pet_L <- subset(gm_5, country %in% name_pet_l)
-pet_low <- fixest::feglm(data=pet_L, n_migr~sw(n_value,n_gws_avg5,n_gws_avg10, gws_anomalies5, gws_anomalies10, CV5, CV10, gws_logret5,gws_logret10)|region + year, family=gaussian)
+pet_low <- fixest::feglm(data=pet_L, n_migr~sw(n_value,n_gws_avg5,n_gws_avg10,gws_anomalies, gws_anomalies5, gws_anomalies10,CV1, CV5, CV10,gws_logret, gws_logret5, gws_logret10)|region + year, family=gaussian)
 tabella <- etable(pet_low); write.csv(tabella, "^Tabelle/migration_pet_low_5.csv", row.names = FALSE)
 
 
