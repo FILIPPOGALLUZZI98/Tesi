@@ -62,19 +62,19 @@ data_4 <- gm[gm$country %in% lista_4, ]
 
 data <- subset(data_1, interval==1)
 mena <- fixest::feglm(data = data, n_migr~sw(n_value,n_gws_avg5,n_gws_avg10,gws_anomalies, gws_anomalies5, gws_anomalies10,CV1, CV5, CV10,gws_logret, gws_logret5, gws_logret10)|region + year, family=quasipoisson)
-tabella <- etable(mena); write.csv(tabella, "^Tabelle/migrations_mena.csv", row.names = FALSE)
+tabella <- etable(mena); write.csv(tabella, "^Tabelle/migrations_mena_1.csv", row.names = FALSE)
 
 data <- subset(data_2, interval==1)
 sub_sahara <- fixest::feglm(data = data, n_migr~sw(n_value,n_gws_avg5,n_gws_avg10,gws_anomalies, gws_anomalies5, gws_anomalies10,CV1, CV5, CV10,gws_logret, gws_logret5, gws_logret10)|region + year, family=quasipoisson)
-tabella <- etable(sub_sahara); write.csv(tabella, "^Tabelle/migrations_sub_sahara.csv", row.names = FALSE)
+tabella <- etable(sub_sahara); write.csv(tabella, "^Tabelle/migrations_sub_sahara_1.csv", row.names = FALSE)
 
 #data <- subset(data_3, interval==1)
 #sud_est_asia <- fixest::feglm(data = data, n_migr~sw(n_value,n_gws_avg5,n_gws_avg10,gws_anomalies, gws_anomalies5, gws_anomalies10,CV1, CV5, CV10,gws_logret, gws_logret5, gws_logret10)|region + year, family=quasipoisson)
-#tabella <- etable(sud_est_asia); write.csv(tabella, "^Tabelle/migrations_sud_est_asia.csv", row.names = FALSE)
+#tabella <- etable(sud_est_asia); write.csv(tabella, "^Tabelle/migrations_sud_est_asia_1.csv", row.names = FALSE)
 
 data <- subset(data_4, interval==1)
 cs_america <- fixest::feglm(data = data, n_migr~sw(n_value,n_gws_avg5,n_gws_avg10,gws_anomalies, gws_anomalies5, gws_anomalies10,CV1, CV5, CV10,gws_logret, gws_logret5, gws_logret10)|region + year, family=quasipoisson)
-tabella <- etable(cs_america); write.csv(tabella, "^Tabelle/migrations_cs_america.csv", row.names = FALSE)
+tabella <- etable(cs_america); write.csv(tabella, "^Tabelle/migrations_cs_america_1.csv", row.names = FALSE)
 
 
 
@@ -83,19 +83,19 @@ tabella <- etable(cs_america); write.csv(tabella, "^Tabelle/migrations_cs_americ
 
 #data <- subset(data_1, interval==5)
 #mena <- fixest::feglm(data = data, n_migr~sw(n_value,n_gws_avg5,n_gws_avg10,gws_anomalies, gws_anomalies5, gws_anomalies10,CV1, CV5, CV10,gws_logret, gws_logret5, gws_logret10)|region + year, family=quasipoisson)
-#tabella <- etable(mena); write.csv(tabella, "^Tabelle/migrations_mena.csv", row.names = FALSE)
+#tabella <- etable(mena); write.csv(tabella, "^Tabelle/migrations_mena_5.csv", row.names = FALSE)
 
 #data <- subset(data_2, interval==5)
 #sub_sahara <- fixest::feglm(data = data, n_migr~sw(n_value,n_gws_avg5,n_gws_avg10,gws_anomalies, gws_anomalies5, gws_anomalies10,CV1, CV5, CV10,gws_logret, gws_logret5, gws_logret10)|region + year, family=quasipoisson)
-#tabella <- etable(sub_sahara); write.csv(tabella, "^Tabelle/migrations_sub_sahara.csv", row.names = FALSE)
+#tabella <- etable(sub_sahara); write.csv(tabella, "^Tabelle/migrations_sub_sahara_5.csv", row.names = FALSE)
 
 data <- subset(data_3, interval==5)
 sud_est_asia <- fixest::feglm(data = data, n_migr~sw(n_value,n_gws_avg5,n_gws_avg10,gws_anomalies, gws_anomalies5, gws_anomalies10,CV1, CV5, CV10,gws_logret, gws_logret5, gws_logret10)|region + year, family=quasipoisson)
-tabella <- etable(sud_est_asia); write.csv(tabella, "^Tabelle/migrations_sud_est_asia.csv", row.names = FALSE)
+tabella <- etable(sud_est_asia); write.csv(tabella, "^Tabelle/migrations_sud_est_asia_5.csv", row.names = FALSE)
 
 data <- subset(data_4, interval==5)
 cs_america <- fixest::feglm(data = data, n_migr~sw(n_value,n_gws_avg5,n_gws_avg10,gws_anomalies, gws_anomalies5, gws_anomalies10,CV1, CV5, CV10,gws_logret, gws_logret5, gws_logret10)|region + year, family=quasipoisson)
-tabella <- etable(cs_america); write.csv(tabella, "^Tabelle/migrations_cs_america.csv", row.names = FALSE)
+tabella <- etable(cs_america); write.csv(tabella, "^Tabelle/migrations_cs_america_5.csv", row.names = FALSE)
 
 
 
