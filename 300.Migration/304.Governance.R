@@ -16,9 +16,9 @@ gm <- read.csv("^Data/gws_migr.csv")
 govern <- read.csv("^Data/Govern.csv")
 
 # Setting of the dictionary for the tables
-setFixest_dict(c(migrants="# migrants/pop", value="gws [Kg/m^2]",
+setFixest_dict(c(n_migr="norm #migrants/pop", value="gws [Kg/m^2]",
                  gws_avg1="average 1-y", gws_avg5="average 5-y", gws_avg10="average 10-y",
-                 gws_growth1="growth rate (%) 1-y", gws_growth5="growth rate (%) 5-y", gws_growth10="growth rate (%) 10-y",
+                 gws_logret5="log return 5-y", gws_logret10="log return 10-y",
                  gws_std1="STD 1-y", gws_std5="STD 5-y", gws_std10="STD 10-y",
                  gws_anomalies="anomalies 1y", gws_anomalies5="gws anomalies 5y",
                  gws_anomalies10="gws anomalies 10y", n_value="normalized gws",
@@ -49,15 +49,15 @@ gov3 <- govern[143:213, ]; name_gov3 <- unique(gov3$country)   ## low
 gm_1 <- subset(gm, interval==1)
 
 gm_gov1 <- subset(gm_1, country %in% name_gov1)
-gov1 <- fixest::feglm(data=gm_gov1, log(migrants)~sw(n_value,n_gws_avg5,n_gws_avg10, gws_anomalies5, gws_anomalies10, CV5, CV10, gws_growth5,gws_growth10)|region + year, family=gaussian)
+gov1 <- fixest::feglm(data=gm_gov1, n_migr~sw(n_value,n_gws_avg5,n_gws_avg10, gws_anomalies5, gws_anomalies10, CV5, CV10, gws_logret5,gws_logret10)|region + year, family=gaussian)
 tabella <- etable(gov1); write.csv(tabella, "^Tabelle/migration_gov1_1.csv", row.names = FALSE)
 
 gm_gov2 <- subset(gm_1, country %in% name_gov2)
-gov2 <- fixest::feglm(data=gm_gov2, log(migrants)~sw(n_value,n_gws_avg5,n_gws_avg10, gws_anomalies5, gws_anomalies10, CV5, CV10, gws_growth5,gws_growth10)|region + year, family=gaussian)
+gov2 <- fixest::feglm(data=gm_gov2, n_migr~sw(n_value,n_gws_avg5,n_gws_avg10, gws_anomalies5, gws_anomalies10, CV5, CV10, gws_logret5,gws_logret10)|region + year, family=gaussian)
 tabella <- etable(gov2); write.csv(tabella, "^Tabelle/migration_gov2_1.csv", row.names = FALSE)
 
 gm_gov3 <- subset(gm_1, country %in% name_gov3)
-gov3 <- fixest::feglm(data=gm_gov3, log(migrants)~sw(n_value,n_gws_avg5,n_gws_avg10, gws_anomalies5, gws_anomalies10, CV5, CV10, gws_growth5,gws_growth10)|region + year, family=gaussian)
+gov3 <- fixest::feglm(data=gm_gov3, n_migr~sw(n_value,n_gws_avg5,n_gws_avg10, gws_anomalies5, gws_anomalies10, CV5, CV10, gws_logret5,gws_logret10)|region + year, family=gaussian)
 tabella <- etable(gov3); write.csv(tabella, "^Tabelle/migration_gov3_1.csv", row.names = FALSE)
 
 
@@ -66,15 +66,15 @@ tabella <- etable(gov3); write.csv(tabella, "^Tabelle/migration_gov3_1.csv", row
 gm_5 <- subset(gm, interval==5)
 
 gm_gov1 <- subset(gm_5, country %in% name_gov1)
-gov1 <- fixest::feglm(data=gm_gov1, log(migrants)~sw(n_value,n_gws_avg5,n_gws_avg10, gws_anomalies5, gws_anomalies10, CV5, CV10, gws_growth5,gws_growth10)|region + year, family=gaussian)
+gov1 <- fixest::feglm(data=gm_gov1, n_migr~sw(n_value,n_gws_avg5,n_gws_avg10, gws_anomalies5, gws_anomalies10, CV5, CV10, gws_logret5,gws_logret10)|region + year, family=gaussian)
 tabella <- etable(gov1); write.csv(tabella, "^Tabelle/migration_gov1_5.csv", row.names = FALSE)
 
 gm_gov2 <- subset(gm_5, country %in% name_gov2)
-gov2 <- fixest::feglm(data=gm_gov2, log(migrants)~sw(n_value,n_gws_avg5,n_gws_avg10, gws_anomalies5, gws_anomalies10, CV5, CV10, gws_growth5,gws_growth10)|region + year, family=gaussian)
+gov2 <- fixest::feglm(data=gm_gov2, n_migr~sw(n_value,n_gws_avg5,n_gws_avg10, gws_anomalies5, gws_anomalies10, CV5, CV10, gws_logret5,gws_logret10)|region + year, family=gaussian)
 tabella <- etable(gov2); write.csv(tabella, "^Tabelle/migration_gov2_5.csv", row.names = FALSE)
 
 gm_gov3 <- subset(gm_5, country %in% name_gov3)
-gov3 <- fixest::feglm(data=gm_gov3, log(migrants)~sw(n_value,n_gws_avg5,n_gws_avg10, gws_anomalies5, gws_anomalies10, CV5, CV10, gws_growth5,gws_growth10)|region + year, family=gaussian)
+gov3 <- fixest::feglm(data=gm_gov3, n_migr~sw(n_value,n_gws_avg5,n_gws_avg10, gws_anomalies5, gws_anomalies10, CV5, CV10, gws_logret5,gws_logret10)|region + year, family=gaussian)
 tabella <- etable(gov3); write.csv(tabella, "^Tabelle/migration_gov3_5.csv", row.names = FALSE)
 
 
