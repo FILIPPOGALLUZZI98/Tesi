@@ -13,7 +13,7 @@ suppressPackageStartupMessages({
 
 # Upload of the groundwater-events dataset
 gm <- read.csv("^Data/gws_migr.csv")
-pet <- read.csv("^Data/Separate/pet.csv")
+pet <- read.csv("^Data/pet.csv")
 
 # Setting of the dictionary for the tables
 setFixest_dict(c(n_migr="norm #migrants/pop", value="gws [Kg/m^2]",
