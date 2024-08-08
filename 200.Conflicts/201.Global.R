@@ -30,7 +30,7 @@ setFixest_dict(c(conflicts="# conflicts", value="gws [Kg/m^2]",
 events_sum <- subset(ge, type=="state")
 
 # Statistical model and table (for normalized variables)
-model <- fixest::feglm(data=events_sum, count~sw(n_value,n_gws_avg5,n_gws_avg10, gws_anomalies5, gws_anomalies10, CV5, CV10,gws_logret5, gws_logret10)|region + year, family=quasipoisson)
+model <- fixest::feglm(data=events_sum, count~sw(n_value,n_gws_avg5,n_gws_avg10,gws_anomalies, gws_anomalies5, gws_anomalies10,CV1, CV5, CV10,gws_logret, gws_logret5, gws_logret10)|region + year, family=quasipoisson)
 tabella <- etable(model); write.csv(tabella, "^Tabelle/conflicts_global.csv", row.names = FALSE)
 
 
