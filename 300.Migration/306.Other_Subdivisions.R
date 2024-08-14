@@ -2,27 +2,12 @@
 # Generalized linear regression with fixed effects (region and year)
 # Family: quasipoisson
 
-suppressPackageStartupMessages({
-  library(sf);library(sp);library(plyr);library(raster);library(ncdf4);library(exactextractr);library(dplyr);library(stringr)
-  library(reshape2);library(ggplot2);library(ggrepel);library(lubridate);library(zoo);library(foreign); library(countrycode);
-  library(fixest);library(xtable); library(data.table)} )
-
-
 #################################################################################################
 #################################################################################################
 
 # Upload of the groundwater-events dataset
 gm <- read.csv("^Data/gws_migr.csv")
 
-# Setting of the dictionary for the tables
-setFixest_dict(c(n_migr="norm #migrants/pop", value="gws [Kg/m^2]",
-                 gws_avg1="average 1-y", gws_avg5="average 5-y", gws_avg10="average 10-y",
-                 gws_logret="log return 1-y",gws_logret5="log return 5-y", gws_logret10="log return 10-y",
-                 gws_std1="STD 1-y", gws_std5="STD 5-y", gws_std10="STD 10-y",
-                 gws_anomalies="anomalies 1y", gws_anomalies5="gws anomalies 5y",
-                 gws_anomalies10="gws anomalies 10y", n_value="normalized gws",
-                 n_gws_avg1="normalized average 1-y", n_gws_avg5="normalized average 5-y",n_gws_avg10="normalized average 10-y",
-                 CV1="Coefficient of variation 1-y", CV5="Coefficient of variation 5-y",CV10="Coefficient of variation 10-y"))
 
 # List of the names of the countries
 lista_1 <- c("Mauritania", "Mali", "Burkina Faso", "Niger", "Ciad", 
@@ -58,44 +43,48 @@ data_4 <- gm[gm$country %in% lista_4, ]
 
 
 
-# Statistical model and tables 1-y
-
+####  MENA
 data <- subset(data_1, interval==1)
 mena <- fixest::feglm(data = data, n_migr~sw(n_value,n_gws_avg5,n_gws_avg10,gws_anomalies, gws_anomalies5, gws_anomalies10,CV1, CV5, CV10,gws_logret, gws_logret5, gws_logret10)|region + year, family=quasipoisson)
-tabella <- etable(mena); write.csv(tabella, "^Tabelle/migrations_mena_1.csv", row.names = FALSE)
+tabella1 <- etable(mena)
+data <- subset(data_1, interval==5)
+mena <- fixest::feglm(data = data, n_migr~sw(n_value,n_gws_avg5,n_gws_avg10,gws_anomalies, gws_anomalies5, gws_anomalies10,CV1, CV5, CV10,gws_logret, gws_logret5, gws_logret10)|region + year, family=quasipoisson)
+tabella5 <- etable(mena)
+tabella <- migr_tabella(tabella1, tabella5)
+write.csv(tabella, "^Tabelle/migrations_mena.csv", row.names = FALSE)
 
+
+####  SUB SAHARA
 data <- subset(data_2, interval==1)
 sub_sahara <- fixest::feglm(data = data, n_migr~sw(n_value,n_gws_avg5,n_gws_avg10,gws_anomalies, gws_anomalies5, gws_anomalies10,CV1, CV5, CV10,gws_logret, gws_logret5, gws_logret10)|region + year, family=quasipoisson)
-tabella <- etable(sub_sahara); write.csv(tabella, "^Tabelle/migrations_sub_sahara_1.csv", row.names = FALSE)
-
-#data <- subset(data_3, interval==1)
-#sud_est_asia <- fixest::feglm(data = data, n_migr~sw(n_value,n_gws_avg5,n_gws_avg10,gws_anomalies, gws_anomalies5, gws_anomalies10,CV1, CV5, CV10,gws_logret, gws_logret5, gws_logret10)|region + year, family=quasipoisson)
-#tabella <- etable(sud_est_asia); write.csv(tabella, "^Tabelle/migrations_sud_est_asia_1.csv", row.names = FALSE)
-
-data <- subset(data_4, interval==1)
-cs_america <- fixest::feglm(data = data, n_migr~sw(n_value,n_gws_avg5,n_gws_avg10,gws_anomalies, gws_anomalies5, gws_anomalies10,CV1, CV5, CV10,gws_logret, gws_logret5, gws_logret10)|region + year, family=quasipoisson)
-tabella <- etable(cs_america); write.csv(tabella, "^Tabelle/migrations_cs_america_1.csv", row.names = FALSE)
+tabella1 <- etable(sub_sahara)
+data <- subset(data_2, interval==5)
+sub_sahara <- fixest::feglm(data = data, n_migr~sw(n_value,n_gws_avg5,n_gws_avg10,gws_anomalies, gws_anomalies5, gws_anomalies10,CV1, CV5, CV10,gws_logret, gws_logret5, gws_logret10)|region + year, family=quasipoisson)
+tabella5 <- etable(sub_sahara)
+tabella <- migr_tabella(tabella1, tabella5)
+write.csv(tabella, "^Tabelle/migrations_sub_sahara.csv", row.names = FALSE)
 
 
-
-
-# Statistical model and tables 5-y
-
-#data <- subset(data_1, interval==5)
-#mena <- fixest::feglm(data = data, n_migr~sw(n_value,n_gws_avg5,n_gws_avg10,gws_anomalies, gws_anomalies5, gws_anomalies10,CV1, CV5, CV10,gws_logret, gws_logret5, gws_logret10)|region + year, family=quasipoisson)
-#tabella <- etable(mena); write.csv(tabella, "^Tabelle/migrations_mena_5.csv", row.names = FALSE)
-
-#data <- subset(data_2, interval==5)
-#sub_sahara <- fixest::feglm(data = data, n_migr~sw(n_value,n_gws_avg5,n_gws_avg10,gws_anomalies, gws_anomalies5, gws_anomalies10,CV1, CV5, CV10,gws_logret, gws_logret5, gws_logret10)|region + year, family=quasipoisson)
-#tabella <- etable(sub_sahara); write.csv(tabella, "^Tabelle/migrations_sub_sahara_5.csv", row.names = FALSE)
-
+####  SUD EST ASIA
+data <- subset(data_3, interval==1)
+sud_est_asia <- fixest::feglm(data = data, n_migr~sw(n_value,n_gws_avg5,n_gws_avg10,gws_anomalies, gws_anomalies5, gws_anomalies10,CV1, CV5, CV10,gws_logret, gws_logret5, gws_logret10)|region + year, family=quasipoisson)
+tabella1 <- etable(sud_est_asia) 
 data <- subset(data_3, interval==5)
 sud_est_asia <- fixest::feglm(data = data, n_migr~sw(n_value,n_gws_avg5,n_gws_avg10,gws_anomalies, gws_anomalies5, gws_anomalies10,CV1, CV5, CV10,gws_logret, gws_logret5, gws_logret10)|region + year, family=quasipoisson)
-tabella <- etable(sud_est_asia); write.csv(tabella, "^Tabelle/migrations_sud_est_asia_5.csv", row.names = FALSE)
+tabella5 <- etable(sud_est_asia)
+tabella <- migr_tabella(tabella1, tabella5)
+write.csv(tabella, "^Tabelle/migrations_sud_est_asia.csv", row.names = FALSE)
 
+
+####  CENTRAL-SOUTH AMERICA
+data <- subset(data_4, interval==1)
+cs_america <- fixest::feglm(data = data, n_migr~sw(n_value,n_gws_avg5,n_gws_avg10,gws_anomalies, gws_anomalies5, gws_anomalies10,CV1, CV5, CV10,gws_logret, gws_logret5, gws_logret10)|region + year, family=quasipoisson)
+tabella1 <- etable(cs_america)
 data <- subset(data_4, interval==5)
 cs_america <- fixest::feglm(data = data, n_migr~sw(n_value,n_gws_avg5,n_gws_avg10,gws_anomalies, gws_anomalies5, gws_anomalies10,CV1, CV5, CV10,gws_logret, gws_logret5, gws_logret10)|region + year, family=quasipoisson)
-tabella <- etable(cs_america); write.csv(tabella, "^Tabelle/migrations_cs_america_5.csv", row.names = FALSE)
+tabella5 <- etable(cs_america)
+tabella <- migr_tabella(tabella1, tabella5)
+write.csv(tabella, "^Tabelle/migrations_cs_america.csv", row.names = FALSE)
 
 
 
