@@ -45,7 +45,7 @@ write.csv(tabella, "^Tabelle/migration_gov1.csv", row.names = FALSE)
 ####  MID GOVERNANCE
 gm_gov2 <- subset(gm_1, country %in% name_gov2)
 gov21 <- fixest::feglm(data=gm_gov2, n_migr~sw(n_value,n_gws_avg5,n_gws_avg10,gws_anomalies, gws_anomalies5, gws_anomalies10,CV1, CV5, CV10,gws_logret, gws_logret5, gws_logret10)|region + year, family=gaussian)
-tabella1 <- etable(gov21); write.csv(tabella, "^Tabelle/migration_gov2_1.csv", row.names = FALSE)
+tabella1 <- etable(gov21)
 gm_gov2 <- subset(gm_5, country %in% name_gov2)
 gov25 <- fixest::feglm(data=gm_gov2, n_migr~sw(n_value,n_gws_avg5,n_gws_avg10,gws_anomalies, gws_anomalies5, gws_anomalies10,CV1, CV5, CV10,gws_logret, gws_logret5, gws_logret10)|region + year, family=gaussian)
 tabella5 <- etable(gov25)
