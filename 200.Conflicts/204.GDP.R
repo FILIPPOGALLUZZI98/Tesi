@@ -2,30 +2,22 @@
 # Generalized linear regression with fixed effects (region and year)
 # Family: quasipoisson
 
-suppressPackageStartupMessages({
-  library(sf);library(sp);library(plyr);library(raster);library(ncdf4);library(exactextractr);library(dplyr);library(stringr)
-  library(reshape2);library(ggplot2);library(ggrepel);library(lubridate);library(zoo);library(foreign); library(countrycode);
-  library(fixest);library(xtable); library(data.table);library(WDI)} )
-
-
 #################################################################################################
 #################################################################################################
 
 # Upload of the groundwater-events dataset
 ge <- read.csv("^Data/gws_events.csv")
+# Create a subset of the dataset (because the variables are counted thrice (one for each type of conflict)
+ge <- subset(ge, type=="state")
 
 # Select the GDP list for one year (2019)
 gdp_data <- WDI(indicator = "NY.GDP.MKTP.PP.KD", start = 2019, end = 2019, extra = TRUE)
 gdp_data <- subset(gdp_data, year== 2019)
-
 # Divide the countries into four categories
 gdp_high <- subset(gdp_data, income == "High income"); name_high <- unique(gdp_high$country)
 gdp_low <- subset(gdp_data, income == "Low income"); name_low <- unique(gdp_low$country)
 gdp_lowmid <- subset(gdp_data, income == "Lower middle income"); name_lowmid <- unique(gdp_lowmid$country)
 gdp_highmid <- subset(gdp_data, income == "Upper middle income"); name_highmid <- unique(gdp_highmid$country)
-
-# Create a subset of the dataset (because the variables are counted thrice (one for each type of conflict)
-ge <- subset(ge, type=="state")
 
 
 # Statistical model and tables
