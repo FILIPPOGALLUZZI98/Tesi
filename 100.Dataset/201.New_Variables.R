@@ -196,8 +196,8 @@ gws_migr <- gws_migr %>%
   arrange(year, country, region) %>%
   group_by(country, region) %>%
   mutate(gws_logret=(log(value/(lag(value, n=1)))),
-         gws_logret5=(log(value/(lag(value, n=5)))),
-         gws_logret10=(log(value/(lag(value, n=10)))))
+         gws_logret5=(log(value/(lag(value, n=4)))),
+         gws_logret10=(log(value/(lag(value, n=9)))))
 
 # GWS STANDARD DEVIATION 1-5-10 YEARS
 gws_migr <- gws_migr %>%
