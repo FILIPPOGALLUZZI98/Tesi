@@ -7,7 +7,6 @@
 
 # Upload of the groundwater-events dataset
 ge <- read.csv("^Data/gws_events.csv")
-
 # Create a subset of the dataset (because the variables are counted thrice (one for each type of conflict)
 events_sum <- subset(ge, type=="state")
 
