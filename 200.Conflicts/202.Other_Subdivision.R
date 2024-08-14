@@ -14,17 +14,6 @@ suppressPackageStartupMessages({
 # Upload of the groundwater-events dataset
 ge <- read.csv("^Data/gws_events.csv")
 
-# Setting of the dictionary for the tables
-setFixest_dict(c(conflicts="# conflicts", value="gws [Kg/m^2]",
-                 gws_avg1="average 1-y", gws_avg5="average 5-y", gws_avg10="average 10-y",
-                 gws_logret="log return 1-y",gws_logret5="log return 5-y", gws_logret10="log return 10-y",
-                 gws_std1="STD 1-y", gws_std5="STD 5-y", gws_std10="STD 10-y",
-                 gws_anomalies="anomalies 1y", gws_anomalies5="gws anomalies 5y",
-                 gws_anomalies10="gws anomalies 10y",count="# conflicts", 
-                 n_confl="normalized conflicts", n_count="normalized conflicts", n_value="normalized gws",
-                 n_gws_avg1="normalized average 1-y", n_gws_avg5="normalized average 5-y",n_gws_avg10="normalized average 10-y",
-                 CV1="Coefficient of variation 1-y", CV5="Coefficient of variation 5-y",CV10="Coefficient of variation 10-y"))
-
 # Create a subset of the dataset (because the variables are counted thrice (one for each type of conflict)
 events_sum <- subset(ge, type=="state")
 
@@ -62,16 +51,16 @@ data_4 <- events_sum[events_sum$country %in% lista_4, ]
 # Statistical model and tables
 
 mena <- fixest::feglm(data = data_1, count~sw(n_value,n_gws_avg5,n_gws_avg10,gws_anomalies, gws_anomalies5, gws_anomalies10,CV1, CV5, CV10,gws_logret, gws_logret5, gws_logret10)|region + year, family=quasipoisson)
-tabella <- etable(mena); write.csv(tabella, "^Tabelle/conflicts_mena.csv", row.names = FALSE)
+tabella <- etable(mena); tabella <- confl_tabella(tabella); write.csv(tabella, "^Tabelle/conflicts_mena.csv", row.names = FALSE)
 
 sub_sahara <- fixest::feglm(data = data_2, count~sw(n_value,n_gws_avg5,n_gws_avg10,gws_anomalies, gws_anomalies5, gws_anomalies10,CV1, CV5, CV10,gws_logret, gws_logret5, gws_logret10)|region + year, family=quasipoisson)
-tabella <- etable(sub_sahara); write.csv(tabella, "^Tabelle/conflicts_sub_sahara.csv", row.names = FALSE)
+tabella <- etable(sub_sahara); tabella <- confl_tabella(tabella); write.csv(tabella, "^Tabelle/conflicts_sub_sahara.csv", row.names = FALSE)
 
 sud_est_asia <- fixest::feglm(data = data_3, count~sw(n_value,n_gws_avg5,n_gws_avg10,gws_anomalies, gws_anomalies5, gws_anomalies10,CV1, CV5, CV10,gws_logret, gws_logret5, gws_logret10)|region + year, family=quasipoisson)
-tabella <- etable(sud_est_asia); write.csv(tabella, "^Tabelle/conflicts_sud_est_asia.csv", row.names = FALSE)
+tabella <- etable(sud_est_asia); tabella <- confl_tabella(tabella); write.csv(tabella, "^Tabelle/conflicts_sud_est_asia.csv", row.names = FALSE)
 
 cs_america <- fixest::feglm(data = data_4, count~sw(n_value,n_gws_avg5,n_gws_avg10,gws_anomalies, gws_anomalies5, gws_anomalies10,CV1, CV5, CV10,gws_logret, gws_logret5, gws_logret10)|region + year, family=quasipoisson)
-tabella <- etable(cs_america); write.csv(tabella, "^Tabelle/conflicts_cs_america.csv", row.names = FALSE)
+tabella <- etable(cs_america); tabella <- confl_tabella(tabella); write.csv(tabella, "^Tabelle/conflicts_cs_america.csv", row.names = FALSE)
 
 
 
