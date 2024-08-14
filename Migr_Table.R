@@ -18,12 +18,11 @@ tabella_df$squared <- sqr
 tabella_df$pseudo <- pseudo
 tabella_df$bic <- bic
 tabella_df <- tabella_df[,-1]
-colnames(tabella_df)[c(1, 2, 3,4,5)] <- c("Coefficients", "Observations","Squared Cor.", "Pseudo R2", "BIC")
-rownames(tabella_df)[c(1:12)] <- c("GWS", "GWS 5-y", "GWS 10-y","GWS Anomalies 1-y", "GWS Anomalies 5-y", "GWS Anomalies 10-y",
+colnames(tabella_df)[c(1, 2, 3,4,5,6)] <- c("Variables","Coefficients", "Observations","Squared Cor.", "Pseudo R2", "BIC")
+tabella_df$Variables <- c("GWS", "GWS 5-y", "GWS 10-y","GWS Anomalies 1-y", "GWS Anomalies 5-y", "GWS Anomalies 10-y",
                                    "Coefficient of Variation 1-y", "Coefficient of Variation 5-y", "Coefficient of Variation 10-y",
                                    "Logarithmic Return 1-y", "Logarithmic Return 5-y", "Logarithmic Return 10-y")
 
-
-
+write.csv(tabella_df, "^Tabelle/prova.csv", row.names = FALSE)
 
 
