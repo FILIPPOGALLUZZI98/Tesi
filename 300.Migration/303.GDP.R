@@ -52,7 +52,7 @@ gm_highmid <- subset(gm_5, country %in% name_highmid)
 midhigh5 <- fixest::feglm(data=gm_highmid, n_migr~sw(n_value,n_gws_avg5,n_gws_avg10,gws_anomalies, gws_anomalies5, gws_anomalies10,CV1, CV5, CV10,gws_logret, gws_logret5, gws_logret10)|region + year, family=gaussian)
 tabella5 <- etable(midhigh5)
 tabella <- migr_tabella(tabella1, tabella5)
-write.csv(tabella, "^Tabelle/migration_lowmidGDP.csv", row.names = FALSE)
+write.csv(tabella, "^Tabelle/migration_midhighGDP.csv", row.names = FALSE)
 
 
 #### LOW-MID GDP
