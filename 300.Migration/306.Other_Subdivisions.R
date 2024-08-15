@@ -11,34 +11,33 @@ gm <- read.csv("^Data/gws_migr.csv")
 
 # List of the names of the countries
 lista_1 <- c("Mauritania", "Mali", "Burkina Faso", "Niger", "Chad", 
-             "Senegal", "Gambia", "Guinea-Bissau", "Guinea", "Ivory Coast",
-             "Ghana", "Nigeria", "Cameroon", "Sudan", "Eritrea", "Saudi Arabia", 
-             "Bahrain", "Cyprus", "Egypt", "Iran", 
-             "Iraq", "Israel", "Jordan", "Kuwait", "Lebanon", 
-             "Oman", "Palestine", "Qatar", "Syria", "Turkey", 
-             "United Arab Emirates", "Yemen")
+                 "Senegal", "Gambia", "Guinea-Bissau", "Guinea", "Ivory Coast",
+                 "Ghana", "Nigeria", "Cameroon", "Sudan", "Eritrea", "Saudi Arabia", 
+                  "Bahrain", "Cyprus", "Egypt", "Iran", 
+                         "Iraq", "Israel", "Jordan", "Kuwait", "Lebanon", 
+                         "Oman", "Palestine", "Qatar", "Syria", "Turkey", 
+                         "United Arab Emirates", "Yemen")
 data_1 <- events_sum[events_sum$country %in% lista_1, ]
 lista_2 <- c("Angola", "Benin", "Botswana", "Burkina Faso", "Burundi", 
-             "Cape Verde", "Cameroon", "Central African Republic", "Chad", "Comoros", 
-             "Republic of the Congo", "Democratic Republic of the Congo", "Ivory Coast", 
-             "Djibouti", "Equatorial Guinea", "Eritrea", "Eswatini", "Ethiopia", 
-             "Gabon", "Gambia", "Ghana", "Guinea", "Guinea-Bissau", 
-             "Kenya", "Lesotho", "Liberia", "Madagascar", "Malawi", 
-             "Mali", "Mauritania", "Mozambique", "Namibia", "Niger", 
-             "Nigeria", "Rwanda", "Sao Tome and Principe", "Senegal", "Seychelles", 
-             "Sierra Leone", "Somalia", "South Sudan", "Sudan", "Tanzania", 
-             "Togo", "Uganda", "Zambia", "Zimbabwe")
+                      "Cape Verde", "Cameroon", "Central African Republic", "Chad", "Comoros", 
+                      "Republic of the Congo", "Democratic Republic of the Congo", "Ivory Coast", 
+                      "Djibouti", "Equatorial Guinea", "Eritrea", "Eswatini", "Ethiopia", 
+                      "Gabon", "Gambia", "Ghana", "Guinea", "Guinea-Bissau", 
+                      "Kenya", "Lesotho", "Liberia", "Madagascar", "Malawi", 
+                      "Mali", "Mauritania", "Mozambique", "Namibia", "Niger", 
+                      "Nigeria", "Rwanda", "Sao Tome and Principe", "Senegal", "Seychelles", 
+                      "Sierra Leone", "Somalia", "South Sudan", "Sudan", "Tanzania", 
+                      "Togo", "Uganda", "Zambia", "Zimbabwe")
 data_2 <- events_sum[events_sum$country %in% lista_2, ]
 lista_3 <- c("Brunei", "Cambodia", "East Timor", "Indonesia", "Laos", 
-             "Malaysia", "Myanmar", "Philippines", "Singapore", "Thailand", 
-             "Vietnam")
+                            "Malaysia", "Myanmar", "Philippines", "Singapore", "Thailand", 
+                            "Vietnam")
 data_3 <- events_sum[events_sum$country %in% lista_3, ]
 lista_4 <- c("Belize", "Costa Rica", "El Salvador", "Guatemala", "Honduras", 
-             "Nicaragua", "Panama", "Argentina", "Bolivia", "Brazil", 
-             "Chile", "Colombia", "Ecuador", "Guyana", "Paraguay", 
-             "Peru", "Suriname", "Uruguay", "Venezuela")
+                              "Nicaragua", "Panama", "Argentina", "Bolivia", "Brazil", 
+                              "Chile", "Colombia", "Ecuador", "Guyana", "Paraguay", 
+                              "Peru", "Suriname", "Uruguay", "Venezuela")
 data_4 <- events_sum[events_sum$country %in% lista_4, ]
-
 
 
 
