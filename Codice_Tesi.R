@@ -1,5 +1,3 @@
-## COMMENTI AL CODICE (Legenda variabili?)
-
 # These are the packages used for the dataset preparation
 suppressPackageStartupMessages({
   library(sf);library(sp);library(plyr);library(raster);library(ncdf4);library(exactextractr);library(dplyr);library(stringr)
@@ -195,7 +193,7 @@ gws_migr <- gws_migr[,c("year", "country", "region", "worldregion", "value", "po
                       "outflow_rate_annual","year_cat10", "orig")]
 
 # Merge with population values
-gws_migr_j <- merge(gws_migr, pop, by = c("year", "country", "region"), all.x = TRUE)
+gws_migr <- merge(gws_migr, pop, by = c("year", "country", "region"), all.x = TRUE)
 
 
 #################################################################################################
@@ -261,14 +259,13 @@ gws_events$conflicts[is.na(gws_events$conflicts)] = 0  ## Assign a zero to each 
 gws_events <- gws_events[, c("year","country", "region","type","deaths", "conflicts","value","orig")]
 
 # Merge with population values
-gws_events_j <- merge(gws_events, pop, by = c("year", "country", "region"), all.x = TRUE)
+gws_events <- merge(gws_events, pop, by = c("year", "country", "region"), all.x = TRUE)
 
 
 #################################################################################################
 ####  NEW VARIABLES FOR MIGRATION  ####
 #################################################################################################
 
-gws_migr <- gws_migr_j
 gws_migr$orig=NULL; gws_migr$flow_annual=NULL; gws_migr$worldregion=NULL
 gws_migr$outflow_rate_annual=NULL; gws_migr$flow_annual=NULL; gws_migr$year_cat10=NULL
 gws_migr <- gws_migr %>%
@@ -388,8 +385,6 @@ write.csv(gws_migr, paste0("^Data/", "gws_migr", ".csv"), row.names=FALSE)
 #################################################################################################
 ####  NEW VARIABLES FOR CONFLICT  ####
 #################################################################################################
-
-gws_events <- gws_events_j
 
 # Since the conflict datasets start from 1989 i just need data from 1979
 gws_events <- gws_events %>%
