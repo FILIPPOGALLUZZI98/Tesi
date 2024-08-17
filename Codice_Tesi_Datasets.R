@@ -55,7 +55,8 @@ years <- unique(format(as.Date(names(r), format = "X%Y.%m.%d"), "%Y"))
 names(gws) <- paste0("gws", years)
 
 # Merging data
-gws <- exactextractr::exact_extract(gws, shp, fun="mean")
+gws_t <- gws
+gws <- exactextractr::exact_extract(gws_t, shp, fun="mean")
 
 # Add columns for regions and countries
 gws$region <- shp$region ; gws$country <- shp$country; gws$orig<-shp$GEOLEVEL1
@@ -89,9 +90,6 @@ file_info <- list(
   "2010" = "^Data/^Raw_Data/population/GHS_POP_E2010_GLOBE_R2023A_54009_1000_V1_0/GHS_POP_E2010_GLOBE_R2023A_54009_1000_V1_0.tif",
   "2015" = "^Data/^Raw_Data/population/GHS_POP_E2015_GLOBE_R2023A_54009_1000_V1_0/GHS_POP_E2015_GLOBE_R2023A_54009_1000_V1_0.tif",
   "2020" = "^Data/^Raw_Data/population/GHS_POP_E2020_GLOBE_R2023A_54009_1000_V1_0/GHS_POP_E2020_GLOBE_R2023A_54009_1000_V1_0.tif")
-
-# Open the shapefile
-shp <- st_read("^Data/shp/shp.shp")
 
 for (year in names(file_info)) {
   file_tiff <- file_info[[year]]
@@ -160,9 +158,6 @@ pet <- pet %>%
 pet <- pet %>%
   arrange(pet)
 
-# Save data
-write.csv(pet, paste0("^Data/", "pet", ".csv"), row.names=FALSE)
-
 
 #################################################################################################
 ####  MIGRATION DATASET  ####
@@ -195,12 +190,119 @@ gws_migr <- gws_migr[,c("year", "country", "region", "worldregion", "value", "po
 # Merge with population values
 gws_migr <- merge(gws_migr, pop, by = c("year", "country", "region"), all.x = TRUE)
 
+# Remove undesired variables
+gws_migr$orig=NULL; gws_migr$flow_annual=NULL; gws_migr$worldregion=NULL
+gws_migr$outflow_rate_annual=NULL; gws_migr$flow_annual=NULL; gws_migr$year_cat10=NULL
+
+# Remove regions with NA values for 'value' variable (for regions such as Antarctica)
+gws_migr <- gws_migr %>%
+  filter(!is.na(value))
+
+# Select only countries for which there are migration measures
+data <- subset(gws_migr, flow>0)
+data <- data %>%
+  filter(!is.na(flow))
+nomi <- unique(data$region)
+gws_migr <- gws_migr %>%
+  filter(region %in% nomi)
+
+# Number of migrants divided by the population of that region
+gws_migr <- gws_migr %>%
+  mutate(migrants=(flow/pop))
+
+# GWS per capita value
+gws_migr <- gws_migr %>% 
+  mutate(value_t = value)
+gws_migr <- gws_migr %>% 
+  mutate(value = value/pop)
+
+# Normalization of gws per capita
+gws_migr <- gws_migr %>%
+  mutate(n_value = log(1+value))
+
+# Normalization of migrants
+gws_migr <- gws_migr %>%
+  mutate(n_migr = log(1+migrants))
+
+# 1-5-10 years averages for normalized value
+gws_migr <- gws_migr %>%
+  arrange(year, country, region) %>%
+  group_by(country, region) %>%
+  mutate(n_gws_avg1 = (lag(n_value) + n_value)/2, 
+         n_gws_avg5 = rollmean(n_value, k = 5, align = "right", fill = NA),
+         n_gws_avg10 = rollmean(n_value, k = 10, align = "right", fill = NA))
+
+# GWS logarithmic return for 1-5-10 years
+gws_migr <- gws_migr %>%
+  arrange(year, country, region) %>%
+  group_by(country, region) %>%
+  mutate(gws_logret=(log(value/(lag(value, n=1)))),
+         gws_logret5=(log(value/(lag(value, n=4)))),
+         gws_logret10=(log(value/(lag(value, n=9)))))
+
+# GWS anomalies for1-5-10 years
+# Create two new variables: mean and std over 1980-2010
+medie <- gws_migr %>%
+  select(year, country, region, n_value)
+medie <- medie %>%
+  filter(year >= 1980 & year <= 2010) %>%
+  arrange(year, country, region) %>%
+  group_by(country, region) %>%
+  mutate(mean_region = mean(n_value))
+medie$year <- NULL; medie$n_value <- NULL
+medie <- medie %>%
+  distinct(country, region, .keep_all = TRUE)
+gws_migr <- left_join(gws_migr,medie,by=c("country","region"))
+std_t <- gws_migr %>%
+  select(year, country, region, n_value)
+std_t <- std_t %>%
+  filter(year >= 1980 & year <= 2010) %>%
+  arrange(year, country, region) %>%
+  group_by(country, region) %>%
+  mutate(std = sd(n_value))
+std_t$year <- NULL; std_t$n_value <- NULL
+std_t <- std_t %>%
+  distinct(country, region, .keep_all = TRUE)
+gws_migr <- left_join(gws_migr,std_t,by=c("country","region"))
+# Create anomalies for 1, 5, 10 years (averages)
+gws_migr <- gws_migr %>%
+  arrange(year, country, region) %>%
+  group_by(country, region) %>%
+  mutate(gws_anomalies = (n_value-mean_region)/std,
+         gws_anomalies5 = (n_gws_avg5-mean_region)/std,
+         gws_anomalies10 = (n_gws_avg10-mean_region)/std)
+
+# Coefficiente di variazione (%)
+# GWS standard deviation for 1-5-10 years
+gws_migr <- gws_migr %>%
+  arrange(year, country, region) %>%
+  group_by(country, region) %>%
+  mutate(gws_std1= rollapply(n_value, width = 2, FUN = sd, align = "right", fill = NA), 
+         gws_std5= rollapply(n_value, width = 5, FUN = sd, align = "right", fill = NA),
+         gws_std10= rollapply(n_value, width = 10, FUN = sd, align = "right", fill = NA))
+gws_migr <- gws_migr %>%
+  arrange(year, country, region) %>%
+  group_by(country, region) %>%
+  mutate(CV1=(gws_std1/mean_region)*100,
+         CV5=(gws_std5/mean_region)*100,
+         CV10=(gws_std10/mean_region)*100) 
+
+# Remove useless values
+gws_migr <- gws_migr %>%
+  filter(!is.na(population))
+gws_migr <- gws_migr %>%
+  filter(!is.na(CV10))
+# Remove regions ini which flow>pop
+gws_migr <- subset(gws_migr, n_migr<0.6)
+
+write.csv(gws_migr, paste0("^Data/", "gws_migr", ".csv"), row.names=FALSE)
+
 
 #################################################################################################
 ####  CONFLICT DATASET  ####
 #################################################################################################
 
-# Select the datasets
+# Open the conflict dataset
 events <- read.csv("^Data/^Raw_Data/Conflict_Data/Global.csv")
 
 # Select the variables of interest
@@ -261,131 +363,6 @@ gws_events <- gws_events[, c("year","country", "region","type","deaths", "confli
 # Merge with population values
 gws_events <- merge(gws_events, pop, by = c("year", "country", "region"), all.x = TRUE)
 
-
-#################################################################################################
-####  NEW VARIABLES FOR MIGRATION  ####
-#################################################################################################
-
-gws_migr$orig=NULL; gws_migr$flow_annual=NULL; gws_migr$worldregion=NULL
-gws_migr$outflow_rate_annual=NULL; gws_migr$flow_annual=NULL; gws_migr$year_cat10=NULL
-gws_migr <- gws_migr %>%
-  filter(!is.na(value))  ## Regioni come Antartide in cui non ci sono valori di GWS
-
-# Selezioni solo i paesi che contengono valori per migrazioni
-data <- subset(gws_migr, flow>0)
-data <- data %>%
-  filter(!is.na(flow))
-nomi <- unique(data$region)
-gws_migr <- gws_migr %>%
-  filter(region %in% nomi)
-
-# NUMBER OF MIGRANTS LEAVING A REGION IN THE CONSIDERED INTERVAL DIVIDED BY THE POPULATION
-# PERCENTAGE OF TOTAL POPULATION
-gws_migr <- gws_migr %>%
-  mutate(migrants=(flow/pop))
-
-# GWS PER CAPITA VALUE
-gws_migr <- gws_migr %>% 
-  mutate(value_t = value)
-gws_migr <- gws_migr %>% 
-  mutate(value = value/pop)
-
-# NORMALIZATION OF VALUE
-# NORMALIZATION OF GWS VALUES (fortemente non simmetrica)
-gws_migr <- gws_migr %>%
-  mutate(n_value = log(1+value))
-
-# NORMALIZATION OF MIGRANTS
-gws_migr <- gws_migr %>%
-  mutate(n_migr = log(1+migrants))
-
-# GWS AVERAGES 1-5-10 YEARS
-#gws_migr <- gws_migr %>%
-#  arrange(year, country, region) %>%
-#  group_by(country, region) %>%
-#  mutate(gws_avg1 = (lag(value) + value)/2, 
-#         gws_avg5 = rollmean(value, k = 5, align = "right", fill = NA),
-#         gws_avg10 = rollmean(value, k = 10, align = "right", fill = NA))
-
-# AVERAGES FOR 1-5-10 YEARS (NORMALIZED)
-gws_migr <- gws_migr %>%
-  arrange(year, country, region) %>%
-  group_by(country, region) %>%
-  mutate(n_gws_avg1 = (lag(n_value) + n_value)/2, 
-         n_gws_avg5 = rollmean(n_value, k = 5, align = "right", fill = NA),
-         n_gws_avg10 = rollmean(n_value, k = 10, align = "right", fill = NA))
-
-# GWS LOGARITHMIC RETURN % 1-5-10 YEARS
-gws_migr <- gws_migr %>%
-  arrange(year, country, region) %>%
-  group_by(country, region) %>%
-  mutate(gws_logret=(log(value/(lag(value, n=1)))),
-         gws_logret5=(log(value/(lag(value, n=4)))),
-         gws_logret10=(log(value/(lag(value, n=9)))))
-
-# GWS STANDARD DEVIATION 1-5-10 YEARS
-gws_migr <- gws_migr %>%
-  arrange(year, country, region) %>%
-  group_by(country, region) %>%
-  mutate(gws_std1= rollapply(n_value, width = 2, FUN = sd, align = "right", fill = NA), 
-         gws_std5= rollapply(n_value, width = 5, FUN = sd, align = "right", fill = NA),
-         gws_std10= rollapply(n_value, width = 10, FUN = sd, align = "right", fill = NA))
-
-# ANOMALIES
-# Create two new variables: mean and std over 1980-2010
-medie <- gws_migr %>%
-  select(year, country, region, n_value)
-medie <- medie %>%
-  filter(year >= 1980 & year <= 2010) %>%
-  arrange(year, country, region) %>%
-  group_by(country, region) %>%
-  mutate(mean_region = mean(n_value))
-medie$year <- NULL; medie$n_value <- NULL
-medie <- medie %>%
-  distinct(country, region, .keep_all = TRUE)
-gws_migr <- left_join(gws_migr,medie,by=c("country","region"))
-std_t <- gws_migr %>%
-  select(year, country, region, n_value)
-std_t <- std_t %>%
-  filter(year >= 1980 & year <= 2010) %>%
-  arrange(year, country, region) %>%
-  group_by(country, region) %>%
-  mutate(std = sd(n_value))
-std_t$year <- NULL; std_t$n_value <- NULL
-std_t <- std_t %>%
-  distinct(country, region, .keep_all = TRUE)
-gws_migr <- left_join(gws_migr,std_t,by=c("country","region"))
-# Create anomalies for 1, 5, 10 years (averages)
-gws_migr <- gws_migr %>%
-  arrange(year, country, region) %>%
-  group_by(country, region) %>%
-  mutate(gws_anomalies = (n_value-mean_region)/std,
-         gws_anomalies5 = (n_gws_avg5-mean_region)/std,
-         gws_anomalies10 = (n_gws_avg10-mean_region)/std)
-
-# Coefficiente di variazione (%)
-gws_migr <- gws_migr %>%
-  arrange(year, country, region) %>%
-  group_by(country, region) %>%
-  mutate(CV1=(gws_std1/mean_region)*100,
-         CV5=(gws_std5/mean_region)*100,
-         CV10=(gws_std10/mean_region)*100) 
-
-# Rimozione valori inutili
-gws_migr <- gws_migr %>%
-  filter(!is.na(population))
-gws_migr <- gws_migr %>%
-  filter(!is.na(CV10))
-# Rimuovere regioni con flow>pop
-gws_migr <- subset(gws_migr, n_migr<0.6)
-
-write.csv(gws_migr, paste0("^Data/", "gws_migr", ".csv"), row.names=FALSE)
-
-
-#################################################################################################
-####  NEW VARIABLES FOR CONFLICT  ####
-#################################################################################################
-
 # Since the conflict datasets start from 1989 i just need data from 1979
 gws_events <- gws_events %>%
   filter(year>1978)
@@ -421,14 +398,6 @@ gws_events <- gws_events %>%
 # NORMALIZATION OF GWS VALUES (fortemente non simmetrica)
 gws_events <- gws_events %>%
   mutate(n_value = log(1+value))
-
-# AVERAGES FOR 1-5-10 YEARS 
-#gws_events <- gws_events %>%
-#  arrange(year, country, region, type) %>%
-#  group_by(country, region, type) %>%
-#  mutate(gws_avg1 = (lag(n_value) + n_value)/2, 
-#         gws_avg5 = rollmean(n_value, k = 5, align = "right", fill = NA),
-#         gws_avg10 = rollmean(n_value, k = 10, align = "right", fill = NA))
 
 # AVERAGES FOR 1-5-10 YEARS (NORMALIZED)
 gws_events <- gws_events %>%
@@ -504,7 +473,6 @@ gws_events$gws_anomalies10[is.nan(gws_events$gws_anomalies10)] <- 0
 gws_events$CV1[is.nan(gws_events$CV1)] <- 0
 gws_events$CV5[is.nan(gws_events$CV5)] <- 0
 gws_events$CV10[is.nan(gws_events$CV10)] <- 0
-
 
 write.csv(gws_events, paste0("^Data/", "gws_events", ".csv"), row.names=FALSE)
 
