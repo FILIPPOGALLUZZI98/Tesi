@@ -311,7 +311,7 @@ events <- events[, c("country" ,"year", "type_of_violence","latitude" ,"longitud
 # Rename the variables
 events <- events %>%
   rename(type = type_of_violence,
-         number_deaths = best)
+         number_best = best)
 events <- mutate(events,
                  type = case_when(
                    type == 1 ~ "state",
@@ -329,16 +329,16 @@ events_joined <- events_joined %>%
 events_joined$geometry=NULL
 events_joined$country.x=NULL
 
-# Create 2 variables: number of conflicts and deaths (per year)
+# Create 2 variables: number of conflicts and best (per year)
 events1 <- events_joined %>%
   group_by(year, country, region, type, GEOLEVEL1) %>%
-  summarise(deaths = sum(number_deaths, na.rm = TRUE))
+  summarise(best = sum(number_best, na.rm = TRUE))
 events2 <- events_joined %>%
   group_by(year, country, region, type, GEOLEVEL1) %>%
   summarise(conflicts = n())
 
 events <- left_join(events1, events2, by=c("year", "country","region","type","GEOLEVEL1"))
-events <- events[, c("year","country", "region","type","deaths", "conflicts","GEOLEVEL1")]
+events <- events[, c("year","country", "region","type","best", "conflicts","GEOLEVEL1")]
 
 # Rename GEOLEVEL1 -> orig
 events <- events %>%
@@ -356,9 +356,9 @@ gws_events <- left_join(gws, vettore, by=c("year"))
 
 # Merge the datasets
 gws_events <- left_join(gws_events,events_data,by=c("country","region","year","type","orig"))
-gws_events$deaths[is.na(gws_events$deaths)] = 0  ## Assign a zero to each month/province where no data is observed
+gws_events$best[is.na(gws_events$best)] = 0  ## Assign a zero to each month/province where no data is observed
 gws_events$conflicts[is.na(gws_events$conflicts)] = 0  ## Assign a zero to each month/province where no data is observed
-gws_events <- gws_events[, c("year","country", "region","type","deaths", "conflicts","value","orig")]
+gws_events <- gws_events[, c("year","country", "region","type","best", "conflicts","value","orig")]
 
 # Merge with population values
 gws_events <- merge(gws_events, pop, by = c("year", "country", "region"), all.x = TRUE)
@@ -366,7 +366,7 @@ gws_events <- merge(gws_events, pop, by = c("year", "country", "region"), all.x 
 # Since the conflict datasets start from 1989 i just need data from 1979
 gws_events <- gws_events %>%
   filter(year>1978)
-gws_events$orig=NULL; gws_events$deaths=NULL
+gws_events$orig=NULL; gws_events$best=NULL
 gws_events <- gws_events %>%
   filter(!is.na(value))  ## Regioni come Antartide in cui non ci sono valori di GWS
 
