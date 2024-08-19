@@ -36,6 +36,29 @@ X_train_1, X_test_1, y_train_1, y_test_1 = train_test_split(X_1year, y_1year, te
 X_train_5, X_test_5, y_train_5, y_test_5 = train_test_split(X_5year, y_5year, test_size=0.2, random_state=42)
 
 
+param_dist = {
+    'n_estimators': [100, 200, 500, 1000],  # Numero di alberi nella foresta
+    'max_depth': [None],  # Profondità massima degli alberi
+    'min_samples_split': [2, 5, 10],  # Minimo numero di campioni richiesti per dividere un nodo
+    'min_samples_leaf': [1, 2, 4],  # Minimo numero di campioni richiesti per formare una foglia
+    'bootstrap': [True, False]}
+
+
+rf = RandomForestRegressor(random_state=42)
+
+# Configura RandomizedSearchCV
+random_search = RandomizedSearchCV(
+    estimator=rf,
+    param_distributions=param_dist,
+    n_iter=30,  # Numero di combinazioni da testare
+    cv=3,  # Numero di fold per la cross-validation
+    scoring='r2',  # Metodologia di scoring
+    verbose=2,  # Livello di verbosità
+    random_state=42,  # Per riproducibilità
+    n_jobs=-1 )
+
+# Esegui la ricerca
+random_search.fit(X_train_1, y_train_1)
 
 
 
