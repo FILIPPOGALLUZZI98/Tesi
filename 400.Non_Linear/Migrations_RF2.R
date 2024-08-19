@@ -76,3 +76,47 @@ plt.barh([features[i] for i in sorted_indices_5year], importances_5year[sorted_i
 plt.xlabel('Importance'); plt.ylabel('Variables'); plt.title('Interval 5 Years')
 
 plt.tight_layout(); plt.show()
+
+
+####  PARTIAL DEPENDENCE PLOTS
+from sklearn.inspection import PartialDependenceDisplay
+import matplotlib.pyplot as plt
+
+# Definisci le variabili importanti per ciascun set
+features = ['n_value', 'n_gws_avg5', 'n_gws_avg10', 'gws_anomalies', 'gws_anomalies5', 'gws_anomalies10',
+            'CV1', 'CV5', 'CV10','gws_logret', 'gws_logret5', 'gws_logret10']
+
+# Ingrandisci la figura prima di creare i grafici
+fig, ax = plt.subplots(figsize=(15, 20))  # Cambia le dimensioni della figura come preferisci
+
+# Genera PDP per le variabili del primo set
+display = PartialDependenceDisplay.from_estimator(rf_1year, X_train_1, features, ax=ax, n_cols=3)
+
+plt.suptitle('Partial Dependence Plots - Set 1', fontsize=16)
+plt.subplots_adjust(top=0.9)  # Regola lo spazio per il titolo
+plt.show()
+
+fig, ax = plt.subplots(figsize=(15, 20))  # Cambia le dimensioni della figura come preferisci
+
+# Genera PDP per le variabili del secondo set
+PartialDependenceDisplay.from_estimator(rf_5year, X_train_5, features, grid_resolution=50, ax=ax, n_cols=3)
+
+plt.suptitle('Partial Dependence Plots - Set 2', fontsize=16)
+plt.subplots_adjust(top=0.95)  # Regola lo spazio per il titolo
+plt.show()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+          
