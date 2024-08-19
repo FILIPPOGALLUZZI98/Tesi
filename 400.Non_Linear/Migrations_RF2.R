@@ -59,6 +59,9 @@ print(f"R² Score: {r2_5}")
 
 
 
+
+####  FEATURE IMPORTANCE
+
 importances_1year = rf_1year.feature_importances_
 importances_5year = rf_5year.feature_importances_
 sorted_indices_1year = importances_1year.argsort()
@@ -77,6 +80,8 @@ plt.xlabel('Importance'); plt.ylabel('Variables'); plt.title('Interval 5 Years')
 
 plt.tight_layout(); plt.show()
 
+
+          
 
 ####  PARTIAL DEPENDENCE PLOTS
 from sklearn.inspection import PartialDependenceDisplay
