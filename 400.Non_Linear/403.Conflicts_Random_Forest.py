@@ -76,6 +76,10 @@ plt.suptitle('Partial Dependence Plots', fontsize=16)
 plt.subplots_adjust(top=0.9)
 plt.show()
 
+# Lista 5 variabili più importanti
+top_5_indices = sorted_indices[-5:][::-1]
+variables = [features[i] for i in top_5_indices]
+print("First variables by importance:"); print(variables)
 
 
 
