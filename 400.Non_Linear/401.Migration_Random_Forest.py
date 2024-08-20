@@ -86,9 +86,6 @@ plt.tight_layout(); plt.show()
 #############################################################################################################
 ####  PARTIAL DEPENDENCE PLOTS  ####
 
-features = ['n_value', 'n_gws_avg5', 'n_gws_avg10', 'gws_anomalies', 'gws_anomalies5', 'gws_anomalies10',
-            'CV1', 'CV5', 'CV10','gws_logret', 'gws_logret5', 'gws_logret10']
-
 # 1-Y
 fig, ax = plt.subplots(figsize=(12, 12))  
 display = PartialDependenceDisplay.from_estimator(rf_1year, X_train_1, features, ax=ax, n_cols=3)
