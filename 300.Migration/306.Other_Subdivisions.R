@@ -10,24 +10,21 @@ gm <- read.csv("^Data/gws_migr.csv")
 
 
 # List of the names of the countries
-lista_1 <- c("Mauritania", "Mali", "Burkina Faso", "Niger", "Chad", 
-                 "Senegal", "Gambia", "Guinea-Bissau", "Guinea", "Ivory Coast",
-                 "Ghana", "Nigeria", "Cameroon", "Sudan", "Eritrea", "Saudi Arabia", 
-                  "Bahrain", "Cyprus", "Egypt", "Iran", 
-                         "Iraq", "Israel", "Jordan", "Kuwait", "Lebanon", 
-                         "Oman", "Palestine", "Qatar", "Syria", "Turkey", 
-                         "United Arab Emirates", "Yemen")
+lista_1 <- sahel_mena_countries <- c(
+  "Algeria", "Bahrain", "Chad", "Djibouti", "Egypt", "Eritrea", "Iran", "Iraq", 
+  "Israel", "Jordan", "Kuwait", "Lebanon", "Libya", "Mauritania", "Morocco", 
+  "Oman", "Qatar", "Saudi Arabia", "Somalia", "Sudan", "Syria", "Tunisia", 
+  "United Arab Emirates", "Yemen", "Western Sahara")
 data_1 <- gm[gm$country %in% lista_1, ]
-lista_2 <- c("Angola", "Benin", "Botswana", "Burkina Faso", "Burundi", 
-                      "Cape Verde", "Cameroon", "Central African Republic", "Chad", "Comoros", 
-                      "Republic of the Congo", "Democratic Republic of the Congo", "Ivory Coast", 
-                      "Djibouti", "Equatorial Guinea", "Eritrea", "Eswatini", "Ethiopia", 
-                      "Gabon", "Gambia", "Ghana", "Guinea", "Guinea-Bissau", 
-                      "Kenya", "Lesotho", "Liberia", "Madagascar", "Malawi", 
-                      "Mali", "Mauritania", "Mozambique", "Namibia", "Niger", 
-                      "Nigeria", "Rwanda", "Sao Tome and Principe", "Senegal", "Seychelles", 
-                      "Sierra Leone", "Somalia", "South Sudan", "Sudan", "Tanzania", 
-                      "Togo", "Uganda", "Zambia", "Zimbabwe")
+lista_2 <- c("Angola", "Benin", "Botswana", "Burkina Faso", "Burundi", "Cabo Verde", 
+             "Cameroon", "Central African Republic", "Comoros", "Congo", 
+             "Democratic Republic of the Congo", "Equatorial Guinea", "Eswatini", 
+             "Ethiopia", "Gabon", "Gambia", "Ghana", "Guinea", "Guinea-Bissau", 
+             "Ivory Coast", "Kenya", "Lesotho", "Liberia", "Madagascar", "Malawi", 
+             "Mali", "Mozambique", "Namibia", "Niger", "Nigeria", "Rwanda", 
+             "São Tomé and Príncipe", "Senegal", "Seychelles", "Sierra Leone", 
+             "South Africa", "South Sudan", "Tanzania", "Togo", "Uganda", 
+             "Zambia", "Zimbabwe")
 data_2 <- gm[gm$country %in% lista_2, ]
 lista_3 <- c("Brunei", "Cambodia", "East Timor", "Indonesia", "Laos", 
                             "Malaysia", "Myanmar", "Philippines", "Singapore", "Thailand", 
