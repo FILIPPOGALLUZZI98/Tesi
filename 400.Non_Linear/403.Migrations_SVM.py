@@ -1,3 +1,10 @@
+import pandas as pd
+from sklearn.model_selection import train_test_split, GridSearchCV
+from sklearn.preprocessing import StandardScaler
+from sklearn.svm import SVR
+from sklearn.metrics import mean_squared_error, r2_score
+
+
 # Montaggi GDrive
 import os, sys
 from google.colab import drive
@@ -5,11 +12,6 @@ drivedir='/content/drive'
 drive.mount(drivedir)
 os.chdir(drivedir)
 datadir=drivedir+'/MyDrive/'
-
-
-
-
-
 
 gm = pd.read_csv(datadir+'gws_migr.csv')
 features = ['n_value', 'n_gws_avg5', 'n_gws_avg10', 'gws_anomalies', 'gws_anomalies5', 'gws_anomalies10',
