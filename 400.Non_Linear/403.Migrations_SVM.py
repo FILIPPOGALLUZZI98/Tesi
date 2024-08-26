@@ -112,10 +112,10 @@ lista = ['interaction_1', 'interaction_2', 'interaction_3', 'interaction_4', 'in
  'interaction_19', 'interaction_20']
 features = features + lista
 
-pca = PCA(n_components=0.90)
-X_pca = pca.fit_transform(gm[features + list(df_poly.columns)])
-df_pca = pd.DataFrame(X_pca, columns=[f'PC{i+1}' for i in range(X_pca.shape[1])])
-df = pd.concat([df_pca, gm[['n_migr', 'interval']].reset_index(drop=True)], axis=1)
+# pca = PCA(n_components=0.90)
+# X_pca = pca.fit_transform(gm[features + list(df_poly.columns)])
+# df_pca = pd.DataFrame(X_pca, columns=[f'PC{i+1}' for i in range(X_pca.shape[1])])
+# df = pd.concat([df_pca, gm[['n_migr', 'interval']].reset_index(drop=True)], axis=1)
 
 # Separazione dei dati per intervallo temporale
 df_1year = df[df['interval'] == 1]
