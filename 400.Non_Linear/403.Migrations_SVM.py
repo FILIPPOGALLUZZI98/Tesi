@@ -24,5 +24,65 @@ df_1year = gm[gm['interval'] == 1]; df_5year = gm[gm['interval'] == 5]
 X_1year = df_1year[features]; X_5year = df_5year[features]
 y_1year = df_1year['n_migr']; y_5year = df_5year['n_migr']
 
-X_train_1, X_test_1, y_train_1, y_test_1 = train_test_split(X_1year, y_1year, test_size=0.2, random_state=42)
-X_train_5, X_test_5, y_train_5, y_test_5 = train_test_split(X_5year, y_5year, test_size=0.2, random_state=42)
+## scaler_1year = StandardScaler()
+## X_1year_scaled = scaler_1year.fit_transform(X_1year)
+## scaler_5year = StandardScaler()
+## X_5year_scaled = scaler_5year.fit_transform(X_5year)
+
+X_1year_train, X_1year_test, y_1year_train, y_1year_test = train_test_split(X_1year, y_1year, test_size=0.2, random_state=42)
+X_5year_train, X_5year_test, y_5year_train, y_5year_test = train_test_split(X_5year, y_5year, test_size=0.2, random_state=42)
+
+# Definizione del modello SVM con kernel RBF 
+svm_model = SVR(kernel='rbf')
+param_grid = {
+    'C': [0.1, 1, 10, 100],
+    'gamma': ['scale', 0.1, 1, 10]}
+
+
+# Interval == 1
+grid_search_1year = GridSearchCV(svm_model, param_grid, cv=5, scoring='r2', verbose=2)
+grid_search_1year.fit(X_1year_train, y_1year_train)
+best_model_1year = grid_search_1year.best_estimator_
+y_1year_pred = best_model_1year.predict(X_1year_test)
+mse_1year = mean_squared_error(y_1year_test, y_1year_pred)
+r2_1year = r2_score(y_1year_test, y_1year_pred)
+print(f'Intervallo di 1 anno - Mean Squared Error: {mse_1year}')
+print(f'Intervallo di 1 anno - R^2 Score: {r2_1year}')
+print(f'Intervallo di 1 anno - Best Hyperparameters: {grid_search_1year.best_params_}')
+
+# Interval == 5
+grid_search_5year = GridSearchCV(svm_model, param_grid, cv=5, scoring='r2', verbose=2)
+grid_search_5year.fit(X_5year_train, y_5year_train)
+best_model_5year = grid_search_5year.best_estimator_
+y_5year_pred = best_model_5year.predict(X_5year_test)
+mse_5year = mean_squared_error(y_5year_test, y_5year_pred)
+r2_5year = r2_score(y_5year_test, y_5year_pred)
+print(f'Intervallo di 5 anni - Mean Squared Error: {mse_5year}')
+print(f'Intervallo di 5 anni - R^2 Score: {r2_5year}')
+print(f'Intervallo di 5 anni - Best Hyperparameters: {grid_search_5year.best_params_}')
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
