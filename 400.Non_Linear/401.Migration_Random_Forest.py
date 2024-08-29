@@ -71,26 +71,15 @@ gm = pd.read_csv(datadir+'gws_migr.csv')
 features = ['n_value', 'n_gws_avg5', 'n_gws_avg10', 'gws_anomalies', 'gws_anomalies5', 'gws_anomalies10',
             'CV1', 'CV5', 'CV10','gws_logret', 'gws_logret5', 'gws_logret10']
             
-gm['interaction_1'] = gm['n_value'] * gm['gws_anomalies']
-gm['interaction_2'] = gm['n_gws_avg5'] / (gm['gws_logret5'] + 1e-5)
-gm['interaction_3'] = gm['n_gws_avg5'] * gm['gws_anomalies5']
-gm['interaction_4'] = gm['n_gws_avg10'] * gm['gws_anomalies10']
-gm['interaction_5'] = gm['n_gws_avg10'] - gm['n_gws_avg5']
-gm['interaction_6'] = gm['gws_anomalies10'] - gm['gws_anomalies5']
-gm['interaction_7'] = gm['CV5'] * gm['gws_anomalies5']
-gm['interaction_8'] = gm['CV10'] * gm['gws_anomalies10']
-gm['interaction_9'] = gm['CV5'] / (gm['n_gws_avg5'] + 1e-5)
-gm['interaction_10'] = gm['CV10'] / (gm['n_gws_avg10'] + 1e-5)
-gm['interaction_11'] = gm['gws_logret'] * gm['gws_anomalies']
-gm['interaction_12'] = gm['gws_logret5'] * gm['gws_anomalies5']
-gm['interaction_13'] = gm['gws_logret10'] * gm['gws_anomalies10']
-gm['interaction_14'] = gm['gws_logret10'] - gm['gws_logret5']
-gm['interaction_15'] = gm['n_value'] * gm['n_gws_avg5']
-gm['interaction_16'] = (gm['n_value'] ** 2) * (gm['gws_anomalies'] ** 2)
-gm['interaction_17'] = gm['n_gws_avg5'] * gm['n_gws_avg10']
-gm['interaction_18'] = gm['CV1'] * gm['CV10']
-gm['interaction_19'] = gm['n_gws_avg10'] - gm['n_gws_avg5']
-gm['interaction_20'] = gm['gws_logret5'] - gm['gws_logret']
+gm['interaction_1'] = gm['n_gws_avg5'] / (gm['gws_logret5'] + 1e-5)
+gm['interaction_2'] = gm['n_gws_avg10'] - gm['n_gws_avg5']
+gm['interaction_3'] = gm['gws_anomalies10'] - gm['gws_anomalies5']
+gm['interaction_4'] = gm['CV5'] / (gm['n_gws_avg5'] + 1e-5)
+gm['interaction_5'] = gm['CV10'] / (gm['n_gws_avg10'] + 1e-5)
+gm['interaction_6'] = gm['gws_logret10'] - gm['gws_logret5']
+gm['interaction_7'] = (gm['n_value'] ** 2) * (gm['gws_anomalies'] ** 2)
+gm['interaction_8'] = gm['n_gws_avg10'] - gm['n_gws_avg5']
+gm['interaction_9'] = gm['gws_logret5'] - gm['gws_logret']
 
 poly = PolynomialFeatures(degree=2, include_bias=False)
 X_poly = poly.fit_transform(gm[features])
