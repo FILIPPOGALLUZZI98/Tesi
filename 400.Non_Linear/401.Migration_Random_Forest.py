@@ -157,51 +157,45 @@ X_train_5, X_test_5, y_train_5, y_test_5 = train_test_split(X_5year, y_5year, te
 
 
 # Definizione dello spazio dei parametri
-param_distributions = {
+# Definizione dello spazio dei parametri
+param_grid = {
     'n_estimators': [50, 100, 150, 200],
-    'max_depth': [None, 3, 5, 7, 9],
-    'min_samples_split': [2, 3, 5, 7, 9],
-    'min_samples_leaf': [1, 2, 4],
-    'max_features': ['auto', 'sqrt', 'log2']}
+    'max_depth': [None],
+    'min_samples_split': [10, 12, 14],
+    'min_samples_leaf': [4, 5, 6],
+    'max_features': ['sqrt']}
 
-# RandomizedSearchCV per il dataset di 1 anno
-rf_1year = RandomForestRegressor(random_state=31)
-random_search_1year = RandomizedSearchCV(
+# GridSearchCV per il dataset di 1 anno
+rf_1year = RandomForestRegressor(random_state=17)
+grid_search_1year = GridSearchCV(
     estimator=rf_1year,
-    param_distributions=param_distributions,
-    n_iter=50,  # Numero di combinazioni di parametri da provare
+    param_grid=param_grid,
     cv=5,  # 5-fold cross-validation
-    random_state=31,
     n_jobs=-1,  # Usa tutti i core della CPU disponibili
     scoring='neg_mean_squared_error')
-random_search_1year.fit(X_train_1, y_train_1)
-best_params_1year = random_search_1year.best_params_
+grid_search_1year.fit(X_train_1, y_train_1)
+best_params_1year = grid_search_1year.best_params_
 print(f"Migliori parametri per il dataset di 1 anno: {best_params_1year}")
-
-# Valutazione del modello ottimizzato per 1 anno
-y_pred_optimized_1year = random_search_1year.predict(X_test_1)
+y_pred_optimized_1year = grid_search_1year.predict(X_test_1)
 mse_optimized_1year = mean_squared_error(y_test_1, y_pred_optimized_1year)
 r2_optimized_1year = r2_score(y_test_1, y_pred_optimized_1year)
 print("1 year interval after optimization:")
 print(f"Mean Squared Error (MSE): {mse_optimized_1year}")
 print(f"R² Score: {r2_optimized_1year}")
 
-# RandomizedSearchCV per il dataset di 5 anni
-rf_5year = RandomForestRegressor(random_state=42)
-random_search_5year = RandomizedSearchCV(
+
+# GridSearchCV per il dataset di 5 anni
+rf_5year = RandomForestRegressor(random_state=17)
+grid_search_5year = GridSearchCV(
     estimator=rf_5year,
-    param_distributions=param_distributions,
-    n_iter=50,
+    param_grid=param_grid,
     cv=5,
-    random_state=42,
     n_jobs=-1,
     scoring='neg_mean_squared_error')
-random_search_5year.fit(X_train_5, y_train_5)
-best_params_5year = random_search_5year.best_params_
+grid_search_5year.fit(X_train_5, y_train_5)
+best_params_5year = grid_search_5year.best_params_
 print(f"Migliori parametri per il dataset di 5 anni: {best_params_5year}")
-
-# Valutazione del modello ottimizzato per 5 anni
-y_pred_optimized_5year = random_search_5year.predict(X_test_5)
+y_pred_optimized_5year = grid_search_5year.predict(X_test_5)
 mse_optimized_5year = mean_squared_error(y_test_5, y_pred_optimized_5year)
 r2_optimized_5year = r2_score(y_test_5, y_pred_optimized_5year)
 print("5 years interval after optimization:")
