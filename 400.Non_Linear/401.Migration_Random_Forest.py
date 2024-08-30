@@ -202,7 +202,30 @@ print("5 years interval after optimization:")
 print(f"Mean Squared Error (MSE): {mse_optimized_5year}")
 print(f"R² Score: {r2_optimized_5year}")
 
+from sklearn.model_selection import cross_val_score
+rf_1year = RandomForestRegressor(random_state=31)
 
+# Esecuzione della cross-validation per il dataset a 1 anno
+scores_1year = cross_val_score(rf_1year, X_train_1, y_train_1, cv=5, scoring='neg_mean_squared_error')
+
+# Calcolo della media e della deviazione standard delle metriche di valutazione
+mean_score_1year = np.mean(scores_1year)
+std_score_1year = np.std(scores_1year)
+
+print(f"Cross-Validation Scores per il dataset di 1 anno (neg MSE): {scores_1year}")
+print(f"Media dei Cross-Validation Scores (neg MSE): {mean_score_1year}")
+print(f"Deviazione standard dei Cross-Validation Scores (neg MSE): {std_score_1year}")
+
+# Ripetere la stessa procedura per il dataset a 5 anni
+rf_5year = RandomForestRegressor(random_state=42)
+scores_5year = cross_val_score(rf_5year, X_train_5, y_train_5, cv=5, scoring='neg_mean_squared_error')
+
+mean_score_5year = np.mean(scores_5year)
+std_score_5year = np.std(scores_5year)
+
+print(f"Cross-Validation Scores per il dataset di 5 anni (neg MSE): {scores_5year}")
+print(f"Media dei Cross-Validation Scores (neg MSE): {mean_score_5year}")
+print(f"Deviazione standard dei Cross-Validation Scores (neg MSE): {std_score_5year}")
 
 
 
