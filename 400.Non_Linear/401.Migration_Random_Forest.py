@@ -227,7 +227,35 @@ print(f"Cross-Validation Scores per il dataset di 5 anni (neg MSE): {scores_5yea
 print(f"Media dei Cross-Validation Scores (neg MSE): {mean_score_5year}")
 print(f"Deviazione standard dei Cross-Validation Scores (neg MSE): {std_score_5year}")
 
+from sklearn.inspection import PartialDependenceDisplay
+# Assuming 'top_features_1year' and 'top_features_5year' are lists of column names 
+features_to_plot_1year = top_features_1year[:3]  # Take the first 3 features for the 1-year dataset
+features_to_plot_5year = top_features_5year[:3]  # Take the first 3 features for the 5-year dataset
 
+# Initialize and train your Random Forest models (make sure X_train_1, y_train_1, etc. are defined)
+rf_1year = RandomForestRegressor(random_state=31)
+rf_1year.fit(X_train_1, y_train_1)
+
+rf_5year = RandomForestRegressor(random_state=42)
+rf_5year.fit(X_train_5, y_train_5)
+
+# PDPs for the 1-year dataset
+fig, ax = plt.subplots(1, 3, figsize=(15, 5))
+
+# Use the 'features' parameter to specify the feature names or indices
+PartialDependenceDisplay.from_estimator(rf_1year, X_train_1, features_to_plot_1year, ax=ax, feature_names=top_features_1year) 
+
+plt.suptitle('Partial Dependence Plots for the 1-year dataset')
+plt.show()
+
+# PDPs for the 5-year dataset
+fig, ax = plt.subplots(1, 3, figsize=(15, 5))
+
+# Use the 'features' parameter to specify the feature names or indices
+PartialDependenceDisplay.from_estimator(rf_5year, X_train_5, features_to_plot_5year, ax=ax, feature_names=top_features_5year)
+
+plt.suptitle('Partial Dependence Plots for the 5-year dataset')
+plt.show()
 
 
 
