@@ -7,26 +7,23 @@
 
 # Upload of the groundwater-events dataset
 ge <- read.csv("^Data/gws_events.csv")
-govern <- read.csv("^Data/Govern.csv")
+gov <- read.csv("^Data/Govern.csv")
 # Create a subset of the dataset (because the variables are counted thrice (one for each type of conflict)
 ge <- subset(ge, type=="state")
 
 # Select the governance list 
-govern <- govern %>%
-  slice(1:(n() - 7)) %>%
-  select(-c(1,2,4)) %>%
-  rename(
-    country = Country.Name,
-    gov = Government.Effectiveness..Estimate..GE.EST.)
-govern$gov <- as.numeric(govern$gov)
-govern <- govern %>%
-  arrange(desc(gov))
-govern <- govern[-214, ]
+gov <- head(gov, -5)
+gov <- gov[, -c(1, 2,4)]
+names(gov) <- c("country", "govern")
+gov$govern <- as.numeric(gov$govern)
+gov <- gov %>%
+  arrange(desc(govern))
+gov <- na.omit(gov)
 
 # Create 3 classes for high, medium and low governance
-gov1 <- govern[1:71, ]; name_gov1 <- unique(gov1$country)  ## high
-gov2 <- govern[72:142, ]; name_gov2 <- unique(gov2$country)  ## medium
-gov3 <- govern[143:213, ]; name_gov3 <- unique(gov3$country)   ## low
+gov1 <- gov[1:71, ]; name_gov1 <- unique(gov1$country)  ## high
+gov2 <- gov[72:142, ]; name_gov2 <- unique(gov2$country)  ## medium
+gov3 <- gov[143:213, ]; name_gov3 <- unique(gov3$country)   ## low
 
 
 # Statistical model and tables
