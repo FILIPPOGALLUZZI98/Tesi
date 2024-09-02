@@ -10,9 +10,9 @@ gm <- read.csv("^Data/gws_migr.csv")
 gm_1 <- subset(gm, interval==1)
 gm_5 <- subset(gm, interval==5)
 
-# Select the GDP list for one year (2019)
-gdp_data <- WDI(indicator = "NY.GDP.MKTP.PP.KD", start = 2019, end = 2019, extra = TRUE)
-gdp_data <- subset(gdp_data, year== 2019)
+# Select the GDP list for one year (2005)
+gdp_data <- WDI(indicator = "NY.GDP.MKTP.PP.KD", start = 2005, end = 2005, extra = TRUE)
+gdp_data <- subset(gdp_data, year== 2005)
 
 # Divide the countries into four categories
 gdp_high <- subset(gdp_data, income == "High income"); name_high <- unique(gdp_high$country)
