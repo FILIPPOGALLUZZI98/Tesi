@@ -7,28 +7,23 @@
 
 # Upload of the groundwater-events dataset
 gm <- read.csv("^Data/gws_migr.csv")
-govern <- read.csv("^Data/Govern.csv")
+gov <- read.csv("^Data/Govern.csv")
 gm_1 <- subset(gm, interval==1)
 gm_5 <- subset(gm, interval==5)
 
-
 # Select the governance list 
-govern <- govern %>%
-  slice(1:(n() - 7)) %>%
-  select(-c(1,2,4)) %>%
-  rename(
-    country = Country.Name,
-    gov = Government.Effectiveness..Estimate..GE.EST.)
-govern$gov <- as.numeric(govern$gov)
-govern <- govern %>%
-  arrange(desc(gov))
-govern <- govern[-214, ]
+gov <- head(gov, -5)
+gov <- gov[, -c(1, 2,4)]
+names(gov) <- c("country", "govern")
+gov$govern <- as.numeric(gov$govern)
+gov <- gov %>%
+  arrange(desc(govern))
+gov <- na.omit(gov)
 
 # Create 3 classes for high, medium and low governance
-gov1 <- govern[1:71, ]; name_gov1 <- unique(gov1$country)  ## high
-gov2 <- govern[72:142, ]; name_gov2 <- unique(gov2$country)  ## medium
-gov3 <- govern[143:213, ]; name_gov3 <- unique(gov3$country)   ## low
-
+gov1 <- gov[1:71, ]; name_gov1 <- unique(gov1$country)  ## high
+gov2 <- gov[72:142, ]; name_gov2 <- unique(gov2$country)  ## medium
+gov3 <- gov[143:213, ]; name_gov3 <- unique(gov3$country)   ## low
 
 
 ####  LOW GOVERNANCE
