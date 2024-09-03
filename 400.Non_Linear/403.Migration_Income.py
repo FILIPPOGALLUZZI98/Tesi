@@ -37,10 +37,8 @@ inc2 = inc[inc['income']=='Upper middle income']
 inc3 = inc[inc['income']=='Lower middle income']
 inc4 = inc[inc['income']=='Low income']
 
-name_inc1 = inc1['country'].unique()
-name_inc2 = inc2['country'].unique()
-name_inc3 = inc3['country'].unique()
-name_inc4 = inc4['country'].unique()
+name_inc1 = inc1['country'].unique(); name_inc2 = inc2['country'].unique()
+name_inc3 = inc3['country'].unique(); name_inc4 = inc4['country'].unique()
 
 
 ################################################################################
