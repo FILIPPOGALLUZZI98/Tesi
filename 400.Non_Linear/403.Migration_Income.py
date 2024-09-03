@@ -32,20 +32,28 @@ df_1year = gm[gm['interval'] == 1]; df_5year = gm[gm['interval'] == 5]
 
 
 # Create 4 classes for high, upper-middle, lower-middle and low income countries
+inc1 = inc[inc['income']=='High income']
+inc2 = inc[inc['income']=='Upper middle income']
+inc3 = inc[inc['income']=='Lower middle income']
+inc4 = inc[inc['income']=='Low income']
 
+name_inc1 = inc1['country'].unique()
+name_inc2 = inc2['country'].unique()
+name_inc3 = inc3['country'].unique()
+name_inc4 = inc4['country'].unique()
 
 
 ################################################################################
 ####  RANDOM FOREST WITHOUT OPTIMIZATION  ####
 
-## Substitute with the desired subset (name_gov1, name_gov2, name_gov3)
-name = name_gov1 
+## Substitute with the desired subset (name_inc1, name_inc2, name_inc3, name_inc4)
+name = name_inc1
 
-gov_1 = df_1year[df_1year['country'].isin(name)]
-gov_5 = df_5year[df_5year['country'].isin(name)]
+inc_1 = df_1year[df_1year['country'].isin(name)]
+inc_5 = df_5year[df_5year['country'].isin(name)]
 
-X_1 = gov_1[features]; X_5 = gov_5[features]
-y_1 = gov_1['n_migr']; y_5 = gov_5['n_migr']
+X_1 = inc_1[features]; X_5 = inc_5[features]
+y_1 = inc_1['n_migr']; y_5 = inc_5['n_migr']
 X_train_1, X_test_1, y_train_1, y_test_1 = train_test_split(X_1, y_1, test_size=0.2, random_state=31)
 X_train_5, X_test_5, y_train_5, y_test_5 = train_test_split(X_5, y_5, test_size=0.2, random_state=31)
 
@@ -107,15 +115,15 @@ df_1year = gm[gm['interval'] == 1]; df_5year = gm[gm['interval'] == 5]
 ################################################################################
 ####  RANDOM FOREST WITH FEATURE ENGINEERING  ####
 
-## Substitute with the desired subset (name_gov1, name_gov2, name_gov3)
-name = name_gov1 
+## Substitute with the desired subset (name_inc1, name_inc2, name_inc3, name_inc4)
+name = name_inc1
 
 
-gov_1 = df_1year[df_1year['country'].isin(name)]
-gov_5 = df_5year[df_5year['country'].isin(name)]
+inc_1 = df_1year[df_1year['country'].isin(name)]
+inc_5 = df_5year[df_5year['country'].isin(name)]
 
-X_1 = gov_1[features]; X_5 = gov_5[features]
-y_1 = gov_1['n_migr']; y_5 = gov_5['n_migr']
+X_1 = inc_1[features]; X_5 = inc_5[features]
+y_1 = inc_1['n_migr']; y_5 = inc_5['n_migr']
 
 scaler_1year = StandardScaler()
 X_1 = scaler_1year.fit_transform(X_1)
@@ -171,8 +179,8 @@ print(f"")
 
 
 ####  PARAMETER OPTIMIZATION
-X_1 = gov_1[top_features_1year]; X_5 = gov_5[top_features_5year]
-y_1 = gov_1['n_migr']; y_5 = gov_5['n_migr']
+X_1 = inc_1[top_features_1year]; X_5 = inc_5[top_features_5year]
+y_1 = inc_1['n_migr']; y_5 = inc_5['n_migr']
 
 scaler_1year = StandardScaler()
 X_1 = scaler_1year.fit_transform(X_1)
