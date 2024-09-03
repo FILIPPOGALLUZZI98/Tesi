@@ -25,7 +25,7 @@ os.chdir(drivedir)
 datadir=drivedir+'/MyDrive/'
 
 gm = pd.read_csv(datadir+'gws_migr.csv')
-inc = pd.read_csv(datadir+'Income.csv')
+inc = pd.read_csv(datadir+'income.csv')
 features = ['n_value', 'n_gws_avg5', 'n_gws_avg10', 'gws_anomalies', 'gws_anomalies5', 'gws_anomalies10',
             'CV1', 'CV5', 'CV10','gws_logret', 'gws_logret5', 'gws_logret10']
 df_1year = gm[gm['interval'] == 1]; df_5year = gm[gm['interval'] == 5]
