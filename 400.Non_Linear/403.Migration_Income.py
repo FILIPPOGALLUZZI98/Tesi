@@ -36,9 +36,10 @@ df_1year = gm[gm['interval'] == 1]; df_5year = gm[gm['interval'] == 5]
 
 
 ################################################################################
-####  RANDOM FOREST WITHOUT OPTIMIZATION
+####  RANDOM FOREST WITHOUT OPTIMIZATION  ####
 
-name = name_gov1  ## Substitute with the desired subset
+## Substitute with the desired subset (name_gov1, name_gov2, name_gov3)
+name = name_gov1 
 
 gov_1 = df_1year[df_1year['country'].isin(name)]
 gov_5 = df_5year[df_5year['country'].isin(name)]
@@ -73,7 +74,7 @@ print(f"R² Score: {r2_5}")
 
 
 ################################################################################
-####  RANDOM FOREST WITH FEATURE ENGINEERING  ####
+####  FEATURE ENGINEERING  ####
 
 gm = pd.read_csv(datadir+'gws_migr.csv')
 features = ['n_value', 'n_gws_avg5', 'n_gws_avg10', 'gws_anomalies', 'gws_anomalies5', 'gws_anomalies10',
@@ -103,8 +104,11 @@ for item in ['year', 'country', 'region', 'value', 'population', 'interval','flo
 df_1year = gm[gm['interval'] == 1]; df_5year = gm[gm['interval'] == 5]
 
 
-####  RANDOM FOREST WITHOUT OPTIMIZATION
-name = name_gov2  ## Substitute with the desired subset
+################################################################################
+####  RANDOM FOREST WITH FEATURE ENGINEERING  ####
+
+## Substitute with the desired subset (name_gov1, name_gov2, name_gov3)
+name = name_gov1 
 
 
 gov_1 = df_1year[df_1year['country'].isin(name)]
