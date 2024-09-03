@@ -15,7 +15,6 @@ from sklearn.inspection import PartialDependenceDisplay
 from sklearn.preprocessing import PolynomialFeatures
 from sklearn.decomposition import PCA
 
-
 # Montaggi GDrive
 import os, sys
 from google.colab import drive
@@ -23,6 +22,7 @@ drivedir='/content/drive'
 drive.mount(drivedir)
 os.chdir(drivedir)
 datadir=drivedir+'/MyDrive/'
+
 
 gm = pd.read_csv(datadir+'gws_migr.csv')
 gov = pd.read_csv(datadir+'Govern.csv')
@@ -43,9 +43,10 @@ gov3 = gov.iloc[142:213]; name_gov3 = gov3['country'].unique()
 
 
 ################################################################################
-####  RANDOM FOREST WITHOUT OPTIMIZATION
+####  RANDOM FOREST WITHOUT OPTIMIZATION  ####
 
-name = name_gov1  ## Substitute with the desired subset
+## Substitute with the desired subset (name_gov1, name_gov2, name_gov3)
+name = name_gov1 
 
 gov_1 = df_1year[df_1year['country'].isin(name)]
 gov_5 = df_5year[df_5year['country'].isin(name)]
@@ -54,7 +55,6 @@ X_1 = gov_1[features]; X_5 = gov_5[features]
 y_1 = gov_1['n_migr']; y_5 = gov_5['n_migr']
 X_train_1, X_test_1, y_train_1, y_test_1 = train_test_split(X_1, y_1, test_size=0.2, random_state=31)
 X_train_5, X_test_5, y_train_5, y_test_5 = train_test_split(X_5, y_5, test_size=0.2, random_state=31)
-
 
 # 1- year
 rf_1year = RandomForestRegressor(random_state=31)
@@ -80,7 +80,7 @@ print(f"R² Score: {r2_5}")
 
 
 ################################################################################
-####  RANDOM FOREST WITH FEATURE ENGINEERING  ####
+####  FEATURE ENGINEERING  ####
 
 gm = pd.read_csv(datadir+'gws_migr.csv')
 features = ['n_value', 'n_gws_avg5', 'n_gws_avg10', 'gws_anomalies', 'gws_anomalies5', 'gws_anomalies10',
@@ -110,8 +110,11 @@ for item in ['year', 'country', 'region', 'value', 'population', 'interval','flo
 df_1year = gm[gm['interval'] == 1]; df_5year = gm[gm['interval'] == 5]
 
 
-####  RANDOM FOREST WITHOUT OPTIMIZATION
-name = name_gov2  ## Substitute with the desired subset
+################################################################################
+####  RANDOM FOREST WITH FEATURE ENGINEERING  ####
+
+## Substitute with the desired subset (name_gov1, name_gov2, name_gov3)
+name = name_gov1 
 
 
 gov_1 = df_1year[df_1year['country'].isin(name)]
